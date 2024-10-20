@@ -62,7 +62,7 @@ public class FirstScreen implements Screen {
                 alpha = 1;
                 game.setScreen(new MainMenuScreen(game));
                 System.out.println("Switched to MainMenuScreen.");
-                dispose();
+                
             }
         }
 
