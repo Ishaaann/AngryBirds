@@ -4,16 +4,23 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MainMenuScreen implements Screen {
     private SpriteBatch batch;
     private Texture menuTexture;
+    private AngryBirds game;
+    private OrthographicCamera cam;
 
     public MainMenuScreen(Game game) {
         batch = new SpriteBatch();
         menuTexture = new Texture("background.jpg");
+        this.game = (AngryBirds) game;
+        cam = new OrthographicCamera();
+        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        menuTexture = new Texture("menu.png");
     }
 
     @Override

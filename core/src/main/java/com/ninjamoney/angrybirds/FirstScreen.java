@@ -3,6 +3,8 @@ package com.ninjamoney.angrybirds;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,19 +16,24 @@ public class FirstScreen implements Screen {
     private float alpha = 1f;
     private float fadeDuration = 2f;
     private boolean transitioning = false;
-    private Game game;
+    private AngryBirds game;
+
 
     private final int originalWidth = 1154;
     private final int originalHeight = 692;
 
     private OrthographicCamera camera;
 
-    public FirstScreen(Game game) {
+    public FirstScreen(AngryBirds game) {
         this.game = game;
         batch = new SpriteBatch();
-        splashTexture = new Texture("badlogic.png");
+        splashTexture = new Texture("entryScreen.png");
         camera = new OrthographicCamera();
         camera.setToOrtho(false, originalWidth, originalHeight);
+        Music themeMusic = Gdx.audio.newMusic(Gdx.files.internal("angry_birds.mp3"));
+        themeMusic.setLooping(true);
+        themeMusic.setVolume(0.5f);
+        themeMusic.play();
     }
 
     @Override
@@ -59,6 +66,7 @@ public class FirstScreen implements Screen {
                 System.out.println("Switched to MainMenuScreen.");
             }
         }
+
 
     }
 
