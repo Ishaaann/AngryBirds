@@ -1,10 +1,8 @@
 package com.ninjamoney.angrybirds;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -46,8 +44,8 @@ public class FirstScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.setColor(1, 1, 1, alpha);
-        float x = (Gdx.graphics.getWidth() - originalWidth) / 2;
-        float y = (Gdx.graphics.getHeight() - originalHeight) / 2;
+        float x = (float) (Gdx.graphics.getWidth() - originalWidth) / 2;
+        float y = (float) (Gdx.graphics.getHeight() - originalHeight) / 2;
         batch.draw(splashTexture, x, y, originalWidth, originalHeight);
         batch.end();
 
@@ -64,6 +62,7 @@ public class FirstScreen implements Screen {
                 alpha = 1;
                 game.setScreen(new MainMenuScreen(game));
                 System.out.println("Switched to MainMenuScreen.");
+                
             }
         }
 

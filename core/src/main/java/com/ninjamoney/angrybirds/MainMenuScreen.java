@@ -21,6 +21,7 @@ public class MainMenuScreen implements Screen {
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         menuTexture = new Texture("menu.png");
+
     }
 
     @Override
