@@ -30,7 +30,7 @@ public class FirstScreen implements Screen {
 //        camera.setToOrtho(false, originalWidth, originalHeight);
         Music themeMusic = Gdx.audio.newMusic(Gdx.files.internal("angry_birds.mp3"));
         themeMusic.setLooping(true);
-        themeMusic.setVolume(0.3f);
+        themeMusic.setVolume(1f);
         themeMusic.play();
     }
 
