@@ -17,20 +17,20 @@ public class FirstScreen implements Screen {
     private AngryBirds game;
 
 
-    private final int originalWidth = 1154;
-    private final int originalHeight = 692;
+    private final int originalWidth = 1080;
+    private final int originalHeight = 720;
 
     private OrthographicCamera camera;
 
     public FirstScreen(AngryBirds game) {
         this.game = game;
         batch = new SpriteBatch();
-        splashTexture = new Texture("entryScreen.png");
+        splashTexture = new Texture("entry.png");
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, originalWidth, originalHeight);
+//        camera.setToOrtho(false, originalWidth, originalHeight);
         Music themeMusic = Gdx.audio.newMusic(Gdx.files.internal("angry_birds.mp3"));
         themeMusic.setLooping(true);
-        themeMusic.setVolume(0.5f);
+        themeMusic.setVolume(0.3f);
         themeMusic.play();
     }
 
@@ -40,13 +40,9 @@ public class FirstScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        batch.draw(splashTexture, 0, 0, 1280f, 720f);
         batch.setColor(1, 1, 1, alpha);
-        float x = (float) (Gdx.graphics.getWidth() - originalWidth) / 2;
-        float y = (float) (Gdx.graphics.getHeight() - originalHeight) / 2;
-        batch.draw(splashTexture, x, y, originalWidth, originalHeight);
         batch.end();
 
         if (!transitioning) {
@@ -56,7 +52,8 @@ public class FirstScreen implements Screen {
                 transitioning = true;
                 System.out.println("Transitioning to MainMenuScreen...");
             }
-        } else {
+        }
+        else {
             alpha += delta / fadeDuration;
             if (alpha >= 1) {
                 alpha = 1;
@@ -65,8 +62,6 @@ public class FirstScreen implements Screen {
 
             }
         }
-
-
     }
 
     @Override
@@ -89,5 +84,6 @@ public class FirstScreen implements Screen {
     public void dispose() {
         batch.dispose();
         splashTexture.dispose();
+
     }
 }

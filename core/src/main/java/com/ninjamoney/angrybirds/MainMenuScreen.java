@@ -18,9 +18,9 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(Game game) {
         batch = new SpriteBatch();
         this.game = (AngryBirds) game;
-        cam = new OrthographicCamera();
-        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        menuTexture = new Texture("menu.png");
+//        cam = new OrthographicCamera();
+//        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        menuTexture = new Texture("menubg.png");
 
     }
 
@@ -32,11 +32,10 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.draw(menuTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(menuTexture, 0, 0, 1280f, 720f);
         batch.end();
          if(Gdx.input.isTouched()) {
             game.setScreen(new LevelSelectorScreen(game));
-//            dispose();
         }
     }
 
