@@ -8,24 +8,45 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import org.w3c.dom.Text;
 
 public class MainMenuScreen implements Screen {
     private SpriteBatch batch;
     private Texture menuTexture;
+    private Texture playbutton;
     private AngryBirds game;
     private OrthographicCamera cam;
+    private Texture logo;
+    private Texture playbutton1;
 
     public MainMenuScreen(Game game) {
         batch = new SpriteBatch();
         this.game = (AngryBirds) game;
-//        cam = new OrthographicCamera();
-//        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        menuTexture = new Texture("menubg.png");
+        cam = new OrthographicCamera();
+        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        menuTexture = new Texture("finalmenu.png");
+//        playbutton = new Texture("playbutton.png");
+        logo = new Texture("logo.png");
+        playbutton = new Texture("Play1.png");
+        playbutton1 = new Texture("Play2.png");
 
     }
 
     @Override
     public void show() {}
+
+    public void handleInput(){
+        float x = Gdx.input.getX();
+        float y = Gdx.graphics.getHeight() - Gdx.input.getY(); // Invert Y coordinate
+
+        if(x > 422 && x < 839 && y > 111 && y < 241){
+            batch.draw(playbutton1, 422, 111, 417, 268);
+            if(Gdx.input.isTouched()) {
+                game.setScreen(new LevelSelectorScreen(game));
+            }
+        }
+    }
+
 
     @Override
     public void render(float delta) {
@@ -33,30 +54,11 @@ public class MainMenuScreen implements Screen {
 
         batch.begin();
         batch.draw(menuTexture, 0, 0, 1280f, 720f);
+        batch.draw(logo, 230, 470, 820, 177);
+        batch.draw(playbutton, 422,111, 417, 268);
+        handleInput();
         batch.end();
-         if(Gdx.input.isTouched()) {
-            game.setScreen(new LevelSelectorScreen(game));
-        }
     }
-
-
-    //do not delete this comment, this render method is for learning and testing purposes
-//    public void render(float delta) {
-//        ScreenUtils.clear(0, 0, 0.2f, 1);
-//
-//        cam.update();
-//        game.batch.setProjectionMatrix(cam .combined);
-//
-//        game.batch.begin();
-//        game.font.draw(game.batch, "Welcome to Angry Birds!!! ", 100, 150);
-//        game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
-//        game.batch.end();
-//
-//        if (Gdx.input.isTouched()) {
-//            game.setScreen(new LevelSelectorScreen(game));
-//            dispose();
-//        }
-//    }
 
     @Override
     public void resize(int width, int height) {}
@@ -69,12 +71,13 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void hide() {
-        dispose();
+//        dispose();
     }
 
     @Override
     public void dispose() {
         batch.dispose();
         menuTexture.dispose();
+        playbutton.dispose();
     }
 }
