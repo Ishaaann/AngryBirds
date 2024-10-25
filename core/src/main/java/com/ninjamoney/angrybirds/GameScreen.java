@@ -20,6 +20,14 @@ public class GameScreen implements Screen {
     private Texture resumeButton;
     private Screen prev;
     private Catapult catapult;
+    private Rock circleRock1, circleRock2, circleRock3, rockBlock1, rockBlock2;
+    private Wood plank1, plank2, plank3, plank4, plank5, woodTriangle1, woodTriangle2;
+    private SmallPig smallPig;
+    private MediumPig mediumPig;
+    private LargePig largePig;
+    private Red red;
+    private Bomb bomb;
+    private Chuck chuck;
 
     private boolean isPaused = false;
 
@@ -31,14 +39,32 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         background = new Texture("background.jpg");
         backButton = new Texture("back.png");
-
-        // REPLACE PAUSE.PNG
         pauseButton = new Texture("pause.png");
         pauseOverlay = new Texture("pauseboard.png");
         pauseheadings = new Texture("pause_heading.png");
         resumeButton = new Texture("Play1.png");
         prev = new LevelSelectorScreen(game);
         catapult = new Catapult(209, 103);
+
+        // Initialize objects once
+        circleRock1 = new Rock("circle");
+        circleRock2 = new Rock("circle");
+        circleRock3 = new Rock("circle");
+        rockBlock1 = new Rock("rockBlock");
+        rockBlock2 = new Rock("rockBlock");
+        plank1 = new Wood("plank");
+        plank2 = new Wood("plank");
+        plank3 = new Wood("plank");
+        plank4 = new Wood("plank");
+        plank5 = new Wood("plank");
+        woodTriangle1 = new Wood("woodTriangle");
+        woodTriangle2 = new Wood("woodTriangle");
+        smallPig = new SmallPig();
+        mediumPig = new MediumPig();
+        largePig = new LargePig();
+        red = new Red();
+        bomb = new Bomb();
+        chuck = new Chuck();
     }
 
     @Override
@@ -74,27 +100,26 @@ public class GameScreen implements Screen {
         batch.draw(pauseButton, 0, 620, 100, 100);
 
         //drawing structure
-        batch.draw(new Rock("circle").getRockTexture(), 899, 99, 57, 50);
-        batch.draw(new Rock("circle").getRockTexture(), 966, 99, 57, 50);
-        batch.draw(new Rock("circle").getRockTexture(), 1033, 99, 57, 50);
+        batch.draw(circleRock1.getRockTexture(), 899, 99, 57, 50);
+        batch.draw(circleRock2.getRockTexture(), 966, 99, 57, 50);
+        batch.draw(circleRock3.getRockTexture(), 1033, 99, 57, 50);
 
-        batch.draw(new Wood("plank").getWoodTexture(), 888, 149, 211, 20);
-        batch.draw(new Wood("plank").getWoodTexture(), 888, 356, 211, 20);
-        batch.draw(new Wood("plank").getWoodTexture(), 888, 488, 211, 20);
-        batch.draw(new Wood("plank").getWoodTexture(), 888, 149, 20, 211);
-        batch.draw(new Wood("plank").getWoodTexture(), 1078, 149, 20, 211);
+        batch.draw(plank1.getWoodTexture(), 888, 149, 211, 20);
+        batch.draw(plank2.getWoodTexture(), 888, 356, 211, 20);
+        batch.draw(plank3.getWoodTexture(), 888, 488, 211, 20);
+        batch.draw(plank4.getWoodTexture(), 888, 149, 20, 211);
+        batch.draw(plank5.getWoodTexture(), 1078, 149, 20, 211);
 
-        batch.draw(new Rock("rockBlock").getRockTexture(), 899, 377, 40, 39);
-        batch.draw(new Rock("rockBlock").getRockTexture(), 1048, 377, 40, 39);
+        batch.draw(rockBlock1.getRockTexture(), 899, 377, 40, 39);
+        batch.draw(rockBlock2.getRockTexture(), 1048, 377, 40, 39);
 
-        batch.draw(new Wood("woodTriangle").getRegion(), 1048, 416, 69, 71);
-        batch.draw(new Wood("woodTriangle").getWoodTexture(), 870, 416, 69, 71);
+        batch.draw(woodTriangle1.getRegion(), 1048, 416, 69, 71);
+        batch.draw(woodTriangle2.getWoodTexture(), 870, 416, 69, 71);
 
         //adding piggies
-        batch.draw(new SmallPig().getPigTexture(), 967, 508, 52, 47);
-        batch.draw(new MediumPig().getPigTexture(), 945, 376, 98, 95);
-        batch.draw(new LargePig().getPigTexture(), 926, 149, 135, 155);
-
+        batch.draw(smallPig.getPigTexture(), 967, 508, 52, 47);
+        batch.draw(mediumPig.getPigTexture(), 945, 376, 98, 95);
+        batch.draw(largePig.getPigTexture(), 926, 149, 135, 155);
 
         if (isPaused) {
             batch.draw(pauseOverlay, 0, 0, 1280, 720);
@@ -102,9 +127,9 @@ public class GameScreen implements Screen {
             batch.draw(resumeButton, 540, 310, 200, 100);
         } else {
             batch.draw(catapult.getCatapultTexture(), 209, 103, 72, 203);
-            batch.draw(new Red().getRedTexture(), 10, 99, 110, 142);
-            batch.draw(new Bomb().getBombTexture(), 112, 99, 97, 161);
-            batch.draw(new Chuck().getChuckTexture(), 202, 251, 71, 55);
+            batch.draw(red.getRedTexture(), 10, 99, 110, 142);
+            batch.draw(bomb.getBombTexture(), 112, 99, 97, 161);
+            batch.draw(chuck.getChuckTexture(), 202, 251, 71, 55);
         }
 
         batch.end();
@@ -132,5 +157,6 @@ public class GameScreen implements Screen {
         pauseOverlay.dispose();
         pauseheadings.dispose();
         resumeButton.dispose();
+
     }
 }

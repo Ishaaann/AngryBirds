@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import org.w3c.dom.Text;
 
 public class LevelSelectorScreen implements Screen {
     private SpriteBatch batch;
@@ -25,32 +24,31 @@ public class LevelSelectorScreen implements Screen {
         batch = new SpriteBatch();
         levelSelectorTexture = new Texture("lst.png");
         levelSelectorBackground = new Texture("lsmmenu.jpg");
-//        Level1 = new Levels(1, false, new Texture("l1.png"));
         l1Texture = new Texture("l1.png");
         l2Texture = new Texture("l2.png");
         l3Texture = new Texture("l3.png");
         backButton = new Texture("back.png");
+        level1 = new Levels(1, false, l1Texture);
+        level2 = new Levels(2, true, l2Texture);
+        level3 = new Levels(3, true, l3Texture);
     }
 
     @Override
     public void show() {}
 
     @Override
-    public void render(float delta) {
-//        game.setScreen(new LevelSelectorScreen(game));
+    public void render(float delta){
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
         batch.draw(levelSelectorBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(levelSelectorTexture, 0, 0, 1280f, 266f);
         batch.draw(backButton, 0, 621, 103, 93);
-        level1 = new Levels(1, false, new Texture("l1.png"));
-        level2 = new Levels(2, true, new Texture("l2.png"));
-        level3 = new Levels(3, true, new Texture("l3.png"));
-        batch.draw(level1.getLevelTexture(),177,261, 238, 242);
-        batch.draw(level2.getLevelTexture(),520,261, 238, 242);
-        batch.draw(level3.getLevelTexture(),867,261, 238, 242);
+        batch.draw(level1.getLevelTexture(), 177, 261, 238, 242);
+        batch.draw(level2.getLevelTexture(), 520, 261, 238, 242);
+        batch.draw(level3.getLevelTexture(), 867, 261, 238, 242);
         batch.end();
+
         handleInput();
     }
 
@@ -69,7 +67,8 @@ public class LevelSelectorScreen implements Screen {
                 game.setScreen(new MainMenuScreen(game));
             }
         }
-//        if(x > 520 && x < 758 && y > 261 && y < 503){
+
+        // if(x > 520 && x < 758 && y > 261 && y < 503){
 //            if(Gdx.input.isTouched()) {
 //                game.setScreen(new Level2(game));
 //            }
