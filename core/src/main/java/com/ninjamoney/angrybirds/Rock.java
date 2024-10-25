@@ -6,8 +6,8 @@ public class Rock extends SolidObjects {
     private Texture rockTexture;
     private String rockType;
 
-    public Rock( String rockType) {
-        this.rockType = rockType;
+    public Rock( String type) {
+        this.rockType = type;
         if(rockType.equals("circle")){
             rockTexture = new Texture("circle.png");
         }
