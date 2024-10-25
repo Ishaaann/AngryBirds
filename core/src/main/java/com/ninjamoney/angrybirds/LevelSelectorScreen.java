@@ -22,8 +22,8 @@ public class LevelSelectorScreen implements Screen {
     public LevelSelectorScreen(AngryBirds game) {
         this.game = game;
         batch = new SpriteBatch();
-        levelSelectorTexture = new Texture("lst.png");
-        levelSelectorBackground = new Texture("lsmmenu.jpg");
+        levelSelectorTexture = new Texture("game/bg/lst.png");
+        levelSelectorBackground = new Texture("game/bg/lsmmenu.jpg");
         l1Texture = new Texture("buttons/levels/l1.png");
         l2Texture = new Texture("buttons/levels/l2.png");
         l3Texture = new Texture("buttons/levels/l3.png");

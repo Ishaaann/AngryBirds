@@ -30,9 +30,9 @@ public class MainMenuScreen implements Screen {
         this.game = (AngryBirds) game;
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        menuTexture = new Texture("finalmenu.png");
+        menuTexture = new Texture("game/bg/finalmenu.png");
 //        playbutton = new Texture("playbutton.png");
-        logo = new Texture("logo.png");
+        logo = new Texture("game/logo.png");
         playbutton = new Texture("buttons/Play1.png");
         playbutton1 = new Texture("buttons/Play2.png");
         soundOnTexture = new Texture("buttons/sound/sound.png");

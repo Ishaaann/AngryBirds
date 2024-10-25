@@ -25,7 +25,7 @@ public class FirstScreen implements Screen {
     public FirstScreen(AngryBirds game) {
         this.game = game;
         batch = new SpriteBatch();
-        splashTexture = new Texture("entry.png");
+        splashTexture = new Texture("game/bg/entry.png");
         camera = new OrthographicCamera();
 //        camera.setToOrtho(false, originalWidth, originalHeight);
         Music themeMusic = Gdx.audio.newMusic(Gdx.files.internal("game/angry-birds-drip.mp3"));

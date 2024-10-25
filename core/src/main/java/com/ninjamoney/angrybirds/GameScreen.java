@@ -37,11 +37,11 @@ public class GameScreen implements Screen {
         this.isLocked = isLocked;
         this.level = level;
         batch = new SpriteBatch();
-        background = new Texture("background.jpg");
+        background = new Texture("game/bg/background.jpg");
         backButton = new Texture("buttons/back.png");
         pauseButton = new Texture("buttons/pause.png");
-        pauseOverlay = new Texture("pauseboard.png");
-        pauseheadings = new Texture("pause_heading.png");
+        pauseOverlay = new Texture("game/pauseboard.png");
+        pauseheadings = new Texture("game/pause_heading.png");
         resumeButton = new Texture("buttons/Play1.png");
         prev = new LevelSelectorScreen(game);
         catapult = new Catapult(209, 103);

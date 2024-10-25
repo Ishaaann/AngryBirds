@@ -7,7 +7,7 @@ public class Levels {
     private int levelNumber;
     private boolean isLocked;
     private Structure structure;
-    private Texture background = new Texture("background.jpg");
+    private Texture background = new Texture("game/bg/background.jpg");
 
     public Levels(int levelNumber, boolean isLocked, Texture levelImage) {
         this.levelNumber = levelNumber;
