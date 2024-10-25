@@ -6,6 +6,7 @@ public class Levels {
     private Texture levelTexture;
     private int levelNumber;
     private boolean isLocked;
+    private Structure structure;
     private Texture background = new Texture("background.jpg");
 
     public Levels(int levelNumber, boolean isLocked, Texture levelImage) {

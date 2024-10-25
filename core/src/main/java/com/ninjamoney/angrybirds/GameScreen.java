@@ -47,9 +47,9 @@ public class GameScreen implements Screen {
         batch.draw(background, 0, 0, 1280f, 720f);
         batch.draw(backButton, 1177, 621, 103, 93);
         batch.draw(catapult.getCatapultTexture(), 209, 103, 72,203);
-        batch.draw(new Red().getRedTexture(),214,254,49,44);
-        batch.draw(new Bomb().getBombTexture(), 154, 103, 55, 66);
-        batch.draw(new Chuck().getChuckTexture(),69,103,71,55);
+        batch.draw(new Red().getRedTexture(),10,99,110,142);
+        batch.draw(new Bomb().getBombTexture(), 112, 99, 97, 161);
+        batch.draw(new Chuck().getChuckTexture(),202,251,71,55);
         batch.end();
         handleInput();
     }
