@@ -14,6 +14,8 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Texture background;
     private Texture backButton;
+    private Screen prev;
+    private Catapult catapult;
 
     public GameScreen(AngryBirds game, int levelNumber, boolean isLocked, Levels level) {
         this.game = game;
@@ -23,28 +25,33 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         background = new Texture("background.jpg");
         backButton = new Texture("back.png");
+        prev = new LevelSelectorScreen(game);
+        catapult = new Catapult(209, 103);
     }
     @Override
     public void show() {}
 
     public void handleInput(){
-
+        float x = Gdx.input.getX();
+        float y = Gdx.graphics.getHeight() - Gdx.input.getY();
+        if(x > 1177 && y > 621){
+            if(Gdx.input.isTouched()) {
+                game.setScreen(prev);
+            }
+        }
     }
 
     @Override
     public void render(float delta) {
         batch.begin();
         batch.draw(background, 0, 0, 1280f, 720f);
-        batch.draw(backButton, 0, 621, 103, 93);
+        batch.draw(backButton, 1177, 621, 103, 93);
+        batch.draw(catapult.getCatapultTexture(), 209, 103, 72,203);
+        batch.draw(new Red().getRedTexture(),214,254,49,44);
+        batch.draw(new Bomb().getBombTexture(), 154, 103, 55, 66);
+        batch.draw(new Chuck().getChuckTexture(),69,103,71,55);
         batch.end();
-        float x = Gdx.input.getX();
-        float y = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-        if(x > 0 && x < 103 && y > 621){
-            if(Gdx.input.isTouched()) {
-                game.setScreen(new LevelSelectorScreen(game));
-            }
-        }
+        handleInput();
     }
 
     @Override
