@@ -84,6 +84,23 @@ public class GameScreen implements Screen {
             batch.draw(new Chuck().getChuckTexture(), 202, 251, 71, 55);
         }
 
+        //drawing structure
+        batch.draw(new Rock("circle").getRockTexture(), 899, 99, 57, 50);
+        batch.draw(new Rock("circle").getRockTexture(), 966, 99, 57, 50);
+        batch.draw(new Rock("circle").getRockTexture(), 1033, 99, 57, 50);
+
+        batch.draw(new Wood("plank").getWoodTexture(), 888, 149, 211, 20);
+        batch.draw(new Wood("plank").getWoodTexture(), 888, 356, 211, 20);
+        batch.draw(new Wood("plank").getWoodTexture(), 888, 488, 211, 20);
+        batch.draw(new Wood("plank").getWoodTexture(), 888, 149, 20, 211);
+        batch.draw(new Wood("plank").getWoodTexture(), 1078, 149, 20, 211);
+
+        batch.draw(new Rock("rockBlock").getRockTexture(), 899, 377, 40, 39);
+        batch.draw(new Rock("rockBlock").getRockTexture(), 1048, 377, 40, 39);
+
+        batch.draw(new Wood("woodTriangle").getRegion(), 1048, 416, 69, 71);
+        batch.draw(new Wood("woodTriangle").getWoodTexture(), 870, 416, 69, 71);
+
         batch.end();
         handleInput();
     }
