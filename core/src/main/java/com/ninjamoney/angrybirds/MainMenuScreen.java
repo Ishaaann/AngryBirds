@@ -18,6 +18,12 @@ public class MainMenuScreen implements Screen {
     private OrthographicCamera cam;
     private Texture logo;
     private Texture playbutton1;
+    private Texture soundOnTexture;
+    private Texture soundOnHoverTexture;
+    private Texture soundOffTexture;
+    private Texture soundOffHoverTexture;
+    private boolean isHoveringSoundButton = false;
+    private boolean isMusicOn = true;
 
     public MainMenuScreen(Game game) {
         batch = new SpriteBatch();
@@ -29,6 +35,11 @@ public class MainMenuScreen implements Screen {
         logo = new Texture("logo.png");
         playbutton = new Texture("Play1.png");
         playbutton1 = new Texture("Play2.png");
+        soundOnTexture = new Texture("sound.png");
+        soundOffTexture = new Texture("soundoff.png");
+        soundOnHoverTexture = new Texture("soundhover.png");
+        soundOffHoverTexture = new Texture("soundoffhover.png");
+
 
     }
 
@@ -45,6 +56,21 @@ public class MainMenuScreen implements Screen {
                 game.setScreen(new LevelSelectorScreen(game));
             }
         }
+        if (x > 1 && x < 108 && y > 1 && y < 108) {
+            isHoveringSoundButton = true;
+            if (Gdx.input.justTouched()) {
+                isMusicOn = !isMusicOn;
+//                if (isMusicOn) {
+//                    game.playMusic();
+//                } else {
+//                    game.stopMusic();
+//                }
+            }
+        } else {
+            isHoveringSoundButton = false;
+        }
+
+
     }
 
 
@@ -56,6 +82,19 @@ public class MainMenuScreen implements Screen {
         batch.draw(menuTexture, 0, 0, 1280f, 720f);
         batch.draw(logo, 230, 470, 820, 177);
         batch.draw(playbutton, 422,111, 417, 268);
+        if (isMusicOn) {
+            if (isHoveringSoundButton) {
+                batch.draw(soundOnHoverTexture, 1, 1, 107, 107);
+            } else {
+                batch.draw(soundOnTexture, 1, 1, 107, 107);
+            }
+        } else {
+            if (isHoveringSoundButton) {
+                batch.draw(soundOffHoverTexture, 1, 1, 107, 107);
+            } else {
+                batch.draw(soundOffTexture, 1, 1, 107, 107);
+            }
+        }
         handleInput();
         batch.end();
     }
