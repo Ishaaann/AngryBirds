@@ -1,9 +1,9 @@
-package com.ninjamoney.angrybirds;
+package com.ninjamoney.angrybirds.elements.character.bird;
 
 import com.badlogic.gdx.graphics.Texture;
 
 public class Chuck extends Birds {
-    private com.ninjamoney.angrybirds.specialAbility specialAbility;
+    private com.ninjamoney.angrybirds.elements.struct.specialAbility specialAbility;
     private final Texture chuckTexture;
 
     public Chuck() {

@@ -1,6 +1,7 @@
-package com.ninjamoney.angrybirds;
+package com.ninjamoney.angrybirds.screens;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.ninjamoney.angrybirds.elements.struct.Structure;
 
 public class Levels {
     private Texture levelTexture;

@@ -3,6 +3,7 @@ package com.ninjamoney.angrybirds;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ninjamoney.angrybirds.screens.FirstScreen;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class AngryBirds extends Game {

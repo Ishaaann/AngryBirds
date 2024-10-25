@@ -1,4 +1,4 @@
-package com.ninjamoney.angrybirds;
+package com.ninjamoney.angrybirds.elements.character.pig;
 
 import com.badlogic.gdx.graphics.Texture;
 

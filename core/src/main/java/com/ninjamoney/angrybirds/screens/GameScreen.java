@@ -1,9 +1,19 @@
-package com.ninjamoney.angrybirds;
+package com.ninjamoney.angrybirds.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ninjamoney.angrybirds.*;
+import com.ninjamoney.angrybirds.elements.character.bird.Bomb;
+import com.ninjamoney.angrybirds.elements.character.bird.Chuck;
+import com.ninjamoney.angrybirds.elements.character.bird.Red;
+import com.ninjamoney.angrybirds.elements.character.pig.LargePig;
+import com.ninjamoney.angrybirds.elements.character.pig.MediumPig;
+import com.ninjamoney.angrybirds.elements.character.pig.SmallPig;
+import com.ninjamoney.angrybirds.elements.struct.Catapult;
+import com.ninjamoney.angrybirds.elements.struct.Rock;
+import com.ninjamoney.angrybirds.elements.struct.Wood;
 
 public class GameScreen implements Screen {
 

@@ -1,4 +1,4 @@
-package com.ninjamoney.angrybirds;
+package com.ninjamoney.angrybirds.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -7,8 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import org.w3c.dom.Text;
+import com.ninjamoney.angrybirds.AngryBirds;
 
 public class MainMenuScreen implements Screen {
     private SpriteBatch batch;
