@@ -73,17 +73,6 @@ public class GameScreen implements Screen {
         batch.draw(backButton, 1177, 621, 103, 93);
         batch.draw(pauseButton, 0, 620, 100, 100);
 
-        if (isPaused) {
-            batch.draw(pauseOverlay, 0, 0, 1280, 720);
-            batch.draw(pauseheadings, 540, 410, 200, 100);
-            batch.draw(resumeButton, 540, 310, 200, 100);
-        } else {
-            batch.draw(catapult.getCatapultTexture(), 209, 103, 72, 203);
-            batch.draw(new Red().getRedTexture(), 10, 99, 110, 142);
-            batch.draw(new Bomb().getBombTexture(), 112, 99, 97, 161);
-            batch.draw(new Chuck().getChuckTexture(), 202, 251, 71, 55);
-        }
-
         //drawing structure
         batch.draw(new Rock("circle").getRockTexture(), 899, 99, 57, 50);
         batch.draw(new Rock("circle").getRockTexture(), 966, 99, 57, 50);
@@ -100,6 +89,23 @@ public class GameScreen implements Screen {
 
         batch.draw(new Wood("woodTriangle").getRegion(), 1048, 416, 69, 71);
         batch.draw(new Wood("woodTriangle").getWoodTexture(), 870, 416, 69, 71);
+
+        //adding piggies
+        batch.draw(new SmallPig().getPigTexture(), 967, 508, 52, 47);
+        batch.draw(new MediumPig().getPigTexture(), 945, 376, 98, 95);
+        batch.draw(new LargePig().getPigTexture(), 926, 149, 135, 155);
+
+
+        if (isPaused) {
+            batch.draw(pauseOverlay, 0, 0, 1280, 720);
+            batch.draw(pauseheadings, 540, 410, 200, 100);
+            batch.draw(resumeButton, 540, 310, 200, 100);
+        } else {
+            batch.draw(catapult.getCatapultTexture(), 209, 103, 72, 203);
+            batch.draw(new Red().getRedTexture(), 10, 99, 110, 142);
+            batch.draw(new Bomb().getBombTexture(), 112, 99, 97, 161);
+            batch.draw(new Chuck().getChuckTexture(), 202, 251, 71, 55);
+        }
 
         batch.end();
         handleInput();
