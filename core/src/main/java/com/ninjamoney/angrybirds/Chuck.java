@@ -8,7 +8,7 @@ public class Chuck extends Birds {
 
     public Chuck() {
         super("Chuck", 100);
-        chuckTexture = new Texture("chuck.png");
+        chuckTexture = new Texture("elements/char/chuck.png");
     }
 
     public Texture getChuckTexture() {

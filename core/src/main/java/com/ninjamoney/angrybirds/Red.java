@@ -8,7 +8,7 @@ public class Red extends Birds {
 
     public Red() {
         super("Red", 100);
-        redTexture = new Texture("red.png");
+        redTexture = new Texture("elements/char/red.png");
     }
 
     public Texture getRedTexture() {

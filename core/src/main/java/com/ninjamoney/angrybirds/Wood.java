@@ -11,12 +11,12 @@ public class Wood extends SolidObjects{
     public Wood(String type) {
         this.woodType = type;
         if(woodType.equals("plank")){
-            woodTexture = new Texture("plank.png");
+            woodTexture = new Texture("elements/struct/plank.png");
             region = new TextureRegion(woodTexture);
             region.flip(true, false);
         }
         if(woodType.equals("woodTriangle")){
-            woodTexture = new Texture("wood_triangle.png");
+            woodTexture = new Texture("elements/struct/wood_triangle.png");
             region = new TextureRegion(woodTexture);
             region.flip(true, false);
         }

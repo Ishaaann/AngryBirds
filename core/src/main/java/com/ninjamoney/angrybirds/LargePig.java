@@ -6,7 +6,7 @@ public class LargePig {
     private Texture pigTexture;
 
     public LargePig() {
-        pigTexture = new Texture("largepig.png");
+        pigTexture = new Texture("elements/char/largepig.png");
     }
 
     public Texture getPigTexture() {

@@ -9,10 +9,10 @@ public class Rock extends SolidObjects {
     public Rock( String type) {
         this.rockType = type;
         if(rockType.equals("circle")){
-            rockTexture = new Texture("rock_circle.png");
+            rockTexture = new Texture("elements/struct/rock_circle.png");
         }
         if(rockType.equals("rockBlock")){
-            rockTexture = new Texture("rock_block.png");
+            rockTexture = new Texture("elements/struct/rock_block.png");
         }
     }
 

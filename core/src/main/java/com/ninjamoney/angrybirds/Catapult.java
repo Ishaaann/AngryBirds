@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 public final class Catapult {
     private int x; // x coordinate of the catapult
     private int y; // y coordinate of the catapult
-    private Texture catapultTexture = new Texture("catapult.png");
+    private Texture catapultTexture = new Texture("elements/struct/catapult.png");
 
     public Catapult(int x, int y) {
         this.x = x;

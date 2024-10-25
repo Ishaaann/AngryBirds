@@ -6,7 +6,7 @@ public class MediumPig {
     private Texture pigTexture;
 
     public MediumPig() {
-        pigTexture = new Texture("mediumpig.png");
+        pigTexture = new Texture("elements/char/mediumpig.png");
     }
 
     public Texture getPigTexture() {

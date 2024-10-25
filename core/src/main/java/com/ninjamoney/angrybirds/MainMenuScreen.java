@@ -33,12 +33,12 @@ public class MainMenuScreen implements Screen {
         menuTexture = new Texture("finalmenu.png");
 //        playbutton = new Texture("playbutton.png");
         logo = new Texture("logo.png");
-        playbutton = new Texture("Play1.png");
-        playbutton1 = new Texture("Play2.png");
-        soundOnTexture = new Texture("sound.png");
-        soundOffTexture = new Texture("soundoff.png");
-        soundOnHoverTexture = new Texture("soundhover.png");
-        soundOffHoverTexture = new Texture("soundoffhover.png");
+        playbutton = new Texture("buttons/Play1.png");
+        playbutton1 = new Texture("buttons/Play2.png");
+        soundOnTexture = new Texture("buttons/sound/sound.png");
+        soundOffTexture = new Texture("buttons/sound/soundoff.png");
+        soundOnHoverTexture = new Texture("buttons/sound/soundhover.png");
+        soundOffHoverTexture = new Texture("buttons/sound/soundoffhover.png");
 
 
     }

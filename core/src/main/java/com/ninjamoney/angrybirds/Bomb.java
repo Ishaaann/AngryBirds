@@ -8,7 +8,7 @@ public class Bomb extends Birds {
 
     public Bomb() {
         super("Bomb", 100);
-        bombTexture = new Texture("bomb.png");
+        bombTexture = new Texture("elements/char/bomb.png");
     }
 
     public Texture getBombTexture() {

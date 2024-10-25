@@ -24,10 +24,10 @@ public class LevelSelectorScreen implements Screen {
         batch = new SpriteBatch();
         levelSelectorTexture = new Texture("lst.png");
         levelSelectorBackground = new Texture("lsmmenu.jpg");
-        l1Texture = new Texture("l1.png");
-        l2Texture = new Texture("l2.png");
-        l3Texture = new Texture("l3.png");
-        backButton = new Texture("back.png");
+        l1Texture = new Texture("buttons/levels/l1.png");
+        l2Texture = new Texture("buttons/levels/l2.png");
+        l3Texture = new Texture("buttons/levels/l3.png");
+        backButton = new Texture("buttons/back.png");
         level1 = new Levels(1, false, l1Texture);
         level2 = new Levels(2, true, l2Texture);
         level3 = new Levels(3, true, l3Texture);
