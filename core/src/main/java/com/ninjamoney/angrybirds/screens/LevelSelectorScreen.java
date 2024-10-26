@@ -59,7 +59,7 @@ public class LevelSelectorScreen implements Screen {
 
         if(x > 177 && x < 415 && y > 261 && y < 503){
             if(Gdx.input.isTouched()) {
-                game.setScreen(new GameScreen(game,1, false, level1));
+                game.setScreen(new GameScreen(game,1, false));
             }
         }
 

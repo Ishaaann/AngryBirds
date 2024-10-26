@@ -3,7 +3,15 @@ package com.ninjamoney.angrybirds.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ninjamoney.angrybirds.*;
 import com.ninjamoney.angrybirds.elements.character.bird.Bomb;
 import com.ninjamoney.angrybirds.elements.character.bird.Chuck;
@@ -28,7 +36,9 @@ public class GameScreen implements Screen {
     private Texture pauseOverlay;
     private Texture pauseheadings;
     private Texture resumeButton;
+    private Texture dummyButtonTexture;
     private Screen prev;
+    private Stage stage;
     private Catapult catapult;
     private Rock circleRock1, circleRock2, circleRock3, rockBlock1, rockBlock2;
     private Wood plank1, plank2, plank3, plank4, plank5, woodTriangle1, woodTriangle2;
@@ -38,10 +48,12 @@ public class GameScreen implements Screen {
     private Red red;
     private Bomb bomb;
     private Chuck chuck;
-
     private boolean isPaused = false;
+    private Skin skin;
+    private Button dummyButton1;
+    private Button dummyButton2;
 
-    public GameScreen(AngryBirds game, int levelNumber, boolean isLocked, Levels level) {
+    public GameScreen(AngryBirds game, int levelNumber, boolean isLocked) {
         this.game = game;
         this.levelNumber = levelNumber;
         this.isLocked = isLocked;
@@ -56,7 +68,42 @@ public class GameScreen implements Screen {
         prev = new LevelSelectorScreen(game);
         catapult = new Catapult(209, 103);
 
-        // Initialize objects once
+        // Initialize stage and add input processor for stage
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+        skin = new Skin();
+        BitmapFont font = new BitmapFont();
+        skin.add("default", font);
+
+        // Dummy button setup
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = skin.getFont("default");
+
+        dummyButton1 = new TextButton("Win Screen", textButtonStyle);
+        dummyButton1.setPosition(0, 0);
+        dummyButton1.setSize(100, 50);
+        dummyButton1.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new VictoryScreen(game));
+            }
+        });
+
+        dummyButton2 = new TextButton("Lose Screen", textButtonStyle);
+        dummyButton2.setPosition(150, 0);
+        dummyButton2.setSize(100, 50);
+        dummyButton2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LoseScreen(game));
+            }
+        });
+
+        stage.addActor(dummyButton1);
+        stage.addActor(dummyButton2);
+
+        // Initialize other game objects
         circleRock1 = new Rock("circle");
         circleRock2 = new Rock("circle");
         circleRock3 = new Rock("circle");
@@ -109,24 +156,21 @@ public class GameScreen implements Screen {
         batch.draw(backButton, 1177, 621, 103, 93);
         batch.draw(pauseButton, 0, 620, 100, 100);
 
-        //drawing structure
+        // Draw structure
         batch.draw(circleRock1.getRockTexture(), 899, 99, 57, 50);
         batch.draw(circleRock2.getRockTexture(), 966, 99, 57, 50);
         batch.draw(circleRock3.getRockTexture(), 1033, 99, 57, 50);
-
         batch.draw(plank1.getWoodTexture(), 888, 149, 211, 20);
         batch.draw(plank2.getWoodTexture(), 888, 356, 211, 20);
         batch.draw(plank3.getWoodTexture(), 888, 488, 211, 20);
         batch.draw(plank4.getWoodTexture(), 888, 149, 20, 211);
         batch.draw(plank5.getWoodTexture(), 1078, 149, 20, 211);
-
         batch.draw(rockBlock1.getRockTexture(), 899, 377, 40, 39);
         batch.draw(rockBlock2.getRockTexture(), 1048, 377, 40, 39);
-
         batch.draw(woodTriangle1.getRegion(), 1048, 416, 69, 71);
         batch.draw(woodTriangle2.getWoodTexture(), 870, 416, 69, 71);
 
-        //adding piggies
+        // Draw pigs
         batch.draw(smallPig.getPigTexture(), 967, 508, 52, 47);
         batch.draw(mediumPig.getPigTexture(), 945, 376, 98, 95);
         batch.draw(largePig.getPigTexture(), 926, 149, 135, 155);
@@ -141,13 +185,19 @@ public class GameScreen implements Screen {
             batch.draw(bomb.getBombTexture(), 112, 99, 97, 161);
             batch.draw(chuck.getChuckTexture(), 202, 251, 71, 55);
         }
-
         batch.end();
+
+        // Update and draw the stage (for buttons)
+        stage.act(delta);
+        stage.draw();
+
         handleInput();
     }
 
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
 
     @Override
     public void pause() {}
@@ -167,6 +217,8 @@ public class GameScreen implements Screen {
         pauseOverlay.dispose();
         pauseheadings.dispose();
         resumeButton.dispose();
-
+        dummyButtonTexture.dispose();
+        stage.dispose();
+        skin.dispose();
     }
 }
