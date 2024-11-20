@@ -29,10 +29,9 @@ public class FirstScreen implements Screen {
         splashTexture = new Texture("game/bg/entry.png");
         camera = new OrthographicCamera();
 //        camera.setToOrtho(false, originalWidth, originalHeight);
-        Music themeMusic = Gdx.audio.newMusic(Gdx.files.internal("game/angry-birds-drip.mp3"));
-        themeMusic.setLooping(true);
-        themeMusic.setVolume(0.3f);
-        themeMusic.play();
+        game.themeMusic.setLooping(true);
+        game.themeMusic.setVolume(0.3f);
+        game.themeMusic.play();
     }
 
     @Override

@@ -1,105 +1,108 @@
+
 package com.ninjamoney.angrybirds.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ninjamoney.angrybirds.AngryBirds;
 
 public class MainMenuScreen implements Screen {
-    private SpriteBatch batch;
-    private Texture menuTexture;
-    private Texture playbutton;
+    private Stage stage;
     private AngryBirds game;
-    private OrthographicCamera cam;
+
+    private Texture menuTexture;
     private Texture logo;
-    private Texture playbutton1;
-    private Texture soundOnTexture;
-    private Texture soundOnHoverTexture;
-    private Texture soundOffTexture;
-    private Texture soundOffHoverTexture;
-    private boolean isHoveringSoundButton = false;
-    private boolean isMusicOn = true;
 
     public MainMenuScreen(Game game) {
-        batch = new SpriteBatch();
         this.game = (AngryBirds) game;
-        cam = new OrthographicCamera();
-        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
         menuTexture = new Texture("game/bg/finalmenu.png");
-//        playbutton = new Texture("playbutton.png");
         logo = new Texture("game/logo.png");
-        playbutton = new Texture("buttons/Play1.png");
-        playbutton1 = new Texture("buttons/Play2.png");
-        soundOnTexture = new Texture("buttons/sound/sound.png");
-        soundOffTexture = new Texture("buttons/sound/soundoff.png");
-        soundOnHoverTexture = new Texture("buttons/sound/soundhover.png");
-        soundOffHoverTexture = new Texture("buttons/sound/soundoffhover.png");
+        createButtons();
+    }
 
+    private void createButtons() {
+        // Play button
+        Texture playTexture = new Texture("buttons/Play1.png");
+        Texture playHoverTexture = new Texture("buttons/Play2.png");
+        ImageButton playButton = new ImageButton(
+            new TextureRegionDrawable(new TextureRegion(playTexture)),
+            new TextureRegionDrawable(new TextureRegion(playHoverTexture))
+        );
+        playButton.setPosition(422, 111);
+        playButton.setSize(417, 268);
 
+        playButton.addListener(event -> {
+            if (playButton.isPressed()) {
+                game.setScreen(new LevelSelectorScreen(game));
+                return true;
+            }
+
+            return false;
+        });
+
+        // Sound button
+        Texture soundOnTexture = new Texture("buttons/sound/sound.png");
+        Texture soundOnHoverTexture = new Texture("buttons/sound/soundhover.png");
+        Texture soundOffTexture = new Texture("buttons/sound/soundoff.png");
+        Texture soundOffHoverTexture = new Texture("buttons/sound/soundoffhover.png");
+        ImageButton soundButton = new ImageButton(
+            new TextureRegionDrawable(new TextureRegion(soundOnTexture)),
+            new TextureRegionDrawable(new TextureRegion(soundOnHoverTexture))
+        );
+        soundButton.setPosition(1, 1);
+        soundButton.setSize(107, 107);
+
+        soundButton.addListener(event -> {
+            if (soundButton.isPressed()) {
+                boolean isMusicOn = !game.isMusicPlaying();
+                game.toggleMusic();
+                if (isMusicOn) {
+                    soundButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(soundOnTexture));
+                    soundButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(soundOnHoverTexture));
+                } else {
+                    soundButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(soundOffTexture));
+                    soundButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(soundOffHoverTexture));
+                }
+                return true;
+            }
+            return false;
+        });
+
+        stage.addActor(playButton);
+        stage.addActor(soundButton);
     }
 
     @Override
     public void show() {}
 
-    public void handleInput(){
-        float x = Gdx.input.getX();
-        float y = Gdx.graphics.getHeight() - Gdx.input.getY(); // Invert Y coordinate
-
-        if(x > 422 && x < 839 && y > 111 && y < 241){
-            batch.draw(playbutton1, 422, 111, 417, 268);
-            if(Gdx.input.isTouched()) {
-                game.setScreen(new LevelSelectorScreen(game));
-            }
-        }
-        if (x > 1 && x < 108 && y > 1 && y < 108) {
-            isHoveringSoundButton = true;
-            if (Gdx.input.justTouched()) {
-                isMusicOn = !isMusicOn;
-//                if (isMusicOn) {
-//                    game.playMusic();
-//                } else {
-//                    game.stopMusic();
-//                }
-            }
-        } else {
-            isHoveringSoundButton = false;
-        }
-
-
-    }
-
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-        batch.draw(menuTexture, 0, 0, 1280f, 720f);
-        batch.draw(logo, 230, 470, 820, 177);
-        batch.draw(playbutton, 422,111, 417, 268);
-        if (isMusicOn) {
-            if (isHoveringSoundButton) {
-                batch.draw(soundOnHoverTexture, 1, 1, 107, 107);
-            } else {
-                batch.draw(soundOnTexture, 1, 1, 107, 107);
-            }
-        } else {
-            if (isHoveringSoundButton) {
-                batch.draw(soundOffHoverTexture, 1, 1, 107, 107);
-            } else {
-                batch.draw(soundOffTexture, 1, 1, 107, 107);
-            }
-        }
-        handleInput();
-        batch.end();
+        stage.getBatch().begin();
+        stage.getBatch().draw(menuTexture, 0, 0, 1280f, 720f);
+        stage.getBatch().draw(logo, 230, 470, 820, 177);
+        stage.getBatch().end();
+
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
 
     @Override
     public void pause() {}
@@ -109,13 +112,13 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void hide() {
-//        dispose();
+        dispose();
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
+        stage.dispose();
         menuTexture.dispose();
-        playbutton.dispose();
+        logo.dispose();
     }
 }
