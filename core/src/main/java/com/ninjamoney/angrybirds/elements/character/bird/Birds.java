@@ -2,6 +2,10 @@ package com.ninjamoney.angrybirds.elements.character.bird;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public abstract class Birds {
     private String name;
@@ -10,23 +14,44 @@ public abstract class Birds {
     private float speed;
     private float damage;
     private Body birdBody;
+    private World world;
 
-
-    public Birds(String name, int health, float speed, float damage, Texture birdTexture) {
+    public Birds(String name, int health, float speed, float damage, Texture birdTexture, World world) {
         this.name = name;
         this.health = health;
         this.speed = speed;
         this.damage = damage;
         this.birdTexture = birdTexture;
+        this.world = world;
+        createBirdBody();
     }
-
 
     public abstract void activateSpecialAbility();
 
-    // Method to update the bird's position based on Box2D
     public abstract void updatePosition();
 
-    // Getters and Setters
+    public abstract void dealDamage();
+
+    private void createBirdBody() {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(0, 0);
+
+        CircleShape shape = new CircleShape();
+        shape.setRadius(0.5f);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.5f;
+        fixtureDef.restitution = 0.2f;
+
+        birdBody = world.createBody(bodyDef);
+        birdBody.createFixture(fixtureDef);
+
+        shape.dispose();
+    }
+
     public String getName() {
         return name;
     }
@@ -75,6 +100,11 @@ public abstract class Birds {
         this.birdBody = birdBody;
     }
 
-    // Method to deal damage to pigs or structures (to be implemented in subclasses)
-    public abstract void dealDamage();
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
 }
