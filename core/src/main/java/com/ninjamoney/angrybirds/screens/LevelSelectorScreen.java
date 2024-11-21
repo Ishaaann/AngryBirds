@@ -104,7 +104,6 @@
 //        backButton.dispose();
 //    }
 //}
-
 package com.ninjamoney.angrybirds.screens;
 
 import com.badlogic.gdx.Gdx;
@@ -127,6 +126,9 @@ public class LevelSelectorScreen implements Screen {
     private Texture backButtonTexture;
     private Texture l1Texture, l2Texture, l3Texture;
 
+    private ImageButton backButton;
+    private ImageButton level1Button, level2Button, level3Button;
+
     public LevelSelectorScreen(AngryBirds game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
@@ -138,16 +140,15 @@ public class LevelSelectorScreen implements Screen {
         l1Texture = new Texture("buttons/levels/l1.png");
         l2Texture = new Texture("buttons/levels/l2.png");
         l3Texture = new Texture("buttons/levels/l3.png");
-        
+
         createButtons();
     }
 
     private void createButtons() {
         // Back button
-        ImageButton backButton = new ImageButton(
+        backButton = new ImageButton(
             new TextureRegionDrawable(new TextureRegion(backButtonTexture))
         );
-        backButton.setPosition(0, 621);
         backButton.setSize(103, 93);
         backButton.addListener(event -> {
             if (backButton.isPressed()) {
@@ -158,10 +159,9 @@ public class LevelSelectorScreen implements Screen {
         });
 
         // Level 1 button
-        ImageButton level1Button = new ImageButton(
+        level1Button = new ImageButton(
             new TextureRegionDrawable(new TextureRegion(l1Texture))
         );
-        level1Button.setPosition(177, 261);
         level1Button.setSize(238, 242);
         level1Button.addListener(event -> {
             if (level1Button.isPressed()) {
@@ -172,14 +172,12 @@ public class LevelSelectorScreen implements Screen {
         });
 
         // Level 2 button
-        ImageButton level2Button = new ImageButton(
+        level2Button = new ImageButton(
             new TextureRegionDrawable(new TextureRegion(l2Texture))
         );
-        level2Button.setPosition(520, 261);
         level2Button.setSize(238, 242);
         level2Button.addListener(event -> {
             if (level2Button.isPressed()) {
-                // Replace `GameScreen` with the correct class for level 2
                 game.setScreen(new GameScreen(game, 2, true));
                 return true;
             }
@@ -187,14 +185,12 @@ public class LevelSelectorScreen implements Screen {
         });
 
         // Level 3 button
-        ImageButton level3Button = new ImageButton(
+        level3Button = new ImageButton(
             new TextureRegionDrawable(new TextureRegion(l3Texture))
         );
-        level3Button.setPosition(867, 261);
         level3Button.setSize(238, 242);
         level3Button.addListener(event -> {
             if (level3Button.isPressed()) {
-                // Replace `GameScreen` with the correct class for level 3
                 game.setScreen(new GameScreen(game, 3, true));
                 return true;
             }
@@ -209,16 +205,13 @@ public class LevelSelectorScreen implements Screen {
     }
 
     @Override
-    public void show() {}
-
-    @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Draw the background and title
         stage.getBatch().begin();
-        stage.getBatch().draw(levelSelectorBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage.getBatch().draw(levelSelectorTexture, 0, 0, 1280f, 266f);
+        stage.getBatch().draw(levelSelectorBackground, 0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
+        stage.getBatch().draw(levelSelectorTexture, 0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight() / 4);
         stage.getBatch().end();
 
         // Render the buttons
@@ -229,7 +222,29 @@ public class LevelSelectorScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+
+        float viewportWidth = stage.getViewport().getWorldWidth();
+        float viewportHeight = stage.getViewport().getWorldHeight();
+
+        // Center the back button at the top-left corner
+        backButton.setPosition(10, viewportHeight - backButton.getHeight() - 10);
+
+        // Dynamically position the level buttons
+        float buttonSpacing = 30;
+        float totalButtonWidth = (3 * level1Button.getWidth()) + (2 * buttonSpacing);
+
+        // Calculate starting X position for centering the buttons
+        float startX = (viewportWidth - totalButtonWidth) / 2;
+        float buttonY = viewportHeight / 2 - level1Button.getHeight() / 2;
+
+        // Set positions for the buttons
+        level1Button.setPosition(startX, buttonY);
+        level2Button.setPosition(startX + level1Button.getWidth() + buttonSpacing, buttonY);
+        level3Button.setPosition(startX + 2 * (level1Button.getWidth() + buttonSpacing), buttonY);
     }
+
+    @Override
+    public void show() {}
 
     @Override
     public void pause() {}
@@ -238,9 +253,7 @@ public class LevelSelectorScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {
-        dispose();
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
@@ -253,3 +266,4 @@ public class LevelSelectorScreen implements Screen {
         l3Texture.dispose();
     }
 }
+

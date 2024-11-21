@@ -155,6 +155,7 @@ public class MainMenuScreen implements Screen {
     private final Texture menuTexture;
     private final Texture logo;
     private ImageButton playButton;
+    private ImageButton soundButton;
 
     public MainMenuScreen(Game game) {
         this.game = (AngryBirds) game;
@@ -177,6 +178,13 @@ public class MainMenuScreen implements Screen {
         );
         playButton.setSize(417, 268);
 
+        soundButton = new ImageButton(
+            new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/sound.png"))),
+            new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/soundhover.png")))
+        );
+        soundButton.setPosition(1, 1);
+        soundButton.setSize(100, 100);
+
         playButton.addListener(event -> {
             if (playButton.isPressed()) {
                 game.setScreen(new LevelSelectorScreen(game));
@@ -185,7 +193,24 @@ public class MainMenuScreen implements Screen {
             return false;
         });
 
+        soundButton.addListener(event -> {
+            if (soundButton.isPressed()) {
+                boolean isMusicOn = !game.isMusicPlaying();
+                game.toggleMusic();
+                if (isMusicOn) {
+                    soundButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/sound.png")));
+                    soundButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/soundhover.png")));
+                } else {
+                    soundButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/soundoff.png")));
+                    soundButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/soundoffhover.png")));
+                }
+                return true;
+            }
+            return false;
+        });
+
         stage.addActor(playButton);
+        stage.addActor(soundButton);
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ninjamoney.angrybirds.*;
 import com.ninjamoney.angrybirds.elements.character.bird.Bomb;
 import com.ninjamoney.angrybirds.elements.character.bird.Chuck;
@@ -22,6 +23,8 @@ import com.ninjamoney.angrybirds.elements.character.pig.SmallPig;
 import com.ninjamoney.angrybirds.elements.struct.Catapult;
 import com.ninjamoney.angrybirds.elements.struct.Rock;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
+
+import javax.swing.text.View;
 
 public class GameScreen implements Screen {
 
@@ -52,12 +55,14 @@ public class GameScreen implements Screen {
     private Skin skin;
     private Button dummyButton1;
     private Button dummyButton2;
+    Viewport viewport;
 
     public GameScreen(AngryBirds game, int levelNumber, boolean isLocked) {
         this.game = game;
         this.levelNumber = levelNumber;
         this.isLocked = isLocked;
         this.level = level;
+
         batch = new SpriteBatch();
         background = new Texture("game/bg/background.jpg");
         backButton = new Texture("buttons/back.png");
