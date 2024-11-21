@@ -29,17 +29,17 @@ public class VictoryScreen implements Screen {
 
     }
 
-    private void handleInput() {
-        float x = Gdx.input.getX();
-        float y = Gdx.graphics.getHeight() - Gdx.input.getY();
-        if (Gdx.input.isTouched()) {
-            if (x >= 593 && x <= 701 && y >= 123 && y <= 229) {
-                game.setScreen(new GameScreen(game, 1, false));
-            } else if (x >= 718 && x <= 831 && y >= 123 && y <= 229) {
-                game.setScreen(new LevelSelectorScreen(game));
-            }
-        }
-    }
+//    private void handleInput() {
+//        float x = Gdx.input.getX();
+//        float y = Gdx.graphics.getHeight() - Gdx.input.getY();
+//        if (Gdx.input.isTouched()) {
+//            if (x >= 593 && x <= 701 && y >= 123 && y <= 229) {
+//                game.setScreen(new GameScreen(game, 1, false));
+//            } else if (x >= 718 && x <= 831 && y >= 123 && y <= 229) {
+//                game.setScreen(new LevelSelectorScreen(game));
+//            }
+//        }
+//    }
 
     @Override
     public void render(float delta) {
@@ -48,7 +48,7 @@ public class VictoryScreen implements Screen {
         batch.draw(playAgainButton,593,123,108,106);
         batch.draw(nextButton, 718, 123, 113, 106);
         batch.end();
-        handleInput();
+//        handleInput();
     }
 
     @Override

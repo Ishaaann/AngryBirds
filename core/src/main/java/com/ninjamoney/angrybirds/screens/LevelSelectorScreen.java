@@ -165,7 +165,7 @@ public class LevelSelectorScreen implements Screen {
         level1Button.setSize(238, 242);
         level1Button.addListener(event -> {
             if (level1Button.isPressed()) {
-                game.setScreen(new GameScreen(game, 1, false));
+                game.setScreen(new Level1(game, 1, false));
                 return true;
             }
             return false;
@@ -178,7 +178,7 @@ public class LevelSelectorScreen implements Screen {
         level2Button.setSize(238, 242);
         level2Button.addListener(event -> {
             if (level2Button.isPressed()) {
-                game.setScreen(new GameScreen(game, 2, true));
+                game.setScreen(new Level2(game, 2, true));
                 return true;
             }
             return false;
@@ -191,7 +191,7 @@ public class LevelSelectorScreen implements Screen {
         level3Button.setSize(238, 242);
         level3Button.addListener(event -> {
             if (level3Button.isPressed()) {
-                game.setScreen(new GameScreen(game, 3, true));
+                game.setScreen(new Level3(game, 3, true));
                 return true;
             }
             return false;
@@ -244,7 +244,9 @@ public class LevelSelectorScreen implements Screen {
     }
 
     @Override
-    public void show() {}
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+    }
 
     @Override
     public void pause() {}

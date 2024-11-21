@@ -36,20 +36,20 @@ public class LoseScreen implements Screen {
         batch.draw(playAgainButton,586,160,108,106);
         batch.draw(nextButton, 733, 160, 113, 106);
         batch.end();
-        handleInput();
+//        handleInput();
     }
 
-    private void handleInput() {
-        float x = Gdx.input.getX();
-        float y = Gdx.graphics.getHeight() - Gdx.input.getY();
-        if (Gdx.input.isTouched()) {
-            if (x >= 586 && x <= 694 && y >= 160 && y <= 266) {
-                game.setScreen(new GameScreen(game, 1, false));
-            } else if (x >= 733 && x <= 846 && y >= 160 && y <= 266) {
-                game.setScreen(new LevelSelectorScreen(game));
-            }
-        }
-    }
+//    private void handleInput() {
+//        float x = Gdx.input.getX();
+//        float y = Gdx.graphics.getHeight() - Gdx.input.getY();
+//        if (Gdx.input.isTouched()) {
+//            if (x >= 586 && x <= 694 && y >= 160 && y <= 266) {
+//                game.setScreen(new GameScreen(game, 1, false));
+//            } else if (x >= 733 && x <= 846 && y >= 160 && y <= 266) {
+//                game.setScreen(new LevelSelectorScreen(game));
+//            }
+//        }
+//    }
 
     @Override
     public void resize(int width, int height) {
