@@ -1,4 +1,4 @@
-package com.ninjamoney.angrybirds.screens;
+package com.ninjamoney.angrybirds.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.ninjamoney.angrybirds.*;
+import com.ninjamoney.angrybirds.AngryBirds;
 import com.ninjamoney.angrybirds.elements.character.bird.Bomb;
 import com.ninjamoney.angrybirds.elements.character.bird.Chuck;
 import com.ninjamoney.angrybirds.elements.character.bird.Red;
@@ -23,11 +23,12 @@ import com.ninjamoney.angrybirds.elements.character.pig.SmallPig;
 import com.ninjamoney.angrybirds.elements.struct.Catapult;
 import com.ninjamoney.angrybirds.elements.struct.Rock;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
+import com.ninjamoney.angrybirds.screens.LevelSelectorScreen;
+import com.ninjamoney.angrybirds.screens.Levels;
+import com.ninjamoney.angrybirds.screens.LoseScreen;
+import com.ninjamoney.angrybirds.screens.VictoryScreen;
 
-import javax.swing.text.View;
-
-public class Level3 implements Screen {
-
+public class Level1 implements Screen {
     private AngryBirds game;
     private int levelNumber;
     private boolean isLocked;
@@ -57,7 +58,7 @@ public class Level3 implements Screen {
     private Button dummyButton2;
     Viewport viewport;
 
-    public Level3(AngryBirds game, int levelNumber, boolean isLocked) {
+    public Level1(AngryBirds game, int levelNumber, boolean isLocked) {
         this.game = game;
         this.levelNumber = levelNumber;
         this.isLocked = isLocked;

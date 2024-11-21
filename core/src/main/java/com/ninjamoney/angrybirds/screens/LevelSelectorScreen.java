@@ -116,6 +116,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ninjamoney.angrybirds.AngryBirds;
+import com.ninjamoney.angrybirds.levels.Level1;
+import com.ninjamoney.angrybirds.levels.Level2;
+import com.ninjamoney.angrybirds.levels.Level3;
 
 public class LevelSelectorScreen implements Screen {
     private Stage stage;
