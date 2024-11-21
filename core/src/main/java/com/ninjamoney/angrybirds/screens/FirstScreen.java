@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ninjamoney.angrybirds.AngryBirds;
 
 public class FirstScreen implements Screen {
@@ -17,18 +20,19 @@ public class FirstScreen implements Screen {
     private boolean transitioning = false;
     private AngryBirds game;
 
-
-    private final int originalWidth = 1080;
+    private final int originalWidth = 1280;
     private final int originalHeight = 720;
 
     private OrthographicCamera camera;
+    Viewport viewport;
 
     public FirstScreen(AngryBirds game) {
         this.game = game;
         batch = new SpriteBatch();
         splashTexture = new Texture("game/bg/entry.png");
         camera = new OrthographicCamera();
-//        camera.setToOrtho(false, originalWidth, originalHeight);
+        camera.setToOrtho(false, originalWidth, originalHeight);
+        viewport = new ScreenViewport(camera);
         game.themeMusic.setLooping(true);
         game.themeMusic.setVolume(0.3f);
         game.themeMusic.play();
@@ -40,6 +44,8 @@ public class FirstScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
+        game.batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(splashTexture, 0, 0, 1280f, 720f);
         batch.setColor(1, 1, 1, alpha);
@@ -66,7 +72,9 @@ public class FirstScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false, width, height);
+        viewport.update(width, height);
+//        camera.update();
+//        camera.setToOrtho(false, width, height);
     }
 
     @Override
