@@ -1,4 +1,4 @@
-package com.ninjamoney.angrybirds.screens;
+package com.ninjamoney.angrybirds.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -23,6 +23,10 @@ import com.ninjamoney.angrybirds.elements.character.pig.SmallPig;
 import com.ninjamoney.angrybirds.elements.struct.Catapult;
 import com.ninjamoney.angrybirds.elements.struct.Rock;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
+import com.ninjamoney.angrybirds.screens.LevelSelectorScreen;
+import com.ninjamoney.angrybirds.screens.Levels;
+import com.ninjamoney.angrybirds.screens.LoseScreen;
+import com.ninjamoney.angrybirds.screens.VictoryScreen;
 
 public class Level2 implements Screen {
         private AngryBirds game;

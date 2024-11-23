@@ -21,7 +21,6 @@ public abstract class Birds {
     }
 
 
-
     public abstract void activateSpecialAbility();
 
     // Method to update the bird's position based on Box2D
@@ -68,13 +67,13 @@ public abstract class Birds {
         this.damage = damage;
     }
 
-//    public Body getBirdBody() {
-//        return birdBody;
-//    }
+    public Body getBirdBody() {
+        return birdBody;
+    }
 
-//    public void setBirdBody(Body birdBody) {
-//        this.birdBody = birdBody;
-//    }
+    public void setBirdBody(Body birdBody) {
+        this.birdBody = birdBody;
+    }
 
     // Method to deal damage to pigs or structures (to be implemented in subclasses)
     public abstract void dealDamage();
