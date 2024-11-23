@@ -3,7 +3,7 @@ package com.ninjamoney.angrybirds.elements.character.bird;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
 
-import static com.ninjamoney.angrybirds.screens.Level1.createCircle;
+//import static com.ninjamoney.angrybirds.screens.Level1.createCircle;
 
 public class Red extends Birds {
     private static final float RED_SPEED = 15.0f;

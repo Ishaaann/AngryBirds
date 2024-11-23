@@ -191,7 +191,7 @@ public class Level1 implements Screen {
         batch.draw(slingshot, stage.getViewport().getWorldWidth() / 8, stage.getViewport().getWorldHeight() / 5, 144 / 3f, 400 / 4f);
 
         // Draw Red bird
-        batch.draw(red.getBirdTexture(), red.getRedBody().getPosition().x - 20f, red.getRedBody().getPosition().y - 20f, 40, 40);
+        batch.draw(red.getBirdTexture(), red.getRedBody().getPosition().x , red.getRedBody().getPosition().y , 40, 40);
 
         // Draw Bomb bird
         batch.draw(bomb.getBirdTexture(), bomb.getBombBody().getPosition().x - 30f, bomb.getBombBody().getPosition().y - 30f, 60, 60);
