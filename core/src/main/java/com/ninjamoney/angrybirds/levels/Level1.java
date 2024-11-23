@@ -1,4 +1,4 @@
-package com.ninjamoney.angrybirds.screens;
+package com.ninjamoney.angrybirds.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
