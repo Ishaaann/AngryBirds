@@ -9,6 +9,8 @@ public final class Catapult {
 
     public Catapult(int x, int y) {
         this.x = x;
+
+
         this.y = y;
     }
 
