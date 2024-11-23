@@ -37,10 +37,10 @@ public class Chuck extends Birds {
     }
 
     public Body getChuckBody() {
-        return chuckBody;
+        return super.getBirdBody();
     }
 
     public void setBirdBody(Body birdBody) {
-        this.chuckBody = birdBody;
+        super.birdBody = birdBody;
     }
 }

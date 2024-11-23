@@ -9,7 +9,7 @@ public abstract class Birds {
     private Texture birdTexture;
     private float speed;
     private float damage;
-    private Body birdBody;
+    public Body birdBody;
 
 
     public Birds(String name, int health, float speed, float damage, Texture birdTexture) {

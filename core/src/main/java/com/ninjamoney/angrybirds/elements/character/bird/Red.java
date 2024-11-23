@@ -9,7 +9,7 @@ public class Red extends Birds {
     private static final float RED_SPEED = 15.0f;
     private static final float RED_DAMAGE = 25.0f;
     private static final Texture redTexture = new Texture("elements/char/red.png");
-    private Body redBody;
+//    private Body redBody;
 
     public Red() {
         super("Red", 100, RED_SPEED, RED_DAMAGE, redTexture);
@@ -40,11 +40,11 @@ public class Red extends Birds {
     }
 
     public Body getRedBody() {
-        return redBody;
+        return super.getBirdBody();
     }
 
     public void setBirdBody(Body birdBody) {
-        this.redBody = birdBody;
+        super.birdBody = birdBody;
     }
 
 }

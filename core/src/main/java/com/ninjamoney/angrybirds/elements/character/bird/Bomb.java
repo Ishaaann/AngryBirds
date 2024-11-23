@@ -37,10 +37,10 @@ public class Bomb extends Birds {
     }
 
     public Body getBombBody() {
-        return bombBody;
+        return super.getBirdBody();
     }
 
     public void setBirdBody(Body birdBody) {
-        this.bombBody = birdBody;
+        super.birdBody = birdBody;
     }
 }
