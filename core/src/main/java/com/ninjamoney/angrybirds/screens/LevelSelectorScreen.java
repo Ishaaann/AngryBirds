@@ -176,7 +176,7 @@ public class LevelSelectorScreen implements Screen {
             new TextureRegionDrawable(new TextureRegion(l2Texture))
         );
         level2Button.setSize(238, 242);
-        level2Button.addListener(event -> {
+        level2Button.addListener(e -> {
             if (level2Button.isPressed()) {
                 game.setScreen(new Level2(game, 2, true));
                 return true;
@@ -189,7 +189,7 @@ public class LevelSelectorScreen implements Screen {
             new TextureRegionDrawable(new TextureRegion(l3Texture))
         );
         level3Button.setSize(238, 242);
-        level3Button.addListener(event -> {
+        level3Button.addListener(e -> {
             if (level3Button.isPressed()) {
                 game.setScreen(new Level3(game, 3, true));
                 return true;

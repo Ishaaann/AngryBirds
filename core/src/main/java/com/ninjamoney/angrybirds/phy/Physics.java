@@ -7,9 +7,9 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 public class Physics {
 
-    private World world;
-    private Box2DDebugRenderer debugRenderer;
-    private ShapeRenderer shapeRenderer;
+    public World world;
+    public Box2DDebugRenderer debugRenderer;
+    public ShapeRenderer shapeRenderer;
 
     public Physics() {
         world = new World(new Vector2(0, -9.8f), true);
