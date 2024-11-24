@@ -114,6 +114,7 @@ public class Level1 implements Screen {
 
         body.createFixture(fixtureDef);
         body.setGravityScale(0);
+        body.setAngularDamping(1f);
         circle.dispose();
 
         return body;
@@ -235,6 +236,7 @@ public class Level1 implements Screen {
         batch.end();
 
         // Update the physics world
+        world.step(1 / 60f, 6, 2);
         world.step(1 / 60f, 6, 2);
 
         // Handle input for pulling and releasing the bird

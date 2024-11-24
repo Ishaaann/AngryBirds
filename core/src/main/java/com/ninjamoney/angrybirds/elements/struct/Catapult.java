@@ -284,7 +284,7 @@ public final class Catapult {
             // Calculate launch vector
             Vector2 birdPosition = currentBird.getBirdBody().getPosition();
             Vector2 launchVector = anchor.cpy().sub(birdPosition); // Direction from bird to anchor
-            float launchPower = launchVector.len() * 10; // Scale the power by stretch distance
+            float launchPower = launchVector.len() * 20; // Scale the power by stretch distance
 
             // Apply force to the bird
             currentBird.getBirdBody().setLinearVelocity(launchVector.nor().scl(launchPower));
