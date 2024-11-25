@@ -9,9 +9,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ninjamoney.angrybirds.AngryBirds;
+import com.ninjamoney.angrybirds.elements.character.bird.Birds;
 import com.ninjamoney.angrybirds.elements.character.bird.Bomb;
 import com.ninjamoney.angrybirds.elements.character.bird.Chuck;
 import com.ninjamoney.angrybirds.elements.character.bird.Red;
@@ -27,6 +29,9 @@ public class Level1 implements Screen {
     private Red red;
     private Chuck chuck;
     private Bomb bomb;
+
+
+    private Queue<Birds> birdQueue;
     public Stage stage;
     private Body gnd;
     public Texture redTexture;
@@ -48,6 +53,7 @@ public class Level1 implements Screen {
         Gdx.input.setInputProcessor(stage);
         redTexture = new Texture("elements/char/red.png");
         cp = new Catapult(0, 0);
+
 
          // Assign to the class field
 
@@ -76,7 +82,30 @@ public class Level1 implements Screen {
         bomb = new Bomb();
         bomb.setBirdBody(createCircle(50, 50, 30f, false)); // Initialize Bomb bird
 
+
+        birdQueue = new Queue<Birds>();
+        birdQueue.addLast(red);
+        birdQueue.addLast(chuck);
+        birdQueue.addLast(bomb);
+
         gnd = createGround();
+        setNextBirdOnSlingshot();
+    }
+
+
+    private void setNextBirdOnSlingshot() {
+        if (birdQueue.size > 0) {
+            Birds nextBird = birdQueue.removeFirst();
+            float slingshotX = stage.getViewport().getWorldWidth() / 8f;
+            float slingshotY = stage.getViewport().getWorldHeight() / 5f;
+            float slingshotHeight = 400 / 4f; // Height of the slingshot texture
+
+            float birdX = slingshotX + 20; // Offset to center the bird
+            float birdY = slingshotY + slingshotHeight - 10; // Slightly below the top
+
+            nextBird.getBirdBody().setTransform(birdX, birdY, 0);
+            cp.setCurrentBird(nextBird);
+        }
     }
 
     private Body createGround() {
@@ -221,21 +250,26 @@ public class Level1 implements Screen {
 
         // Handle input for pulling and releasing the bird
         if (Gdx.input.isTouched()) {
-            cp.pull(chuck); // Start pulling Chuck
-            cp.updatePull(); // Update Chuck's position
+            if (cp.getCurrentBird() != null) {
+                cp.pull(cp.getCurrentBird()); // Start pulling the current bird
+                cp.updatePull(); // Update the bird's position
 
-            // Update the trajectory
-            Vector2 dragPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            stage.getViewport().unproject(dragPos);
+                // Update the trajectory
+                Vector2 dragPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+                stage.getViewport().unproject(dragPos);
 
-            Vector2 slingshotPos = new Vector2(
-                stage.getViewport().getWorldWidth() / 8f + (144/3f) * 0.75f,  // X position + offset to slingshot pocket
-                stage.getViewport().getWorldHeight() / 5f + (400/4f) * 0.7f   // Y position + offset to slingshot pocket
-            );
+                Vector2 slingshotPos = new Vector2(
+                    stage.getViewport().getWorldWidth() / 8f + (144/3f) * 0.75f,  // X position + offset to slingshot pocket
+                    stage.getViewport().getWorldHeight() / 5f + (400/4f) * 0.7f   // Y position + offset to slingshot pocket
+                );
 
-            trajectoryPredictor.updateTrajectory(slingshotPos, dragPos);
+                trajectoryPredictor.updateTrajectory(slingshotPos, dragPos);
+            }
         } else {
-            cp.release(); // Release Chuck
+            if (cp.isPulling()) {
+                cp.release(); // Release the bird
+                setNextBirdOnSlingshot(); // Set the next bird on the slingshot
+            }
         }
 
         // Uncomment to visualize Box2D debug shapes

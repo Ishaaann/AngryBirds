@@ -220,6 +220,9 @@ package com.ninjamoney.angrybirds.elements.struct;////package com.ninjamoney.ang
 
 // In Catapult.java
 
+
+
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -238,6 +241,18 @@ public final class Catapult {
         this.x = x;
         this.y = y;
         anchor = new Vector2(x, y); // Set the anchor point at the base of the slingshot
+    }
+
+    public void setCurrentBird(Birds bird) {
+        this.currentBird = bird;
+    }
+
+    public boolean isPulling() {
+        return isPulling;
+    }
+
+    public Birds getCurrentBird() {
+        return currentBird;
     }
 
     private boolean isMouseOverCatapult() {
@@ -264,15 +279,13 @@ public final class Catapult {
             Vector2 mousePosition = new Vector2(mouseX, mouseY);
             Vector2 stretchVector = mousePosition.sub(anchor);
 
-            // Get the bird's radius
-            float birdRadius = currentBird.getBirdBody().getFixtureList().get(0).getShape().getRadius();
-
-            // Limit the stretch distance to the bird's radius
-            if (stretchVector.len() > birdRadius) {
-                stretchVector.nor().scl(birdRadius);
+            // Limit the stretch distance to a maximum value
+            float maxStretch = 150; // Example maximum stretch distance
+            if (stretchVector.len() > maxStretch) {
+                stretchVector.nor().scl(maxStretch);
             }
 
-            // Update bird's position
+            // Update bird's position relative to the anchor point
             currentBird.getBirdBody().setTransform(anchor.cpy().add(stretchVector), 0);
         }
     }
