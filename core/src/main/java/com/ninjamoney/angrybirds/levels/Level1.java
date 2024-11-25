@@ -331,14 +331,17 @@ public class Level1 implements Screen {
         batch.draw(pauseButton, stage.getViewport().getWorldWidth() - 100, stage.getViewport().getWorldHeight() - 100, 100, 100);
 
         if (isPaused) {
-            batch.draw(pauseOverlay, 0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
-            batch.draw(pauseHeadings, stage.getViewport().getWorldWidth() / 2 - 100, stage.getViewport().getWorldHeight() / 2 + 50, 200, 100);
-            batch.draw(resumeButton, stage.getViewport().getWorldWidth() / 2 - 100, stage.getViewport().getWorldHeight() / 2 - 50, 200, 100);
+            float overlayWidth = stage.getViewport().getWorldWidth() / 2;
+            float overlayHeight = stage.getViewport().getWorldHeight() / 2;
+            float overlayX = (stage.getViewport().getWorldWidth() - overlayWidth) / 2;
+            float overlayY = (stage.getViewport().getWorldHeight() - overlayHeight) / 2;
+
+            batch.draw(pauseOverlay, overlayX, overlayY, overlayWidth, overlayHeight);
+            batch.draw(pauseHeadings, overlayX + overlayWidth / 4, overlayY + overlayHeight / 2, overlayWidth / 2, overlayHeight / 4);
+            batch.draw(resumeButton, overlayX + overlayWidth / 4, overlayY + overlayHeight / 4, overlayWidth / 2, overlayHeight / 4);
         }
 
         // Render the trajectory
-//        cp.trajectoryPredictor.render(batch);
-//        red.getRedBody().setTransform(cp.getX(), cp.getY()+80, 0);
         if (cp.isShowTrajectory()) {
             cp.trajectoryPredictor.render(batch);
         }
@@ -352,8 +355,6 @@ public class Level1 implements Screen {
             handleInput();
         }
 
-
-        // Handle input for pulling and releasing the bird
         handleInput();
 
         // Uncomment to visualize Box2D debug shapes
