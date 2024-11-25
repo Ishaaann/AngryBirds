@@ -348,6 +348,7 @@ public class Level1 implements Screen {
         if (!isPaused) {
             // Update the physics world
             world.step(1 / 60f, 6, 2);
+            world.step(1 / 60f, 6, 2);
             handleInput();
         }
 
