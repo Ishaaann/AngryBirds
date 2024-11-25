@@ -1,4 +1,3 @@
-
 package com.ninjamoney.angrybirds.levels;
 
 import com.badlogic.gdx.Gdx;
@@ -8,18 +7,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ninjamoney.angrybirds.AngryBirds;
-import com.ninjamoney.angrybirds.elements.character.bird.Birds;
 import com.ninjamoney.angrybirds.elements.character.bird.Bomb;
 import com.ninjamoney.angrybirds.elements.character.bird.Chuck;
 import com.ninjamoney.angrybirds.elements.character.bird.Red;
 import com.ninjamoney.angrybirds.elements.struct.Catapult;
+import com.ninjamoney.angrybirds.phy.TrajectoryPredictor;
 
 public class Level1 implements Screen {
     private AngryBirds game;
@@ -38,10 +35,10 @@ public class Level1 implements Screen {
     private Array<Body> boxes;
     private Texture boxTexture;
     private Catapult cp;
+    private TrajectoryPredictor trajectoryPredictor;
 
     private static World world;
     private Box2DDebugRenderer debugRenderer;
-    private RevoluteJoint chuckJoint; // Variable to store the joint
 
     public Level1(AngryBirds game, int levelNumber, boolean isLocked) {
         this.game = game;
@@ -49,7 +46,10 @@ public class Level1 implements Screen {
         background = new Texture("game/bg/background.jpg");
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        redTexture = new Texture("elements/char/red.png");cp = new Catapult(0, 0);
+        redTexture = new Texture("elements/char/red.png");
+        cp = new Catapult(0, 0);
+
+         // Assign to the class field
 
         world = new World(new Vector2(0, -9.8f), true);
         debugRenderer = new Box2DDebugRenderer();
@@ -59,6 +59,8 @@ public class Level1 implements Screen {
         float slingshotY = stage.getViewport().getWorldHeight() / 5f;
         float slingshotHeight = 400 / 4f; // Height of the slingshot texture
         cp = new Catapult(slingshotX, slingshotY);
+
+        this.trajectoryPredictor = new TrajectoryPredictor();
 
         // Position Chuck on top of the slingshot
         float chuckX = slingshotX + 20; // Offset to center Chuck
@@ -111,7 +113,6 @@ public class Level1 implements Screen {
         fixtureDef.friction = 0.5f;
         fixtureDef.restitution = 0.3f;
 
-
         body.createFixture(fixtureDef);
         body.setGravityScale(0);
         body.setAngularDamping(1f);
@@ -129,29 +130,6 @@ public class Level1 implements Screen {
 
         boxes = new Array<Body>();
         createStructure();
-
-        // Create joint between Chuck and slingshot
-        createChuckJoint();
-    }
-
-    private void createChuckJoint() {
-        // Get the slingshot position (assuming the slingshot's body is at this position)
-        float slingshotX = stage.getViewport().getWorldWidth() / 8f;
-        float slingshotY = stage.getViewport().getWorldHeight() / 5f;
-
-        // Define joint anchor point (where Chuck will be attached)
-        Vector2 anchor = new Vector2(slingshotX + 20, slingshotY + 80); // Slightly above the slingshot
-
-        // Revolute joint to anchor Chuck to the slingshot position
-        RevoluteJointDef jointDef = new RevoluteJointDef();
-        jointDef.bodyA = chuck.getChuckBody();
-        jointDef.bodyB = gnd; // The ground (slingshot base) is the second body
-        jointDef.localAnchorA.set(0, 0); // Chuck's local anchor point (relative to Chuck)
-        jointDef.localAnchorB.set(anchor); // Anchor point on the slingshot
-        jointDef.collideConnected = false; // Don't make Chuck collide with the slingshot
-
-        // Create the joint
-        chuckJoint = (RevoluteJoint) world.createJoint(jointDef);
     }
 
     private void createStructure() {
@@ -233,72 +211,36 @@ public class Level1 implements Screen {
             30, 30, 60, 60, 1, 1,
             (float) Math.toDegrees(bomb.getBombBody().getAngle())); // Apply rotation in degrees
 
+        // Render the trajectory
+        trajectoryPredictor.render(batch);
+
         batch.end();
 
         // Update the physics world
-        world.step(1 / 60f, 6, 2);
         world.step(1 / 60f, 6, 2);
 
         // Handle input for pulling and releasing the bird
         if (Gdx.input.isTouched()) {
             cp.pull(chuck); // Start pulling Chuck
             cp.updatePull(); // Update Chuck's position
+
+            // Update the trajectory
+            Vector2 dragPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            stage.getViewport().unproject(dragPos);
+
+            Vector2 slingshotPos = new Vector2(
+                stage.getViewport().getWorldWidth() / 8f + (144/3f) * 0.75f,  // X position + offset to slingshot pocket
+                stage.getViewport().getWorldHeight() / 5f + (400/4f) * 0.7f   // Y position + offset to slingshot pocket
+            );
+
+            trajectoryPredictor.updateTrajectory(slingshotPos, dragPos);
         } else {
             cp.release(); // Release Chuck
         }
 
         // Uncomment to visualize Box2D debug shapes
-        debugRenderer.render(world, stage.getViewport().getCamera().combined);
+        // debugRenderer.render(world, stage.getViewport().getCamera().combined);
     }
-//    @Override
-//    public void render(float delta) {
-//        ScreenUtils.clear(0, 0, 0, 1);
-//
-//        batch.begin();
-//
-//        // Draw the background and ground
-//        batch.draw(background, 0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
-//        batch.draw(ground, 0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight() / 5);
-//        batch.draw(slingshot, stage.getViewport().getWorldWidth() / 8, stage.getViewport().getWorldHeight() / 5, 144 / 3f, 400 / 4f);
-//
-//        // Draw Red bird with angle
-//        TextureRegion redTexture = new TextureRegion(red.getBirdTexture());
-//        batch.draw(redTexture,
-//            red.getRedBody().getPosition().x - 20, red.getRedBody().getPosition().y - 20,
-//            20, 20, 40, 40, 1, 1,
-//            (float) Math.toDegrees(red.getRedBody().getAngle())); // Apply rotation in degrees
-//
-//        // Draw Chuck bird with angle
-//        TextureRegion chuckTexture = new TextureRegion(chuck.getBirdTexture());
-//        batch.draw(chuckTexture,
-//            chuck.getChuckBody().getPosition().x - 20f, chuck.getChuckBody().getPosition().y - 20f,
-//            20, 20, 40, 40, 1, 1,
-//            (float) Math.toDegrees(chuck.getChuckBody().getAngle())); // Apply rotation in degrees
-//
-//        // Draw Bomb bird with angle
-//        TextureRegion bombTexture = new TextureRegion(bomb.getBirdTexture());
-//        batch.draw(bombTexture,
-//            bomb.getBombBody().getPosition().x - 30f, bomb.getBombBody().getPosition().y - 25f,
-//            30, 30, 60, 60, 1, 1,
-//            (float) Math.toDegrees(bomb.getBombBody().getAngle())); // Apply rotation in degrees
-//
-//        // Draw the structure (boxes)
-//        for (Body box : boxes) {
-//            Vector2 pos = box.getPosition();
-//            batch.draw(boxTexture, pos.x - 1f, pos.y - 0.5f, 2f, 1f); // Box size matches dimensions
-//        }
-//
-//        batch.end();
-//
-//        // Update the physics world
-//        world.step(1 / 60f, 6, 2);
-////        cp.pull(chuck);
-////        cp.updatePull();
-//
-//
-//        // Uncomment to visualize Box2D debug shapes
-//        debugRenderer.render(world, stage.getViewport().getCamera().combined);
-//    }
 
     @Override
     public void dispose() {
@@ -309,6 +251,7 @@ public class Level1 implements Screen {
         boxTexture.dispose();
         debugRenderer.dispose();
         world.dispose();
+        trajectoryPredictor.dispose();
     }
 
     @Override
