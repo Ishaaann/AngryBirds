@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ninjamoney.angrybirds.AngryBirds;
 import com.ninjamoney.angrybirds.elements.character.bird.Birds;
@@ -87,6 +88,7 @@ public class Level1 implements Screen {
         largePig = new LargePig();
         largePig.setPigBody(createCirclePiggas(50, 50, 20f, false));
 
+
         birdQueue = new Queue<Birds>();
         birdQueue.addLast(red);
         birdQueue.addLast(chuck);
@@ -97,6 +99,24 @@ public class Level1 implements Screen {
 
         boxes = new Array<Body>();
         createStructure();
+
+        disableGravityForAllElements();
+    }
+    private void disableGravityForAllElements() {
+        for (Body box : boxes) {
+            box.setGravityScale(0);
+        }
+        smallpig.getPigBody().setGravityScale(0);
+        mediumPig.getPigBody().setGravityScale(0);
+        largePig.getPigBody().setGravityScale(0);
+    }
+    private void enableGravityForAllElements() {
+        for (Body box : boxes) {
+            box.setGravityScale(1);
+        }
+        smallpig.getPigBody().setGravityScale(1);
+        mediumPig.getPigBody().setGravityScale(1);
+        largePig.getPigBody().setGravityScale(1);
     }
 
     public Body createCirclePiggas(float x, float y, float radius, boolean isStatic) {
@@ -368,8 +388,17 @@ public class Level1 implements Screen {
         } else {
             if (cp.isPulling()) {
                 cp.release();
-                setNextBirdOnSlingshot();
-            }
+                cp.release();
+                enableGravityForAllElements();
+
+                // Wait for 3 seconds before placing the next bird on the slingshot
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        setNextBirdOnSlingshot();
+                    }
+                }, 3);
+        }
         }
     }
 
