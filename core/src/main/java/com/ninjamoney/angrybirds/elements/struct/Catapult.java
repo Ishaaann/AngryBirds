@@ -300,7 +300,7 @@ public final class Catapult {
             float launchPower = launchVector.len() * 20; // Scale the power by stretch distance
 
             // Apply force to the bird
-            currentBird.getBirdBody().setLinearVelocity(launchVector.nor().scl(launchPower));
+            currentBird.getBirdBody().applyLinearImpulse(launchVector.nor().scl(launchPower), birdPosition, true);
 
             // Re-enable gravity
             currentBird.getBirdBody().setGravityScale(1);
