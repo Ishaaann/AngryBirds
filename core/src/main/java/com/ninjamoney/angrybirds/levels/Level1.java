@@ -31,7 +31,7 @@ public class Level1 implements Screen {
     private final int levelNumber = 1;
     private final boolean isLocked = false;
     private Texture background;
-    private Red red;
+    private static Red red;
     private Chuck chuck;
     private Bomb bomb;
 
@@ -67,10 +67,11 @@ public class Level1 implements Screen {
         float slingshotX = stage.getViewport().getWorldWidth() / 8f;
         float slingshotY = stage.getViewport().getWorldHeight() / 5f;
         float slingshotHeight = 400 / 4f;
-        cp = new Catapult(0, 0);
+        cp = new Catapult(slingshotX, slingshotY+80);
 
         red = new Red();
-        red.setBirdBody(createCircle(120, 20, 20f, false)); // Initialize the Red bird body on the ground
+        red.setBirdBody(createCircle(slingshotX, slingshotY+80, 20f, false)); // Initialize the Red bird body on the ground
+        red.birdBody.setGravityScale(0);
 
         chuck = new Chuck();
         chuck.setBirdBody(createCircle(90, 20, 20f, false)); // Initialize Chuck on the ground
@@ -100,16 +101,8 @@ public class Level1 implements Screen {
         boxes = new Array<Body>();
         createStructure();
 
-        disableGravityForAllElements();
     }
-    private void disableGravityForAllElements() {
-        for (Body box : boxes) {
-            box.setGravityScale(0);
-        }
-        smallpig.getPigBody().setGravityScale(0);
-        mediumPig.getPigBody().setGravityScale(0);
-        largePig.getPigBody().setGravityScale(0);
-    }
+
     private void enableGravityForAllElements() {
         for (Body box : boxes) {
             box.setGravityScale(1);
@@ -145,6 +138,7 @@ public class Level1 implements Screen {
 
     private void setNextBirdOnSlingshot() {
         if (birdQueue.size > 0) {
+            birdJumpToCatapult(cp.getCurrentBird());
             Birds nextBird = birdQueue.removeFirst();
             float slingshotX = stage.getViewport().getWorldWidth() / 8f;
             float slingshotY = stage.getViewport().getWorldHeight() / 5f;
@@ -325,13 +319,18 @@ public class Level1 implements Screen {
             (float) Math.toDegrees(bomb.getBombBody().getAngle())); // Apply rotation in degrees
 
         // Render the trajectory
-        cp.trajectoryPredictor.render(batch);
+//        cp.trajectoryPredictor.render(batch);
+//        red.getRedBody().setTransform(cp.getX(), cp.getY()+80, 0);
+        if (cp.isShowTrajectory()) {
+            cp.trajectoryPredictor.render(batch);
+        }
 
         batch.end();
 
         // Update the physics world
         world.step(1 / 60f, 6, 2);
         world.step(1 / 60f, 6, 2);
+
 
         // Handle input for pulling and releasing the bird
         handleInput();
@@ -340,36 +339,8 @@ public class Level1 implements Screen {
         debugRenderer.render(world, stage.getViewport().getCamera().combined);
     }
 
-//    public void handleInput() {
-//        if (Gdx.input.isTouched()) {
-//            if (cp.getCurrentBird() != null) {
-//                cp.pull(cp.getCurrentBird()); // Start pulling the current bird
-//                cp.updatePull(); // Update the bird's position
-//
-//                // Update the trajectory
-//                Vector2 dragPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-//                stage.getViewport().unproject(dragPos);
-//
-//                Vector2 slingshotPos = new Vector2(
-//                    stage.getViewport().getWorldWidth() / 8f + (144/3f) * 0.75f,  // X position + offset to slingshot pocket
-//                    stage.getViewport().getWorldHeight() / 5f + (400/4f) * 0.7f   // Y position + offset to slingshot pocket
-//                );
-//
-//                cp.trajectoryPredictor.updateTrajectory(slingshotPos, dragPos);
-//            }
-//        } else {
-//            if (cp.isPulling()) {
-//                cp.release(); // Release the bird
-//                setNextBirdOnSlingshot(); // Set the next bird on the slingshot
-//            }
-//        }
-//    }
-
-
-
 
     public void handleInput() {
-
         if (Gdx.input.isTouched()) {
             if (cp.getCurrentBird() != null) {
                 cp.pull(cp.getCurrentBird());
@@ -400,6 +371,35 @@ public class Level1 implements Screen {
                 }, 3);
         }
         }
+    }
+
+    private void birdJumpToCatapult(Birds bird){
+        if(bird == null || bird.getBirdBody() == null){
+            return;
+        }
+        Vector2 catapultPosition = new Vector2(cp.getX(), cp.getY()+80);
+        Vector2 birdPosition = new Vector2(bird.getBirdBody().getPosition().x, bird.getBirdBody().getPosition().y);
+        float jumpTime = 0.5f;
+        int steps = 60;
+        float stepTime = jumpTime/steps;
+
+        Timer.schedule(new Timer.Task() {
+            int currentStep = 0;
+            @Override
+            public void run(){
+                if(currentStep<steps){
+                    float progress = currentStep/steps;
+                    float x = birdPosition.x + progress * (catapultPosition.x - birdPosition.x);
+                    float y = birdPosition.y + progress * (catapultPosition.y - birdPosition.y);
+                    bird.getBirdBody().setTransform(x, y, 0);
+                    currentStep++;
+                } else {
+                    bird.getBirdBody().setTransform(catapultPosition, 0);
+                    cp.setCurrentBird(bird);
+                    this.cancel();
+                }
+            }
+        }, 0, stepTime, steps);
     }
 
 
