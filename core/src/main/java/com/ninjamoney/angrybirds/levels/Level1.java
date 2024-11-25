@@ -35,6 +35,12 @@ public class Level1 implements Screen {
     private Chuck chuck;
     private Bomb bomb;
 
+    private Texture pauseButton;
+    private boolean isPaused = false;
+    private Texture pauseOverlay;
+    private Texture pauseHeadings;
+    private Texture resumeButton;
+
     private Queue<Birds> birdQueue;
     public Stage stage;
     private Body gnd;
@@ -260,8 +266,11 @@ public class Level1 implements Screen {
         ground = new Texture("game/bg/ground.png");
         slingshot = cp.getCatapultTexture();
         boxTexture = new Texture("elements/struct/plank.png");
+        pauseButton = new Texture("buttons/pause.png");
+        pauseOverlay = new Texture("game/pauseboard.png");
+        pauseHeadings = new Texture("game/pause_heading.png");
+        resumeButton = new Texture("buttons/Play1.png");
     }
-
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
@@ -324,14 +333,25 @@ public class Level1 implements Screen {
             30, 30, 60, 60, 1, 1,
             (float) Math.toDegrees(bomb.getBombBody().getAngle())); // Apply rotation in degrees
 
+        // Draw the pause button
+        batch.draw(pauseButton, stage.getViewport().getWorldWidth() - 100, stage.getViewport().getWorldHeight() - 100, 100, 100);
+
+        if (isPaused) {
+            batch.draw(pauseOverlay, 0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
+            batch.draw(pauseHeadings, stage.getViewport().getWorldWidth() / 2 - 100, stage.getViewport().getWorldHeight() / 2 + 50, 200, 100);
+            batch.draw(resumeButton, stage.getViewport().getWorldWidth() / 2 - 100, stage.getViewport().getWorldHeight() / 2 - 50, 200, 100);
+        }
+
         // Render the trajectory
         cp.trajectoryPredictor.render(batch);
 
         batch.end();
 
-        // Update the physics world
-        world.step(1 / 60f, 6, 2);
-        world.step(1 / 60f, 6, 2);
+        if (!isPaused) {
+            // Update the physics world
+            world.step(1 / 60f, 6, 2);
+            handleInput();
+        }
 
         // Handle input for pulling and releasing the bird
         handleInput();
@@ -366,28 +386,41 @@ public class Level1 implements Screen {
 //    }
 
 
-
-
     public void handleInput() {
-
         if (Gdx.input.isTouched()) {
-            if (cp.getCurrentBird() != null) {
-                cp.pull(cp.getCurrentBird());
-                cp.updatePull();
+            Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            stage.getViewport().unproject(touchPos);
 
-                Vector2 dragPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-                stage.getViewport().unproject(dragPos);
+            if (isPaused) {
+                // Check if resume button is clicked
+                if (touchPos.x >= stage.getViewport().getWorldWidth() / 2 - 100 && touchPos.x <= stage.getViewport().getWorldWidth() / 2 + 100 &&
+                    touchPos.y >= stage.getViewport().getWorldHeight() / 2 - 50 && touchPos.y <= stage.getViewport().getWorldHeight() / 2 + 50) {
+                    isPaused = false;
+                }
+            } else {
+                // Check if pause button is clicked
+                if (touchPos.x >= stage.getViewport().getWorldWidth() - 100 && touchPos.x <= stage.getViewport().getWorldWidth() &&
+                    touchPos.y >= stage.getViewport().getWorldHeight() - 100 && touchPos.y <= stage.getViewport().getWorldHeight()) {
+                    isPaused = true;
+                }
 
-                Vector2 slingshotPos = new Vector2(
-                    stage.getViewport().getWorldWidth() / 8f + (144 / 3f) * 0.75f,
-                    stage.getViewport().getWorldHeight() / 5f + (400 / 4f) * 0.7f
-                );
+                if (cp.getCurrentBird() != null) {
+                    cp.pull(cp.getCurrentBird());
+                    cp.updatePull();
 
-                cp.trajectoryPredictor.updateTrajectory(slingshotPos, dragPos);
+                    Vector2 dragPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+                    stage.getViewport().unproject(dragPos);
+
+                    Vector2 slingshotPos = new Vector2(
+                        stage.getViewport().getWorldWidth() / 8f + (144 / 3f) * 0.75f,
+                        stage.getViewport().getWorldHeight() / 5f + (400 / 4f) * 0.7f
+                    );
+
+                    cp.trajectoryPredictor.updateTrajectory(slingshotPos, dragPos);
+                }
             }
         } else {
-            if (cp.isPulling()) {
-                cp.release();
+            if (cp.isPulling() && !isPaused) {
                 cp.release();
                 enableGravityForAllElements();
 
@@ -398,9 +431,44 @@ public class Level1 implements Screen {
                         setNextBirdOnSlingshot();
                     }
                 }, 3);
-        }
+            }
         }
     }
+
+
+//    public void handleInput() {
+//
+//        if (Gdx.input.isTouched()) {
+//            if (cp.getCurrentBird() != null) {
+//                cp.pull(cp.getCurrentBird());
+//                cp.updatePull();
+//
+//                Vector2 dragPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+//                stage.getViewport().unproject(dragPos);
+//
+//                Vector2 slingshotPos = new Vector2(
+//                    stage.getViewport().getWorldWidth() / 8f + (144 / 3f) * 0.75f,
+//                    stage.getViewport().getWorldHeight() / 5f + (400 / 4f) * 0.7f
+//                );
+//
+//                cp.trajectoryPredictor.updateTrajectory(slingshotPos, dragPos);
+//            }
+//        } else {
+//            if (cp.isPulling()) {
+//                cp.release();
+//                cp.release();
+//                enableGravityForAllElements();
+//
+//                // Wait for 3 seconds before placing the next bird on the slingshot
+//                Timer.schedule(new Timer.Task() {
+//                    @Override
+//                    public void run() {
+//                        setNextBirdOnSlingshot();
+//                    }
+//                }, 3);
+//        }
+//        }
+//    }
 
 
     @Override
