@@ -43,11 +43,12 @@ public class Wood extends SolidObjects {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 2.0f;
+        fixtureDef.density = 0.001f;
         fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0.3f;
+        fixtureDef.restitution = 0.1f;
 
         body.createFixture(fixtureDef);
+//        body.setGravityScale(0.8f);
         shape.dispose();
 
         return body;

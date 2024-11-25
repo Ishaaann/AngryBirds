@@ -20,6 +20,7 @@ public class TrajectoryPredictor {
         trajectoryPoints = new Array<Vector2>();
         dotTexture = new Texture("dot.png");
         dotSprite = new Sprite(dotTexture);
+        dotSprite.setSize(5,5);
     }
 
     public void calculateTrajectory(Vector2 startPos, Vector2 velocity) {
