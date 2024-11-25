@@ -15,6 +15,7 @@ public class Catapult {
     private boolean isPulling = false; // Flag for pull state
     private float maxStretch = 10; // Maximum distance the bird can be stretched
     public TrajectoryPredictor trajectoryPredictor;
+    private boolean showTrajectory = false;
 
 
     public Catapult(float x, float y) {
@@ -46,7 +47,8 @@ public class Catapult {
         if (isMouseOverCatapult() && !isPulling && bird != null && bird.getBirdBody() != null) {
             this.currentBird = bird;
             this.isPulling = true;
-            bird.getBirdBody().setGravityScale(0); // Disable gravity while pulling
+            this.showTrajectory = true;
+            currentBird.getBirdBody().setGravityScale(0); // Disable gravity while pulling
             bird.getBirdBody().setLinearVelocity(0, 0); // Stop all movement
         }
     }
@@ -69,15 +71,17 @@ public class Catapult {
 
             // Update bird's position relative to the catapult's base
             currentBird.getBirdBody().setTransform(catapultPosition.add(stretchVector), 0);
+            showTrajectory = true;
         }
     }
 
     public void release() {
         if (isPulling && currentBird != null && currentBird.getBirdBody() != null) {
             isPulling = false;
+            showTrajectory = false;
 
             Vector2 birdPosition = currentBird.getBirdBody().getPosition();
-            Vector2 catapultPosition = new Vector2(160f,144f);
+            Vector2 catapultPosition = new Vector2(x,y);
             Vector2 launchVector = catapultPosition.sub(birdPosition); // Direction from bird to catapult base
             float launchPower = launchVector.len() * 2000000000; // Scale the power by stretch distance (adjust scaling factor as needed)
 
@@ -91,11 +95,23 @@ public class Catapult {
         }
     }
 
+    public boolean isShowTrajectory() {
+        return showTrajectory;
+    }
+
     public Texture getCatapultTexture() {
         return catapultTexture;
     }
 
     public void dispose() {
         catapultTexture.dispose();
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
     }
 }
