@@ -1,10 +1,9 @@
-
-
 package com.ninjamoney.angrybirds.elements.struct;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ninjamoney.angrybirds.elements.character.bird.Birds;
 import com.ninjamoney.angrybirds.phy.TrajectoryPredictor;
 
@@ -16,6 +15,7 @@ public class Catapult {
     private boolean isPulling = false; // Flag for pull state
     private float maxStretch = 10; // Maximum distance the bird can be stretched
     public TrajectoryPredictor trajectoryPredictor;
+
 
     public Catapult(float x, float y) {
         this.x = x;
@@ -56,8 +56,10 @@ public class Catapult {
             float mouseX = Gdx.input.getX();
             float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY(); // Flip Y-axis
 
+
+
             Vector2 mousePosition = new Vector2(mouseX, mouseY);
-            Vector2 catapultPosition = new Vector2(x, y);
+            Vector2 catapultPosition = new Vector2(x,y);
             Vector2 stretchVector = mousePosition.sub(catapultPosition);
 
             // Limit the stretch distance to maxStretch
@@ -75,9 +77,9 @@ public class Catapult {
             isPulling = false;
 
             Vector2 birdPosition = currentBird.getBirdBody().getPosition();
-            Vector2 catapultPosition = new Vector2(x, y);
+            Vector2 catapultPosition = new Vector2(160f,144f);
             Vector2 launchVector = catapultPosition.sub(birdPosition); // Direction from bird to catapult base
-            float launchPower = launchVector.len()*2000000000; // Scale the power by stretch distance
+            float launchPower = launchVector.len() * 2000000000; // Scale the power by stretch distance (adjust scaling factor as needed)
 
             // Apply force to the bird
             currentBird.getBirdBody().applyLinearImpulse(launchVector.nor().scl(launchPower), birdPosition, true);
@@ -85,6 +87,7 @@ public class Catapult {
 
             // Clear the current bird
             currentBird = null;
+
         }
     }
 

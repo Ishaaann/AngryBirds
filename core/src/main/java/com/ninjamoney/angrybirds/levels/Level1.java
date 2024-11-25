@@ -58,7 +58,7 @@ public class Level1 implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         redTexture = new Texture("elements/char/red.png");
-        cp = new Catapult(0, 0);
+
 
         world = new World(new Vector2(0, -9.8f), true);
         debugRenderer = new Box2DDebugRenderer();
@@ -66,7 +66,7 @@ public class Level1 implements Screen {
         float slingshotX = stage.getViewport().getWorldWidth() / 8f;
         float slingshotY = stage.getViewport().getWorldHeight() / 5f;
         float slingshotHeight = 400 / 4f;
-        cp = new Catapult(slingshotX, slingshotY);
+        cp = new Catapult(0, 0);
 
         red = new Red();
         red.setBirdBody(createCircle(120, 20, 20f, false)); // Initialize the Red bird body on the ground
@@ -345,7 +345,11 @@ public class Level1 implements Screen {
 //        }
 //    }
 
+
+
+
     public void handleInput() {
+
         if (Gdx.input.isTouched()) {
             if (cp.getCurrentBird() != null) {
                 cp.pull(cp.getCurrentBird());
@@ -368,6 +372,8 @@ public class Level1 implements Screen {
             }
         }
     }
+
+
     @Override
     public void dispose() {
         batch.dispose();
