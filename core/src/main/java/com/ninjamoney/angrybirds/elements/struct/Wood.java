@@ -43,7 +43,7 @@ public class Wood extends SolidObjects {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1.0f;
+        fixtureDef.density = 2.0f;
         fixtureDef.friction = 0.5f;
         fixtureDef.restitution = 0.3f;
 

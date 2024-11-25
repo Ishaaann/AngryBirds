@@ -321,6 +321,10 @@ import com.ninjamoney.angrybirds.elements.character.bird.Birds;
 import com.ninjamoney.angrybirds.elements.character.bird.Bomb;
 import com.ninjamoney.angrybirds.elements.character.bird.Chuck;
 import com.ninjamoney.angrybirds.elements.character.bird.Red;
+import com.ninjamoney.angrybirds.elements.character.pig.LargePig;
+import com.ninjamoney.angrybirds.elements.character.pig.MediumPig;
+import com.ninjamoney.angrybirds.elements.character.pig.Pigs;
+import com.ninjamoney.angrybirds.elements.character.pig.SmallPig;
 import com.ninjamoney.angrybirds.elements.struct.Catapult;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
 
@@ -343,6 +347,10 @@ public class Level1 implements Screen {
     private Array<Body> boxes;
     private Texture boxTexture;
     private Catapult cp;
+
+    private Pigs smallpig;
+    private Pigs mediumPig;
+    private Pigs largePig;
 
     private static World world;
     private Box2DDebugRenderer debugRenderer;
@@ -372,6 +380,15 @@ public class Level1 implements Screen {
 
         bomb = new Bomb();
         bomb.setBirdBody(createCircle(50, 50, 30f, false));
+
+        smallpig = new SmallPig();
+        smallpig.setPigBody(createCircle(50, 50, 20f, false));
+
+        mediumPig = new MediumPig();
+        mediumPig.setPigBody(createCircle(50, 50, 20f, false));
+
+        largePig = new LargePig();
+        largePig.setPigBody(createCircle(50, 50, 20f, false));
 
         birdQueue = new Queue<Birds>();
         birdQueue.addLast(red);
@@ -435,7 +452,7 @@ public class Level1 implements Screen {
         fixtureDef.restitution = 0.3f;
 
         body.createFixture(fixtureDef);
-        body.setGravityScale(0);
+        body.setGravityScale(1);
         body.setAngularDamping(1f);
         circle.dispose();
 
@@ -460,13 +477,21 @@ public class Level1 implements Screen {
         boxes.add(fifthBox.getBody());
 
         // Add a top box to complete the structure
-        boxes.add(new Wood(world, "plank", 4 * stage.getWidth() / 5 - 150, stage.getHeight() / 5 + 280, 20, 140).getBody());
-        boxes.add(new Wood(world, "plank", 4 * stage.getWidth() / 5 - 50, stage.getHeight() / 5 + 280, 20, 140).getBody());
+        boxes.add(new Wood(world, "plank", 4 * stage.getWidth() / 5 - 150, stage.getHeight() / 5 + 260, 20, 140).getBody());
+        boxes.add(new Wood(world, "plank", 4 * stage.getWidth() / 5 - 50, stage.getHeight() / 5 + 260, 20, 140).getBody());
 
-        Wood sixthBox = new Wood(world, "plank", 4 * stage.getWidth() / 5 - 100, stage.getHeight() / 5 + 400, 20, 120);
+        Wood sixthBox = new Wood(world, "plank", 4 * stage.getWidth() / 5 - 110, stage.getHeight() / 5 + 400, 20, 120);
         sixthBox.getBody().setTransform(sixthBox.getBody().getPosition(), (float) Math.toRadians(90));
         boxes.add(sixthBox.getBody());
-    }    private Body createBox(float x, float y, float width, float height) {
+
+        // Place pigs on the structure
+        smallpig.getPigBody().setTransform(4 * stage.getWidth() / 5 - 150, stage.getHeight() / 5 + 300, 0);
+        mediumPig.getPigBody().setTransform(4 * stage.getWidth() / 5 - 50, stage.getHeight() / 5 + 300, 0);
+        largePig.getPigBody().setTransform(4 * stage.getWidth() / 5 - 100, stage.getHeight() / 5 + 420, 0);
+    }
+
+
+    private Body createBox(float x, float y, float width, float height) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
@@ -487,58 +512,6 @@ public class Level1 implements Screen {
 
         return body;
     }
-
-//    @Override
-//    public void show() {
-//        Gdx.input.setInputProcessor(stage);
-//        ground = new Texture("game/bg/ground.png");
-//        slingshot = cp.getCatapultTexture();
-//        boxTexture = new Texture("elements/struct/plank.png");
-//    }
-//
-//    @Override
-//    public void render(float delta) {
-//        ScreenUtils.clear(0, 0, 0, 1);
-//
-//        batch.begin();
-//
-//        batch.draw(background, 0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
-//        batch.draw(ground, 0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight() / 5);
-//        batch.draw(slingshot, stage.getViewport().getWorldWidth() / 8, stage.getViewport().getWorldHeight() / 5, 144 / 3f, 400 / 4f);
-//
-//        for (Body box : boxes) {
-//            Vector2 pos = box.getPosition();
-//            batch.draw(boxTexture, pos.x - 1f, pos.y - 0.5f, 2f, 1f);
-//        }
-//
-//        TextureRegion redTexture = new TextureRegion(red.getBirdTexture());
-//        batch.draw(redTexture,
-//            red.getRedBody().getPosition().x - 20, red.getRedBody().getPosition().y - 20,
-//            20, 20, 40, 40, 1, 1,
-//            (float) Math.toDegrees(red.getRedBody().getAngle()));
-//
-//        TextureRegion chuckTexture = new TextureRegion(chuck.getBirdTexture());
-//        batch.draw(chuckTexture,
-//            chuck.getChuckBody().getPosition().x - 20f, chuck.getChuckBody().getPosition().y - 20f,
-//            20, 20, 40, 40, 1, 1,
-//            (float) Math.toDegrees(chuck.getChuckBody().getAngle()));
-//
-//        TextureRegion bombTexture = new TextureRegion(bomb.getBirdTexture());
-//        batch.draw(bombTexture,
-//            bomb.getBombBody().getPosition().x - 30f, bomb.getBombBody().getPosition().y - 25f,
-//            30, 30, 60, 60, 1, 1,
-//            (float) Math.toDegrees(bomb.getBombBody().getAngle()));
-//
-//        cp.trajectoryPredictor.render(batch);
-//
-//        batch.end();
-//
-//        world.step(1 / 60f, 6, 2);
-//
-//        handleInput();
-//
-//        debugRenderer.render(world, stage.getViewport().getCamera().combined);
-//    }
 
     @Override
     public void show() {
@@ -562,36 +535,53 @@ public class Level1 implements Screen {
         // Draw the structure (boxes)
         for (Body box : boxes) {
             Vector2 pos = box.getPosition();
+            batch.draw(boxTexture, pos.x - 1f, pos.y - 0.5f, 2f, 1f); // Box size matches dimensions
             float angle = box.getAngle();
             PolygonShape shape = (PolygonShape) box.getFixtureList().get(0).getShape();
             Vector2 size = new Vector2();
             shape.getVertex(0, size);
             size.scl(2); // Box2D uses half-widths, so multiply by 2
-
             TextureRegion boxTR = new TextureRegion(boxTexture);
             batch.draw(boxTR, pos.x - size.x / 2, pos.y - size.y / 2, size.x / 2, size.y / 2, size.x, size.y, 1, 1, (float) Math.toDegrees(angle));
         }
 
-        // Draw Red bird with angle
+        // Draw the pigs with angle
+        TextureRegion smallPigTexture = new TextureRegion(smallpig.getPigTexture());
+        batch.draw(smallPigTexture,
+            smallpig.getPigBody().getPosition().x - 20, smallpig.getPigBody().getPosition().y - 20,
+            20, 20, 40, 40, 1, 1,
+            (float) Math.toDegrees(smallpig.getPigBody().getAngle())); // Apply rotation in degrees
+
+        TextureRegion mediumPigTexture = new TextureRegion(mediumPig.getPigTexture());
+        batch.draw(mediumPigTexture,
+            mediumPig.getPigBody().getPosition().x - 20, mediumPig.getPigBody().getPosition().y - 20,
+            20, 20, 40, 40, 1, 1,
+            (float) Math.toDegrees(mediumPig.getPigBody().getAngle())); // Apply rotation in degrees
+
+        TextureRegion largePigTexture = new TextureRegion(largePig.getPigTexture());
+        batch.draw(largePigTexture,
+            largePig.getPigBody().getPosition().x - 30, largePig.getPigBody().getPosition().y - 25,
+            30, 30, 60, 60, 1, 1,
+            (float) Math.toDegrees(largePig.getPigBody().getAngle())); // Apply rotation in degrees
+
+        // Draw the birds with angle
         TextureRegion redTexture = new TextureRegion(red.getBirdTexture());
         batch.draw(redTexture,
             red.getRedBody().getPosition().x - 20, red.getRedBody().getPosition().y - 20,
             20, 20, 40, 40, 1, 1,
-            (float) Math.toDegrees(red.getRedBody().getAngle()));
+            (float) Math.toDegrees(red.getRedBody().getAngle())); // Apply rotation in degrees
 
-        // Draw Chuck bird with angle
         TextureRegion chuckTexture = new TextureRegion(chuck.getBirdTexture());
         batch.draw(chuckTexture,
             chuck.getChuckBody().getPosition().x - 20f, chuck.getChuckBody().getPosition().y - 20f,
             20, 20, 40, 40, 1, 1,
-            (float) Math.toDegrees(chuck.getChuckBody().getAngle()));
+            (float) Math.toDegrees(chuck.getChuckBody().getAngle())); // Apply rotation in degrees
 
-        // Draw Bomb bird with angle
         TextureRegion bombTexture = new TextureRegion(bomb.getBirdTexture());
         batch.draw(bombTexture,
             bomb.getBombBody().getPosition().x - 30f, bomb.getBombBody().getPosition().y - 25f,
             30, 30, 60, 60, 1, 1,
-            (float) Math.toDegrees(bomb.getBombBody().getAngle()));
+            (float) Math.toDegrees(bomb.getBombBody().getAngle())); // Apply rotation in degrees
 
         // Render the trajectory
         cp.trajectoryPredictor.render(batch);

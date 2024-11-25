@@ -111,11 +111,11 @@ public class Level3 implements Screen {
         stage.addActor(dummyButton2);
 
         // Initialize other game objects
-        circleRock1 = new Rock("circle");
-        circleRock2 = new Rock("circle");
-        circleRock3 = new Rock("circle");
-        rockBlock1 = new Rock("rockBlock");
-        rockBlock2 = new Rock("rockBlock");
+//        circleRock1 = new Rock("circle");
+//        circleRock2 = new Rock("circle");
+//        circleRock3 = new Rock("circle");
+//        rockBlock1 = new Rock("rockBlock");
+//        rockBlock2 = new Rock("rockBlock");
 //        plank1 = new Wood("plank");
 //        plank2 = new Wood("plank");
 //        plank3 = new Wood("plank");
