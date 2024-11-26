@@ -20,6 +20,7 @@ public class AngryBirds extends Game {
         font = new BitmapFont();
         themeMusic = Gdx.audio.newMusic(Gdx.files.internal("game/angry-birds-drip.mp3"));
         setScreen(new FirstScreen(this));
+
 //        setScreen(new MainMenuScreen(this));
     }
 

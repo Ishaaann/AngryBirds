@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -25,6 +27,9 @@ import com.ninjamoney.angrybirds.elements.character.pig.SmallPig;
 import com.ninjamoney.angrybirds.elements.struct.Catapult;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
 import com.ninjamoney.angrybirds.phy.Collisions;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.ninjamoney.angrybirds.screens.LevelSelectorScreen;
 
 public class Level1 implements Screen {
     private AngryBirds game;
@@ -41,6 +46,13 @@ public class Level1 implements Screen {
     private Texture pauseOverlay;
     private Texture pauseHeadings;
     private Texture resumeButton;
+
+    private Texture musicOnButtonTexture;
+    private Texture musicOffButtonTexture;
+    private Texture backButtonTexture;
+    private ImageButton musicButton;
+    private ImageButton backButton;
+    private boolean isMusicOn = true; // Assuming music is on by default
 
     private Queue<Birds> birdQueue;
     public Stage stage;
@@ -262,6 +274,7 @@ public class Level1 implements Screen {
         return body;
     }
 
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -272,7 +285,49 @@ public class Level1 implements Screen {
         pauseOverlay = new Texture("game/pauseboard.png");
         pauseHeadings = new Texture("game/pause_heading.png");
         resumeButton = new Texture("buttons/Play1.png");
+        musicOnButtonTexture = new Texture("buttons/sound/sound.png");
+        musicOffButtonTexture = new Texture("buttons/sound/soundoff.png");
+        backButtonTexture = new Texture("buttons/back.png");
+
+        // Initialize music button
+        TextureRegionDrawable musicDrawable = game.themeMusic.isPlaying() ?
+            new TextureRegionDrawable(new TextureRegion(musicOnButtonTexture)) :
+            new TextureRegionDrawable(new TextureRegion(musicOffButtonTexture));
+        musicButton = new ImageButton(musicDrawable);
+        musicButton.setSize(100, 100);
+        musicButton.setPosition(stage.getViewport().getWorldWidth() / 2 - 150, stage.getViewport().getWorldHeight() / 2 - 50);
+        musicButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Toggle the music state
+                isMusicOn = !isMusicOn;
+
+                if (isMusicOn) {
+                    game.themeMusic.play();
+                    musicButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(musicOnButtonTexture));
+                } else {
+                    game.themeMusic.pause();
+                    musicButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(musicOffButtonTexture));
+                }
+            }
+        });
+
+        // Initialize back button
+        backButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButtonTexture)));
+        backButton.setSize(100, 100);
+        backButton.setPosition(stage.getViewport().getWorldWidth() / 2 + 50, stage.getViewport().getWorldHeight() / 2 - 50);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelSelectorScreen(game));
+                dispose();
+            }
+        });
+
+        stage.addActor(musicButton);
+        stage.addActor(backButton);
     }
+
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
@@ -345,8 +400,18 @@ public class Level1 implements Screen {
             float overlayY = (stage.getViewport().getWorldHeight() - overlayHeight) / 2;
 
             batch.draw(pauseOverlay, overlayX, overlayY, overlayWidth, overlayHeight);
-            batch.draw(pauseHeadings, overlayX + overlayWidth / 4, overlayY + overlayHeight / 2, overlayWidth / 2, overlayHeight / 4);
-            batch.draw(resumeButton, overlayX + overlayWidth / 4, overlayY + overlayHeight / 4, overlayWidth / 2, overlayHeight / 4);
+
+            // Draw the pause heading at the top
+            batch.draw(pauseHeadings, overlayX + overlayWidth / 4, overlayY + overlayHeight + 20, overlayWidth / 2, overlayHeight / 4);
+
+            // Draw the resume button at the bottom center of the pause board
+            batch.draw(resumeButton, overlayX + (overlayWidth - resumeButton.getWidth()) / 2, overlayY + 20, resumeButton.getWidth(), resumeButton.getHeight());
+
+            // Draw the music and back buttons
+            musicButton.setPosition(overlayX + 20, overlayY + 20);
+            backButton.setPosition(overlayX + overlayWidth - backButton.getWidth() - 20, overlayY + 20);
+            musicButton.draw(batch, 1);
+            backButton.draw(batch, 1);
         }
 
         // Render the trajectory
@@ -354,21 +419,12 @@ public class Level1 implements Screen {
             cp.trajectoryPredictor.render(batch);
         }
 
-
-
-//        postContact();
-
-        System.out.println("Pig Health: "+largePig.getHealth());
-        System.out.println("Pig Health: "+mediumPig.getHealth());
-        System.out.println("Pig Health: "+smallpig.getHealth());
-
-
         batch.end();
 
         if (!isPaused) {
             // Update the physics world
             world.step(1 / 60f, 6, 2);
-            world.step(1 / 60f, 6, 2);
+            world.step(1/60f,6,2);
             handleInput();
         }
 
