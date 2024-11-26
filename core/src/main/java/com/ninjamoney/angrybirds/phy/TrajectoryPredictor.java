@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.ninjamoney.angrybirds.levels.Level1;
 
 public class TrajectoryPredictor {
-    private static final float TIME_STEP = 0.25f; // Increased time step for more visible arc
-    private static final int NUM_POINTS = 20; // Number of points to predict
-    private static final float GRAVITY = -10f; // Adjusted gravity for game scale
-    private static final float VELOCITY_SCALAR = 0.5f; // Scaling factor for velocity
+    private static final float TIME_STEP = 0.5f; // Smaller time step for more precise prediction
+    private static final int NUM_POINTS = 50; // More points for smoother trajectory
+    private static final float GRAVITY = -9.8f; // Standard gravity
+    private static final float VELOCITY_SCALAR = 1f; // Increased velocity scaling
 
     private Array<Vector2> trajectoryPoints;
     private Texture dotTexture;
@@ -38,12 +39,13 @@ public class TrajectoryPredictor {
         for (int i = 0; i < NUM_POINTS; i++) {
             trajectoryPoints.add(new Vector2(currentPos));
 
+            currentVel.y += GRAVITY * TIME_STEP;
             // Update position and velocity for next point
             currentPos.x += currentVel.x * TIME_STEP;
             currentPos.y += currentVel.y * TIME_STEP;
 
             // Apply gravity to vertical velocity
-            currentVel.y += GRAVITY * TIME_STEP;
+
 
             // Don't add points below ground level
             if (currentPos.y < 0) break;
