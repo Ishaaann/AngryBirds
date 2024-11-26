@@ -3,6 +3,7 @@ package com.ninjamoney.angrybirds.phy;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -15,12 +16,15 @@ public class TrajectoryPredictor {
     private Array<Vector2> trajectoryPoints;
     private Texture dotTexture;
     private Sprite dotSprite;
+    TextureRegion dotTR;
 
     public TrajectoryPredictor() {
         trajectoryPoints = new Array<Vector2>();
-        dotTexture = new Texture("dot.png");
+        dotTexture = new Texture("elements/char/bomb.png");
+        dotTR = new TextureRegion(dotTexture,50,50);
+
         dotSprite = new Sprite(dotTexture);
-        dotSprite.setSize(5,5);
+        dotSprite.setSize(10,10);
     }
 
     public void calculateTrajectory(Vector2 startPos, Vector2 velocity) {
@@ -54,7 +58,7 @@ public class TrajectoryPredictor {
             float scale = 0.2f * (1.0f - (float) i / NUM_POINTS);
             float alpha = 1.0f - (float) i / NUM_POINTS;
 
-            dotSprite.setSize(dotTexture.getWidth() * scale, dotTexture.getHeight() * scale);
+            dotSprite.setSize(dotTR.getRegionWidth() * scale, dotTR.getRegionHeight() * scale);
             dotSprite.setOriginCenter();
             dotSprite.setPosition(point.x - dotSprite.getWidth() / 2, point.y - dotSprite.getHeight() / 2);
             dotSprite.setColor(1, 1, 1, alpha);

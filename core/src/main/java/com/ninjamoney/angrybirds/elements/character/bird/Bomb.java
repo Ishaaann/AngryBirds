@@ -5,12 +5,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public class Bomb extends Birds {
     private static final float BOMB_SPEED = 12.0f; // Speed of the Bomb bird
-    private static final float BOMB_DAMAGE = 50.0f; // Damage dealt by the Bomb bird
+    private static final float damage = 50.0f; // Damage dealt by the Bomb bird
     private static final Texture bombTexture = new Texture("elements/char/bomb.png"); // Texture for Bomb
     private Body bombBody;
 
     public Bomb() {
-        super("Bomb", 100, BOMB_SPEED, BOMB_DAMAGE, bombTexture); // Pass properties to superclass
+        super("Bomb", 100, BOMB_SPEED, damage, bombTexture); // Pass properties to superclass
     }
 
     @Override

@@ -7,12 +7,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public class Red extends Birds {
     private static final float RED_SPEED = 15.0f;
-    private static final float RED_DAMAGE = 25.0f;
+    private static final float damage = 25.0f;
     private static final Texture redTexture = new Texture("elements/char/red.png");
 //    private Body redBody;
 
     public Red() {
-        super("Red", 100, RED_SPEED, RED_DAMAGE, redTexture);
+        super("Red", 100, RED_SPEED, damage, redTexture);
 //        this.setBirdBody(createCircle(2f,2f,0.5f,false));
     }
 

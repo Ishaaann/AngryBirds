@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public abstract class Pigs {
     private String name;
-    private int health;
+    private float health;
     private Texture pigTexture;
     public Body pigBody;
 
@@ -27,11 +27,11 @@ public abstract class Pigs {
         this.name = name;
     }
 
-    public int getHealth() {
+    public float getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(float health) {
         this.health = health;
     }
 

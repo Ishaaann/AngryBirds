@@ -29,6 +29,7 @@ public class Wood extends SolidObjects {
             region = new TextureRegion(woodTexture);
             region.flip(true, false);
         }
+        body.setUserData(this);
     }
 
     private Body createBody(World world, float x, float y, float width, float height) {

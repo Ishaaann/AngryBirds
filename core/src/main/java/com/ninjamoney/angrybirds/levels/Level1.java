@@ -24,6 +24,7 @@ import com.ninjamoney.angrybirds.elements.character.pig.Pigs;
 import com.ninjamoney.angrybirds.elements.character.pig.SmallPig;
 import com.ninjamoney.angrybirds.elements.struct.Catapult;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
+import com.ninjamoney.angrybirds.phy.Collisions;
 
 public class Level1 implements Screen {
     private AngryBirds game;
@@ -68,6 +69,7 @@ public class Level1 implements Screen {
 
 
         world = new World(new Vector2(0, -9.8f), true);
+        world.setContactListener(new Collisions());
         debugRenderer = new Box2DDebugRenderer();
 
         float slingshotX = stage.getViewport().getWorldWidth() / 8f;
@@ -78,23 +80,29 @@ public class Level1 implements Screen {
         red = new Red();
         red.setBirdBody(createCircle(slingshotX, slingshotY+80, 20f, false)); // Initialize the Red bird body on the ground
         red.birdBody.setGravityScale(0);
+        red.getRedBody().setUserData(red);
 
         chuck = new Chuck();
         chuck.setBirdBody(createCircle(90, 20, 20f, false)); // Initialize Chuck on the ground
+        chuck.getChuckBody().setUserData(chuck);
 
         bomb = new Bomb();
         bomb.setBirdBody(createCircle(50, 20, 30f, false)); // Initialize Bomb bird on the ground
+        bomb.getBombBody().setUserData(bomb);
 
         smallpig = new SmallPig();
         smallpig.setPigBody(createCirclePiggas(50, 50, 20f, false));
+        smallpig.getPigBody().setUserData(smallpig);
+
 //        smallpig.getPigBody().
 
         mediumPig = new MediumPig();
         mediumPig.setPigBody(createCirclePiggas(50, 50, 20f, false));
+        mediumPig.getPigBody().setUserData(mediumPig);
 
         largePig = new LargePig();
         largePig.setPigBody(createCirclePiggas(50, 50, 20f, false));
-
+        largePig.getPigBody().setUserData(largePig);
 
         birdQueue = new Queue<Birds>();
         birdQueue.addLast(red);
@@ -346,6 +354,15 @@ public class Level1 implements Screen {
             cp.trajectoryPredictor.render(batch);
         }
 
+
+
+//        postContact();
+
+        System.out.println("Pig Health: "+largePig.getHealth());
+        System.out.println("Pig Health: "+mediumPig.getHealth());
+        System.out.println("Pig Health: "+smallpig.getHealth());
+
+
         batch.end();
 
         if (!isPaused) {
@@ -356,10 +373,30 @@ public class Level1 implements Screen {
         }
 
         handleInput();
-
-        // Uncomment to visualize Box2D debug shapes
         debugRenderer.render(world, stage.getViewport().getCamera().combined);
     }
+
+//    public void postContact(){
+//        if(smallpig.getHealth() <= 0){
+//            world.destroyBody(smallpig.getPigBody());
+//        }
+//        if(mediumPig.getHealth() <= 0){
+//            world.destroyBody(mediumPig.getPigBody());
+//        }
+//        if(largePig.getHealth() <= 0){
+//            world.destroyBody(largePig.getPigBody());
+//        }
+//        Vector2 check = new Vector2(0,0);
+//        if(red.getRedBody().getLinearVelocity() == check){
+//            world.destroyBody(red.getRedBody());
+//        }
+//        if(chuck.getChuckBody().getLinearVelocity() == check){
+//            world.destroyBody(chuck.getChuckBody());
+//        }
+//        if(bomb.getBombBody().getLinearVelocity() == check){
+//            world.destroyBody(bomb.getBombBody());
+//        }
+//    }
 
 
     public void handleInput() {

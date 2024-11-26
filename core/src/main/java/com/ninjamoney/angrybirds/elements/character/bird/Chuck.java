@@ -5,12 +5,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public class Chuck extends Birds {
     private static final float CHUCK_SPEED = 20.0f;
-    private static final float CHUCK_DAMAGE = 30.0f;
+    private static final float damage = 30.0f;
     private static final Texture chuckTexture = new Texture("elements/char/chuck.png");
     private Body chuckBody;
 
     public Chuck() {
-        super("Chuck", 100, CHUCK_SPEED, CHUCK_DAMAGE, chuckTexture);
+        super("Chuck", 100, CHUCK_SPEED, damage, chuckTexture);
     }
 
     @Override
