@@ -448,7 +448,6 @@ public class Level1 implements Screen, PigHealthListener {
             cp.trajectoryPredictor.render(batch);
         }
 
-        System.out.println("Score: " + score);
         System.out.println("Small Pig Health: " + smallpig.getHealth());
         System.out.println("Medium Pig Health: " + mediumPig.getHealth());
         System.out.println("Large Pig Health: " + largePig.getHealth());
@@ -558,16 +557,36 @@ public class Level1 implements Screen, PigHealthListener {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        background.dispose();
-        ground.dispose();
-        slingshot.dispose();
-        boxTexture.dispose();
-        debugRenderer.dispose();
-        world.dispose();
-        cp.trajectoryPredictor.dispose();
-    }
+        // Dispose of all textures
+        if (background != null) background.dispose();
+        if (ground != null) ground.dispose();
+        if (slingshot != null) slingshot.dispose();
+        if (boxTexture != null) boxTexture.dispose();
+        if (pauseButton != null) pauseButton.dispose();
+        if (pauseOverlay != null) pauseOverlay.dispose();
+        if (pauseHeadings != null) pauseHeadings.dispose();
+        if (resumeButton != null) resumeButton.dispose();
+        if (musicOnButtonTexture != null) musicOnButtonTexture.dispose();
+        if (musicOffButtonTexture != null) musicOffButtonTexture.dispose();
+        if (MusicOnHoverTexture != null) MusicOnHoverTexture.dispose();
+        if (MusicOffHoverTexture != null) MusicOffHoverTexture.dispose();
+        if (backButtonTexture != null) backButtonTexture.dispose();
 
+        // Dispose of the batch
+        if (batch != null) batch.dispose();
+
+        // Dispose of the debug renderer
+        if (debugRenderer != null) debugRenderer.dispose();
+
+        // Dispose of the world
+        if (world != null) world.dispose();
+
+        // Dispose of the stage
+        if (stage != null) stage.dispose();
+
+        // Dispose of the trajectory predictor
+        if (cp != null && cp.trajectoryPredictor != null) cp.trajectoryPredictor.dispose();
+    }
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
@@ -585,7 +604,6 @@ public class Level1 implements Screen, PigHealthListener {
         stage.getViewport().getCamera().update();
     }
 
-    public static float score = 0;
 
     public void levelCleared(){
         if(pigsArray.size==0){
@@ -645,10 +663,6 @@ public class Level1 implements Screen, PigHealthListener {
                 }
             }
         }
-    }
-
-    public float getScore(){
-        return score;
     }
 
     @Override

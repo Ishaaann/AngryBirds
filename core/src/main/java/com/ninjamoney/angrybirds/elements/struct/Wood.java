@@ -20,7 +20,7 @@ public class Wood extends SolidObjects {
         this.world = world;
         this.woodType = type;
         this.body = createBody(world, x, y, width, height);
-        this.hp = 50;
+        this.hp = 40;
         if (woodType.equals("plank")) {
             woodTexture = new Texture("elements/struct/plank.png");
             region = new TextureRegion(woodTexture);

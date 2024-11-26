@@ -29,6 +29,12 @@ public class Rock extends SolidObjects {
             region = new TextureRegion(rockTexture);
             region.flip(true, false);
         }
+        if(rockType.equals("rockPlank")) {
+            rockTexture = new Texture("elements/struct/rock_plank.png");
+            region = new TextureRegion(rockTexture);
+            region.flip(true, false);
+        }
+        body.setUserData(this);
     }
 
     private Body createBody(World world, float x, float y, float width, float height) {
@@ -43,9 +49,9 @@ public class Rock extends SolidObjects {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1.0f;
+        fixtureDef.density = 0.001f;
         fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0.3f;
+        fixtureDef.restitution = 0.1f;
 
         body.createFixture(fixtureDef);
         shape.dispose();
