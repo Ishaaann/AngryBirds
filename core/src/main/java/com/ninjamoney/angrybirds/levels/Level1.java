@@ -44,6 +44,7 @@ public class Level1 implements Screen, PigHealthListener {
     private static Red red;
     private Chuck chuck;
     private Bomb bomb;
+    public static boolean cleared = false;
 
     private Texture pauseButton;
     private boolean isPaused = false;
@@ -459,6 +460,9 @@ public class Level1 implements Screen, PigHealthListener {
             // Update the physics world
             world.step(1 / 60f, 6, 2);
             world.step(1/60f,6,2);
+            checkBounds(smallpig);
+            checkBounds(mediumPig);
+            checkBounds(largePig);
             processBodyDestructionQueue();
             handleInput();
             levelCleared();
@@ -468,12 +472,33 @@ public class Level1 implements Screen, PigHealthListener {
         debugRenderer.render(world, stage.getViewport().getCamera().combined);
     }
 
-    public static void checkBounds(Pigs pig){
-        Rectangle bounds = new Rectangle();
-        bounds.set(0,0,stage.getWidth(),stage.getHeight());
-        if(!bounds.contains(pig.getPigBody().getPosition()) || pig.getHealth() <= 0){
+    private void checkBounds(Pigs pig) {
+        float x = pig.getPigBody().getPosition().x;
+        float y = pig.getPigBody().getPosition().y;
+        float worldWidth = stage.getViewport().getWorldWidth();
+        float worldHeight = stage.getViewport().getWorldHeight();
+
+        if (x < 0 || x > worldWidth || y < 0 || y > worldHeight) {
+            pigsArray.removeValue(pig, true);
             queueBodyForDestruction(pig.getPigBody());
         }
+    }
+
+    public void processBodyDestructionQueue() {
+        System.out.println("Processing destruction queue...");
+        for (Body body : bodiesToDestroy) {
+            if (body != null) {
+                if (body.getUserData() instanceof Pigs) {
+                    Pigs pig = (Pigs) body.getUserData();
+                    pig.setHealth(0);
+                    pigsArray.removeValue(pig, true);
+                    checkBounds(pig);
+                }
+                System.out.println("Destroying body: " + body);
+                world.destroyBody(body);
+            }
+        }
+        bodiesToDestroy.clear();
     }
 
     public void handleInput() {
@@ -607,6 +632,7 @@ public class Level1 implements Screen, PigHealthListener {
 
     public void levelCleared(){
         if(pigsArray.size==0){
+            cleared = true;
             game.setScreen(new VictoryScreen(game));
         }
         else if(birdQueue.size==0 && pigsArray.size>0){
@@ -634,24 +660,6 @@ public class Level1 implements Screen, PigHealthListener {
             bodiesToDestroy.add(body);
             System.out.println("Queued body for destruction: " + body);
         }
-    }
-
-    public void processBodyDestructionQueue() {
-        System.out.println("Processing destruction queue...");
-        for (Body body : bodiesToDestroy) {
-            if (body != null) {
-                if(body.getUserData() instanceof Pigs){
-                    Pigs pig = (Pigs) body.getUserData();
-                    pig.setHealth(0);
-//                    score+= pig.HEALTH;
-                    pigsArray.removeValue(pig, true);
-                    checkBounds(pig);
-                }
-                System.out.println("Destroying body: " + body);
-                world.destroyBody(body);
-            }
-        }
-        bodiesToDestroy.clear();
     }
 
     //to be implemented properly

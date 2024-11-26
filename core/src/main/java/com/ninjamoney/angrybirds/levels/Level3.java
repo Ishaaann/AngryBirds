@@ -47,6 +47,7 @@ public class Level3 implements Screen, PigHealthListener {
     private Chuck chuck;
     private Bomb bomb;
     private Texture rockCircleTexture;
+    public static boolean cleared = false;
 
     private Texture pauseButton;
     private boolean isPaused = false;
@@ -641,6 +642,7 @@ public class Level3 implements Screen, PigHealthListener {
 
     public void levelCleared(){
         if(pigsArray.size==0){
+            cleared = true;
             game.setScreen(new VictoryScreen(game));
         }
         else if(birdQueue.size==0 && pigsArray.size>0){
