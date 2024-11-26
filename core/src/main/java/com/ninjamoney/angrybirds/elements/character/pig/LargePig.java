@@ -5,9 +5,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public class LargePig extends Pigs{
     private Texture pigTexture;
+//    public final static int HEALTH = 100;
 
     public LargePig() {
-        super("Large Pig", 200, new Texture("elements/char/largepig.png"));
+        super("Large Pig", 100, new Texture("elements/char/largepig.png"));
         pigTexture = new Texture("elements/char/largepig.png");
     }
 

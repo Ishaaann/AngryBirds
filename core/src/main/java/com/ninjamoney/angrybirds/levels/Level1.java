@@ -32,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.ninjamoney.angrybirds.phy.PigHealthListener;
 import com.ninjamoney.angrybirds.screens.LevelSelectorScreen;
+import com.ninjamoney.angrybirds.screens.LoseScreen;
 import com.ninjamoney.angrybirds.screens.VictoryScreen;
 
 public class Level1 implements Screen, PigHealthListener {
@@ -60,7 +61,7 @@ public class Level1 implements Screen, PigHealthListener {
     private boolean isMusicOn = true; // Assuming music is on by default
 
     private Queue<Birds> birdQueue;
-    public Stage stage;
+    public static Stage stage;
     private Body gnd;
     public Texture redTexture;
     private Texture ground;
@@ -72,6 +73,7 @@ public class Level1 implements Screen, PigHealthListener {
     private Pigs smallpig;
     private Pigs mediumPig;
     private Pigs largePig;
+    private Array<Pigs> pigsArray;
 
     private static World world;
     private Box2DDebugRenderer debugRenderer;
@@ -83,6 +85,7 @@ public class Level1 implements Screen, PigHealthListener {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         redTexture = new Texture("elements/char/red.png");
+        pigsArray = new Array<Pigs>();
 
 
         world = new World(new Vector2(0, -9.8f), true);
@@ -110,14 +113,17 @@ public class Level1 implements Screen, PigHealthListener {
         smallpig = new SmallPig();
         smallpig.setPigBody(createCirclePiggas(50, 50, 20f, false));
         smallpig.getPigBody().setUserData(smallpig);
+        pigsArray.add(smallpig);
 
         mediumPig = new MediumPig();
         mediumPig.setPigBody(createCirclePiggas(50, 50, 20f, false));
         mediumPig.getPigBody().setUserData(mediumPig);
+        pigsArray.add(mediumPig);
 
         largePig = new LargePig();
         largePig.setPigBody(createCirclePiggas(50, 50, 20f, false));
         largePig.getPigBody().setUserData(largePig);
+        pigsArray.add(largePig);
 
         birdQueue = new Queue<Birds>();
         birdQueue.addLast(red);
@@ -449,6 +455,7 @@ public class Level1 implements Screen, PigHealthListener {
 
         batch.end();
 
+
         if (!isPaused) {
             // Update the physics world
             world.step(1 / 60f, 6, 2);
@@ -460,6 +467,14 @@ public class Level1 implements Screen, PigHealthListener {
 
         handleInput();
         debugRenderer.render(world, stage.getViewport().getCamera().combined);
+    }
+
+    public static void checkBounds(Pigs pig){
+        Rectangle bounds = new Rectangle();
+        bounds.set(0,0,stage.getWidth(),stage.getHeight());
+        if(!bounds.contains(pig.getPigBody().getPosition()) || pig.getHealth() <= 0){
+            queueBodyForDestruction(pig.getPigBody());
+        }
     }
 
     public void handleInput() {
@@ -573,30 +588,28 @@ public class Level1 implements Screen, PigHealthListener {
     public static float score = 0;
 
     public void levelCleared(){
-        if(score> 200){
+        if(pigsArray.size==0){
             game.setScreen(new VictoryScreen(game));
+        }
+        else if(birdQueue.size==0 && pigsArray.size>0){
+            //add delay of 10 seconds
+            if(cp.getCurrentBird() == null){
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        if(pigsArray.size == 0){
+                            game.setScreen(new LoseScreen(game));
+                        }
+                        else {
+                            game.setScreen(new LoseScreen(game));
+                        }
+                    }
+                }, 10);
+            }
         }
     }
 
     private static Array<Body> bodiesToDestroy = new Array<Body>();
-
-    public void postCollision() {
-        Rectangle bounds = new Rectangle();
-        bounds.set(0, 0, stage.getWidth(), stage.getHeight());
-
-        if (!bounds.contains(largePig.getPigBody().getPosition()) || largePig.getHealth() <= 0) {
-            queueBodyForDestruction(largePig.getPigBody());
-            largePig = null; // Clear reference to avoid reuse
-        }
-        if (!bounds.contains(mediumPig.getPigBody().getPosition()) || mediumPig.getHealth() <= 0) {
-            queueBodyForDestruction(mediumPig.getPigBody());
-            mediumPig = null; // Clear reference to avoid reuse
-        }
-        if (!bounds.contains(smallpig.getPigBody().getPosition()) || smallpig.getHealth() <= 0) {
-            queueBodyForDestruction(smallpig.getPigBody());
-            smallpig = null; // Clear reference to avoid reuse
-        }
-    }
 
     public static void queueBodyForDestruction(Body body) {
         if (body != null && !bodiesToDestroy.contains(body, true)) {
@@ -609,6 +622,13 @@ public class Level1 implements Screen, PigHealthListener {
         System.out.println("Processing destruction queue...");
         for (Body body : bodiesToDestroy) {
             if (body != null) {
+                if(body.getUserData() instanceof Pigs){
+                    Pigs pig = (Pigs) body.getUserData();
+                    pig.setHealth(0);
+//                    score+= pig.HEALTH;
+                    pigsArray.removeValue(pig, true);
+                    checkBounds(pig);
+                }
                 System.out.println("Destroying body: " + body);
                 world.destroyBody(body);
             }
@@ -616,6 +636,16 @@ public class Level1 implements Screen, PigHealthListener {
         bodiesToDestroy.clear();
     }
 
+    //to be implemented properly
+    private void destroyBirds(Birds bird){
+        if(bird != null && bird.getBirdBody() != null) {
+            if (bird.state.equals("launched")) {
+                if (bird.getBirdBody().getLinearVelocity().len()==0) {
+                    queueBodyForDestruction(bird.getBirdBody());
+                }
+            }
+        }
+    }
 
     public float getScore(){
         return score;
@@ -641,5 +671,6 @@ public class Level1 implements Screen, PigHealthListener {
     @Override
     public void onPigHealthZero(Pigs pig) {
         queueBodyForDestruction(pig.getPigBody());
+//        score+=pig.getHealth();
     }
 }

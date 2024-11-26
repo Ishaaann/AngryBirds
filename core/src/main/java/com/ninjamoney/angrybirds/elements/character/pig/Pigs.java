@@ -8,9 +8,11 @@ public abstract class Pigs {
     private float health;
     private Texture pigTexture;
     public Body pigBody;
+    public static int HEALTH;
 
     public Pigs(String name, int health, Texture pigTexture) {
         this.name = name;
+        this.HEALTH = health;
         this.health = health;
         this.pigTexture = pigTexture;
     }

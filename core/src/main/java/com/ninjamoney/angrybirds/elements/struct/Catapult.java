@@ -88,6 +88,7 @@ public class Catapult {
             // Apply force to the bird
             currentBird.getBirdBody().applyLinearImpulse(launchVector.nor().scl(launchPower), birdPosition, true);
             currentBird.getBirdBody().setGravityScale(1); // Re-enable gravity
+            currentBird.state = "launched";
 
             // Clear the current bird
             currentBird = null;

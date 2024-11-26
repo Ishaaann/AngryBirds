@@ -10,6 +10,7 @@ public abstract class Birds {
     private float speed;
     private float damage;
     public Body birdBody;
+    public String state;
 
 
     public Birds(String name, int health, float speed, float damage, Texture birdTexture) {
@@ -18,6 +19,7 @@ public abstract class Birds {
         this.speed = speed;
         this.damage = damage;
         this.birdTexture = birdTexture;
+        this.state = "IDLE";
     }
 
 

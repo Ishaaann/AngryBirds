@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public class MediumPig extends Pigs{
     private Texture pigTexture;
+//    public final static int HEALTH = 10;
 
     public MediumPig() {
         super("Medium Pig", 10, new Texture("elements/char/mediumpig.png"));

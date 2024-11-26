@@ -71,6 +71,7 @@
 // In `Collisions.java`
 package com.ninjamoney.angrybirds.phy;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.ninjamoney.angrybirds.elements.character.bird.Birds;
 import com.ninjamoney.angrybirds.elements.character.pig.Pigs;
@@ -148,7 +149,9 @@ public class Collisions implements ContactListener {
     }
 
     private void checkPigHealth(Pigs pig) {
-        if (pig.getHealth() <= 0) {
+        Rectangle bounds = new Rectangle();
+        bounds.set(0, 0, Level1.stage.getWidth(), Level1.stage.getHeight());
+        if (pig.getHealth() <= 0 || !bounds.contains(pig.getPigBody().getPosition().x, pig.getPigBody().getPosition().y)) {
             pigHealthListener.onPigHealthZero(pig);
         }
     }
