@@ -7,7 +7,7 @@ public class SmallPig extends Pigs{
     private Texture pigTexture;
 
     public SmallPig() {
-        super("Small Pig", 50, new Texture("elements/char/smallpig.png"));
+        super("Small Pig", 10, new Texture("elements/char/smallpig.png"));
         pigTexture = new Texture("elements/char/smallpig.png");
     }
 

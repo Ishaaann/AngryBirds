@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -29,9 +30,11 @@ import com.ninjamoney.angrybirds.elements.struct.Wood;
 import com.ninjamoney.angrybirds.phy.Collisions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.ninjamoney.angrybirds.phy.PigHealthListener;
 import com.ninjamoney.angrybirds.screens.LevelSelectorScreen;
+import com.ninjamoney.angrybirds.screens.VictoryScreen;
 
-public class Level1 implements Screen {
+public class Level1 implements Screen, PigHealthListener {
     private AngryBirds game;
     private SpriteBatch batch;
     private final int levelNumber = 1;
@@ -83,7 +86,7 @@ public class Level1 implements Screen {
 
 
         world = new World(new Vector2(0, -9.8f), true);
-        world.setContactListener(new Collisions());
+        world.setContactListener(new Collisions(this));
         debugRenderer = new Box2DDebugRenderer();
 
         float slingshotX = stage.getViewport().getWorldWidth() / 8f;
@@ -107,8 +110,6 @@ public class Level1 implements Screen {
         smallpig = new SmallPig();
         smallpig.setPigBody(createCirclePiggas(50, 50, 20f, false));
         smallpig.getPigBody().setUserData(smallpig);
-
-//        smallpig.getPigBody().
 
         mediumPig = new MediumPig();
         mediumPig.setPigBody(createCirclePiggas(50, 50, 20f, false));
@@ -369,23 +370,29 @@ public class Level1 implements Screen {
         }
 
         // Draw the pigs with angle
-        TextureRegion smallPigTexture = new TextureRegion(smallpig.getPigTexture());
-        batch.draw(smallPigTexture,
-            smallpig.getPigBody().getPosition().x - 20, smallpig.getPigBody().getPosition().y - 20,
-            20, 20, 40, 40, 1, 1,
-            (float) Math.toDegrees(smallpig.getPigBody().getAngle())); // Apply rotation in degrees
+        if(smallpig.getPigBody()!=null && smallpig != null && smallpig.getHealth() > 0){
+            TextureRegion smallPigTexture = new TextureRegion(smallpig.getPigTexture());
+            batch.draw(smallPigTexture,
+                smallpig.getPigBody().getPosition().x - 20, smallpig.getPigBody().getPosition().y - 20,
+                20, 20, 40, 40, 1, 1,
+                (float) Math.toDegrees(smallpig.getPigBody().getAngle())); // Apply rotation in degrees
+        }
 
-        TextureRegion mediumPigTexture = new TextureRegion(mediumPig.getPigTexture());
-        batch.draw(mediumPigTexture,
-            mediumPig.getPigBody().getPosition().x - 20, mediumPig.getPigBody().getPosition().y - 20,
-            20, 20, 40, 40, 1, 1,
-            (float) Math.toDegrees(mediumPig.getPigBody().getAngle())); // Apply rotation in degrees
+        if(mediumPig.getPigBody()!=null && mediumPig != null && mediumPig.getHealth() > 0){
+            TextureRegion mediumPigTexture = new TextureRegion(mediumPig.getPigTexture());
+            batch.draw(mediumPigTexture,
+                mediumPig.getPigBody().getPosition().x - 20, mediumPig.getPigBody().getPosition().y - 20,
+                20, 20, 40, 40, 1, 1,
+                (float) Math.toDegrees(mediumPig.getPigBody().getAngle())); // Apply rotation in degrees
+        }
 
-        TextureRegion largePigTexture = new TextureRegion(largePig.getPigTexture());
-        batch.draw(largePigTexture,
-            largePig.getPigBody().getPosition().x - 30, largePig.getPigBody().getPosition().y - 25,
-            30, 30, 60, 60, 1, 1,
-            (float) Math.toDegrees(largePig.getPigBody().getAngle())); // Apply rotation in degrees
+        if(largePig.getPigBody()!=null && largePig != null && largePig.getHealth() > 0){
+            TextureRegion largePigTexture = new TextureRegion(largePig.getPigTexture());
+            batch.draw(largePigTexture,
+                largePig.getPigBody().getPosition().x - 30, largePig.getPigBody().getPosition().y - 25,
+                30, 30, 60, 60, 1, 1,
+                (float) Math.toDegrees(largePig.getPigBody().getAngle())); // Apply rotation in degrees
+        }
 
         // Draw the birds with angle
         TextureRegion redTexture = new TextureRegion(red.getBirdTexture());
@@ -435,41 +442,25 @@ public class Level1 implements Screen {
             cp.trajectoryPredictor.render(batch);
         }
 
+        System.out.println("Score: " + score);
+        System.out.println("Small Pig Health: " + smallpig.getHealth());
+        System.out.println("Medium Pig Health: " + mediumPig.getHealth());
+        System.out.println("Large Pig Health: " + largePig.getHealth());
+
         batch.end();
 
         if (!isPaused) {
             // Update the physics world
             world.step(1 / 60f, 6, 2);
             world.step(1/60f,6,2);
+            processBodyDestructionQueue();
             handleInput();
+            levelCleared();
         }
 
         handleInput();
         debugRenderer.render(world, stage.getViewport().getCamera().combined);
     }
-
-//    public void postContact(){
-//        if(smallpig.getHealth() <= 0){
-//            world.destroyBody(smallpig.getPigBody());
-//        }
-//        if(mediumPig.getHealth() <= 0){
-//            world.destroyBody(mediumPig.getPigBody());
-//        }
-//        if(largePig.getHealth() <= 0){
-//            world.destroyBody(largePig.getPigBody());
-//        }
-//        Vector2 check = new Vector2(0,0);
-//        if(red.getRedBody().getLinearVelocity() == check){
-//            world.destroyBody(red.getRedBody());
-//        }
-//        if(chuck.getChuckBody().getLinearVelocity() == check){
-//            world.destroyBody(chuck.getChuckBody());
-//        }
-//        if(bomb.getBombBody().getLinearVelocity() == check){
-//            world.destroyBody(bomb.getBombBody());
-//        }
-//    }
-
 
     public void handleInput() {
         if (Gdx.input.isTouched()) {
@@ -550,41 +541,6 @@ public class Level1 implements Screen {
     }
 
 
-//    public void handleInput() {
-//
-//        if (Gdx.input.isTouched()) {
-//            if (cp.getCurrentBird() != null) {
-//                cp.pull(cp.getCurrentBird());
-//                cp.updatePull();
-//
-//                Vector2 dragPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-//                stage.getViewport().unproject(dragPos);
-//
-//                Vector2 slingshotPos = new Vector2(
-//                    stage.getViewport().getWorldWidth() / 8f + (144 / 3f) * 0.75f,
-//                    stage.getViewport().getWorldHeight() / 5f + (400 / 4f) * 0.7f
-//                );
-//
-//                cp.trajectoryPredictor.updateTrajectory(slingshotPos, dragPos);
-//            }
-//        } else {
-//            if (cp.isPulling()) {
-//                cp.release();
-//                cp.release();
-//                enableGravityForAllElements();
-//
-//                // Wait for 3 seconds before placing the next bird on the slingshot
-//                Timer.schedule(new Timer.Task() {
-//                    @Override
-//                    public void run() {
-//                        setNextBirdOnSlingshot();
-//                    }
-//                }, 3);
-//        }
-//        }
-//    }
-
-
     @Override
     public void dispose() {
         batch.dispose();
@@ -614,6 +570,57 @@ public class Level1 implements Screen {
         stage.getViewport().getCamera().update();
     }
 
+    public static float score = 0;
+
+    public void levelCleared(){
+        if(score> 200){
+            game.setScreen(new VictoryScreen(game));
+        }
+    }
+
+    private static Array<Body> bodiesToDestroy = new Array<Body>();
+
+    public void postCollision() {
+        Rectangle bounds = new Rectangle();
+        bounds.set(0, 0, stage.getWidth(), stage.getHeight());
+
+        if (!bounds.contains(largePig.getPigBody().getPosition()) || largePig.getHealth() <= 0) {
+            queueBodyForDestruction(largePig.getPigBody());
+            largePig = null; // Clear reference to avoid reuse
+        }
+        if (!bounds.contains(mediumPig.getPigBody().getPosition()) || mediumPig.getHealth() <= 0) {
+            queueBodyForDestruction(mediumPig.getPigBody());
+            mediumPig = null; // Clear reference to avoid reuse
+        }
+        if (!bounds.contains(smallpig.getPigBody().getPosition()) || smallpig.getHealth() <= 0) {
+            queueBodyForDestruction(smallpig.getPigBody());
+            smallpig = null; // Clear reference to avoid reuse
+        }
+    }
+
+    public static void queueBodyForDestruction(Body body) {
+        if (body != null && !bodiesToDestroy.contains(body, true)) {
+            bodiesToDestroy.add(body);
+            System.out.println("Queued body for destruction: " + body);
+        }
+    }
+
+    public void processBodyDestructionQueue() {
+        System.out.println("Processing destruction queue...");
+        for (Body body : bodiesToDestroy) {
+            if (body != null) {
+                System.out.println("Destroying body: " + body);
+                world.destroyBody(body);
+            }
+        }
+        bodiesToDestroy.clear();
+    }
+
+
+    public float getScore(){
+        return score;
+    }
+
     @Override
     public void pause() {}
 
@@ -625,5 +632,14 @@ public class Level1 implements Screen {
 
     public World getWorld() {
         return world;
+    }
+
+    public static void onWoodHealthZero(Wood wood) {
+        queueBodyForDestruction(wood.getBody());
+    }
+
+    @Override
+    public void onPigHealthZero(Pigs pig) {
+        queueBodyForDestruction(pig.getPigBody());
     }
 }
