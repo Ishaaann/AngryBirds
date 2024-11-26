@@ -46,6 +46,8 @@ public class Level1 implements Screen {
     private Texture pauseOverlay;
     private Texture pauseHeadings;
     private Texture resumeButton;
+    private Texture MusicOnHoverTexture;
+    private Texture MusicOffHoverTexture;
 
     private Texture musicOnButtonTexture;
     private Texture musicOffButtonTexture;
@@ -289,11 +291,22 @@ public class Level1 implements Screen {
         musicOffButtonTexture = new Texture("buttons/sound/soundoff.png");
         backButtonTexture = new Texture("buttons/back.png");
 
-        // Initialize music button
-        TextureRegionDrawable musicDrawable = game.themeMusic.isPlaying() ?
-            new TextureRegionDrawable(new TextureRegion(musicOnButtonTexture)) :
-            new TextureRegionDrawable(new TextureRegion(musicOffButtonTexture));
-        musicButton = new ImageButton(musicDrawable);
+        // Create hover textures for the music button
+        MusicOnHoverTexture = new Texture("buttons/sound/soundhover.png");
+        MusicOffHoverTexture = new Texture("buttons/sound/soundoffhover.png");
+
+        // Initialize music button style
+        ImageButton.ImageButtonStyle musicButtonStyle = new ImageButton.ImageButtonStyle();
+        if (game.themeMusic.isPlaying()) {
+            musicButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(musicOnButtonTexture));
+            musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(MusicOnHoverTexture)); // Hover state
+        } else {
+            musicButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(musicOffButtonTexture));
+            musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(MusicOffHoverTexture)); // Hover state
+        }
+
+        // Create the music button
+        musicButton = new ImageButton(musicButtonStyle);
         musicButton.setSize(100, 100);
         musicButton.setPosition(stage.getViewport().getWorldWidth() / 2 - 150, stage.getViewport().getWorldHeight() / 2 - 50);
         musicButton.addListener(new ClickListener() {
@@ -304,10 +317,12 @@ public class Level1 implements Screen {
 
                 if (isMusicOn) {
                     game.themeMusic.play();
-                    musicButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(musicOnButtonTexture));
+                    musicButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(musicOnButtonTexture));
+                    musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(MusicOnHoverTexture)); // Update hover state
                 } else {
                     game.themeMusic.pause();
-                    musicButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(musicOffButtonTexture));
+                    musicButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(musicOffButtonTexture));
+                    musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(MusicOffHoverTexture)); // Update hover state
                 }
             }
         });
@@ -327,6 +342,7 @@ public class Level1 implements Screen {
         stage.addActor(musicButton);
         stage.addActor(backButton);
     }
+
 
     @Override
     public void render(float delta) {
