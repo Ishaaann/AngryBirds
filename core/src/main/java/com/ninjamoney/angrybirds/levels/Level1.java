@@ -26,6 +26,7 @@ import com.ninjamoney.angrybirds.elements.character.pig.MediumPig;
 import com.ninjamoney.angrybirds.elements.character.pig.Pigs;
 import com.ninjamoney.angrybirds.elements.character.pig.SmallPig;
 import com.ninjamoney.angrybirds.elements.struct.Catapult;
+import com.ninjamoney.angrybirds.elements.struct.SolidObjects;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
 import com.ninjamoney.angrybirds.phy.Collisions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -34,6 +35,8 @@ import com.ninjamoney.angrybirds.phy.PigHealthListener;
 import com.ninjamoney.angrybirds.screens.LevelSelectorScreen;
 import com.ninjamoney.angrybirds.screens.LoseScreen;
 import com.ninjamoney.angrybirds.screens.VictoryScreen;
+
+import java.util.Iterator;
 
 public class Level1 implements Screen, PigHealthListener {
     private AngryBirds game;
@@ -365,15 +368,17 @@ public class Level1 implements Screen, PigHealthListener {
 
         // Draw the structure (boxes)
         for (Body box : boxes) {
-            Vector2 pos = box.getPosition();
-            batch.draw(boxTexture, pos.x - 1f, pos.y - 0.5f, 2f, 1f); // Box size matches dimensions
-            float angle = box.getAngle();
-            PolygonShape shape = (PolygonShape) box.getFixtureList().get(0).getShape();
-            Vector2 size = new Vector2();
-            shape.getVertex(0, size);
-            size.scl(2); // Box2D uses half-widths, so multiply by 2
-            TextureRegion boxTR = new TextureRegion(boxTexture);
-            batch.draw(boxTR, pos.x - size.x / 2, pos.y - size.y / 2, size.x / 2, size.y / 2, size.x, size.y, 1, 1, (float) Math.toDegrees(angle));
+            if (box != null) {
+                Vector2 pos = box.getPosition();
+                batch.draw(boxTexture, pos.x - 1f, pos.y - 0.5f, 2f, 1f); // Box size matches dimensions
+                float angle = box.getAngle();
+                PolygonShape shape = (PolygonShape) box.getFixtureList().get(0).getShape();
+                Vector2 size = new Vector2();
+                shape.getVertex(0, size);
+                size.scl(2); // Box2D uses half-widths, so multiply by 2
+                TextureRegion boxTR = new TextureRegion(boxTexture);
+                batch.draw(boxTR, pos.x - size.x / 2, pos.y - size.y / 2, size.x / 2, size.y / 2, size.x, size.y, 1, 1, (float) Math.toDegrees(angle));
+            }
         }
 
         // Draw the pigs with angle
@@ -486,19 +491,20 @@ public class Level1 implements Screen, PigHealthListener {
 
     public void processBodyDestructionQueue() {
         System.out.println("Processing destruction queue...");
-        for (Body body : bodiesToDestroy) {
+        Iterator<Body> iterator = bodiesToDestroy.iterator();
+        while (iterator.hasNext()) {
+            Body body = iterator.next();
             if (body != null) {
                 if (body.getUserData() instanceof Pigs) {
-                    Pigs pig = (Pigs) body.getUserData();
-                    pig.setHealth(0);
-                    pigsArray.removeValue(pig, true);
-                    checkBounds(pig);
+                    pigsArray.removeValue((Pigs) body.getUserData(), true);
+                } else if (body.getUserData() instanceof SolidObjects) {
+                    boxes.removeValue(body, true);
                 }
                 System.out.println("Destroying body: " + body);
                 world.destroyBody(body);
+                iterator.remove();
             }
         }
-        bodiesToDestroy.clear();
     }
 
     public void handleInput() {

@@ -27,6 +27,7 @@ import com.ninjamoney.angrybirds.elements.character.pig.Pigs;
 import com.ninjamoney.angrybirds.elements.character.pig.SmallPig;
 import com.ninjamoney.angrybirds.elements.struct.Catapult;
 import com.ninjamoney.angrybirds.elements.struct.Rock;
+import com.ninjamoney.angrybirds.elements.struct.SolidObjects;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
 import com.ninjamoney.angrybirds.phy.Collisions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -35,6 +36,8 @@ import com.ninjamoney.angrybirds.phy.PigHealthListener;
 import com.ninjamoney.angrybirds.screens.LevelSelectorScreen;
 import com.ninjamoney.angrybirds.screens.LoseScreen;
 import com.ninjamoney.angrybirds.screens.VictoryScreen;
+
+import java.util.Iterator;
 
 public class Level2 implements Screen, PigHealthListener {
     private AngryBirds game;
@@ -655,20 +658,20 @@ public class Level2 implements Screen, PigHealthListener {
 
     public void processBodyDestructionQueue() {
         System.out.println("Processing destruction queue...");
-        for (Body body : bodiesToDestroy) {
+        Iterator<Body> iterator = bodiesToDestroy.iterator();
+        while (iterator.hasNext()) {
+            Body body = iterator.next();
             if (body != null) {
-                if(body.getUserData() instanceof Pigs){
-                    Pigs pig = (Pigs) body.getUserData();
-                    pig.setHealth(0);
-//                    score+= pig.HEALTH;
-                    pigsArray.removeValue(pig, true);
-                    checkBounds(pig);
+                if (body.getUserData() instanceof Pigs) {
+                    pigsArray.removeValue((Pigs) body.getUserData(), true);
+                } else if (body.getUserData() instanceof SolidObjects) {
+                    boxes.removeValue(body, true);
                 }
                 System.out.println("Destroying body: " + body);
                 world.destroyBody(body);
+                iterator.remove();
             }
         }
-        bodiesToDestroy.clear();
     }
 
     //to be implemented properly

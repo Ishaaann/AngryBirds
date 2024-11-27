@@ -14,6 +14,7 @@ public class Ice extends SolidObjects {
     private float hp;
 
     public Ice(World world, String type, float x, float y, float width, float height) {
+        super(10);
         this.world = world;
         this.iceType = type;
         this.body = createBody(world, x, y, width, height);

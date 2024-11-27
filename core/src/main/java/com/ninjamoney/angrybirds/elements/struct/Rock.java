@@ -16,6 +16,7 @@ public class Rock extends SolidObjects {
     private World world;
 
     public Rock(World world, String type, float x, float y, float width, float height) {
+        super(50);
         this.world = world;
         this.rockType = type;
         this.body = createBody(world, x, y, width, height);

@@ -14,13 +14,13 @@ public class Wood extends SolidObjects {
     private TextureRegion region;
     private Body body;
     private World world;
-    private float hp;
 
     public Wood(World world, String type, float x, float y, float width, float height) {
+        super(10);
         this.world = world;
         this.woodType = type;
         this.body = createBody(world, x, y, width, height);
-        this.hp = 40;
+
         if (woodType.equals("plank")) {
             woodTexture = new Texture("elements/struct/plank.png");
             region = new TextureRegion(woodTexture);
@@ -57,12 +57,9 @@ public class Wood extends SolidObjects {
         return body;
     }
 
-    public void setHp(float hp) {
-        this.hp = hp;
-    }
 
     public float getHp() {
-        return hp;
+        return super.getHp();
     }
 
     public Texture getWoodTexture() {

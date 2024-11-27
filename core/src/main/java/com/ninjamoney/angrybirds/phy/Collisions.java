@@ -6,10 +6,12 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ninjamoney.angrybirds.elements.character.bird.Birds;
 import com.ninjamoney.angrybirds.elements.character.pig.Pigs;
+import com.ninjamoney.angrybirds.elements.struct.SolidObjects;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
 import com.ninjamoney.angrybirds.levels.Level1;
 
 import static com.ninjamoney.angrybirds.levels.Level1.onWoodHealthZero;
+import static com.ninjamoney.angrybirds.levels.Level1.queueBodyForDestruction;
 
 public class Collisions implements ContactListener {
     public static float score = 0;
@@ -40,9 +42,24 @@ public class Collisions implements ContactListener {
                 handlePigGroundCollision((Pigs) body1.getUserData(), (Body) body2.getUserData());
             } else if (body1.getUserData() instanceof Body && body2.getUserData() instanceof Pigs) {
                 handlePigGroundCollision((Pigs) body2.getUserData(), (Body) body1.getUserData());
-            } else if (body1.getUserData() instanceof Wood && body2.getUserData() instanceof Body) {
-                handleWoodHP((Body) body2.getUserData(), (Wood) body1.getUserData());
+            } else if (body1.getUserData() instanceof SolidObjects) {
+                handleSolidObjectCollision((SolidObjects) body1.getUserData(), body2);
+            } else if (body2.getUserData() instanceof SolidObjects) {
+                handleSolidObjectCollision((SolidObjects) body2.getUserData(), body1);
             }
+        }
+    }
+
+    private void handleSolidObjectCollision(SolidObjects solidObject, Body otherBody) {
+        float velocity = otherBody.getLinearVelocity().len();
+        float damage = velocity * 0.05f; // Example damage calculation
+        solidObject.setHp(solidObject.getHp() - damage);
+        checkSolidObjectHealth(solidObject);
+    }
+
+    private void checkSolidObjectHealth(SolidObjects solidObject) {
+        if (solidObject.getHp() <= 0) {
+           queueBodyForDestruction(solidObject.getBody());
         }
     }
 
