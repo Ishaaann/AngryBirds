@@ -111,8 +111,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ninjamoney.angrybirds.AngryBirds;
@@ -153,12 +155,11 @@ public class LevelSelectorScreen implements Screen {
             new TextureRegionDrawable(new TextureRegion(backButtonTexture))
         );
         backButton.setSize(103, 93);
-        backButton.addListener(event -> {
-            if (backButton.isPressed()) {
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MainMenuScreen(game));
-                return true;
             }
-            return false;
         });
 
         // Level 1 button
@@ -166,12 +167,11 @@ public class LevelSelectorScreen implements Screen {
             new TextureRegionDrawable(new TextureRegion(l1Texture))
         );
         level1Button.setSize(238, 242);
-        level1Button.addListener(event -> {
-            if (level1Button.isPressed()) {
+        level1Button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new Level1(game, 1, false));
-                return true;
             }
-            return false;
         });
 
         // Level 2 button
@@ -179,16 +179,11 @@ public class LevelSelectorScreen implements Screen {
             new TextureRegionDrawable(new TextureRegion(l2Texture))
         );
         level2Button.setSize(238, 242);
-        level2Button.addListener(e -> {
-//            if (level2Button.isPressed()) {
-//                if(Level1.cleared){
-//                    game.setScreen(new Level2(game, 2, false));
-//                }
-////                game.setScreen(new Level2(game, 2, true));
-//                return true;
-//            }
-            game.setScreen(new Level2(game, 2, true));
-            return false;
+        level2Button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new Level2(game, 2, true));
+            }
         });
 
         // Level 3 button
@@ -196,15 +191,11 @@ public class LevelSelectorScreen implements Screen {
             new TextureRegionDrawable(new TextureRegion(l3Texture))
         );
         level3Button.setSize(238, 242);
-        level3Button.addListener(e -> {
-//            if (level3Button.isPressed()) {
-//                if(Level2.cleared){
-//                    game.setScreen(new Level3(game, 3, false));
-//                }
-//                return true;
-//            }
-            game.setScreen(new Level3(game, 3, true));
-            return false;
+        level3Button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new Level3(game, 3, true));
+            }
         });
 
         // Add buttons to the stage
@@ -213,6 +204,7 @@ public class LevelSelectorScreen implements Screen {
         stage.addActor(level2Button);
         stage.addActor(level3Button);
     }
+
 
     @Override
     public void render(float delta) {
