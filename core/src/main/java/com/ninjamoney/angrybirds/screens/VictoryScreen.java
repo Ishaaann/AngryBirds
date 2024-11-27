@@ -4,75 +4,166 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.ninjamoney.angrybirds.AngryBirds;
+import com.ninjamoney.angrybirds.levels.Level1;
+import com.ninjamoney.angrybirds.levels.Level2;
+import com.ninjamoney.angrybirds.levels.Level3;
 
 public class VictoryScreen implements Screen {
-    private int score;
-    private int stars;
-    private Texture background;
-    private SpriteBatch batch;
     private AngryBirds game;
-    private Texture nextButton;
-    private Texture playAgainButton;
-    private Levels l1;
-    private Levels l2;
+    private Stage stage;
+    private SpriteBatch batch;
+    private Texture background;
+    private Texture playAgainTexture;
+    private Texture nextButtonTexture;
+    private ImageButton playAgainButton;
+    private ImageButton nextButton;
+    private int currentLevel;  // To store the current level number
 
-    public VictoryScreen(AngryBirds game) {
-        background = new Texture("game/bg/victory.png");
-        batch = new SpriteBatch();
+    public VictoryScreen(AngryBirds game, int currentLevel) {
         this.game = game;
-        nextButton = new Texture("buttons/next.png");
-        playAgainButton = new Texture("buttons/replay.png");
+        this.batch = new SpriteBatch();
+        this.stage = new Stage();
+        this.currentLevel = currentLevel;  // Set the current level
+        Gdx.input.setInputProcessor(stage);  // Set input processor for the stage
     }
+
     @Override
     public void show() {
+        // Load textures for buttons
+        background = new Texture("game/bg/victory.png");
+        playAgainTexture = new Texture("buttons/replay.png");
+        nextButtonTexture = new Texture("buttons/next.png");
 
+        // Create button styles for playAgain and next
+        ImageButtonStyle playAgainStyle = new ImageButtonStyle();
+        playAgainStyle.up = new TextureRegionDrawable(playAgainTexture);
+
+        ImageButtonStyle nextButtonStyle = new ImageButtonStyle();
+        nextButtonStyle.up = new TextureRegionDrawable(nextButtonTexture);
+
+        // Create ImageButton instances
+        playAgainButton = new ImageButton(playAgainStyle);
+        nextButton = new ImageButton(nextButtonStyle);
+
+        // Set positions of the buttons
+        playAgainButton.setPosition(593, 123);
+        nextButton.setPosition(718, 123);
+
+        // Add buttons to the stage
+        stage.addActor(playAgainButton);
+        stage.addActor(nextButton);
+
+        // Handle button clicks
+        playAgainButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Restart the same level
+                restartLevel(currentLevel);
+            }
+        });
+
+        nextButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Go to next level, or if no next level, go to level selector
+                nextLevel(currentLevel);
+            }
+        });
     }
 
-//    private void handleInput() {
-//        float x = Gdx.input.getX();
-//        float y = Gdx.graphics.getHeight() - Gdx.input.getY();
-//        if (Gdx.input.isTouched()) {
-//            if (x >= 593 && x <= 701 && y >= 123 && y <= 229) {
-//                game.setScreen(new GameScreen(game, 1, false));
-//            } else if (x >= 718 && x <= 831 && y >= 123 && y <= 229) {
-//                game.setScreen(new LevelSelectorScreen(game));
-//            }
-//        }
-//    }
+    private void restartLevel(int level) {
+        // Dynamically load the level based on the current level
+        switch (level) {
+            case 1:
+                game.setScreen(new Level1(game, level, false)); // Load Level1
+                break;
+            case 2:
+                game.setScreen(new Level2(game, level, false)); // Load Level2
+                break;
+            case 3:
+                game.setScreen(new Level3(game, level, false)); // Load Level3
+                break;
+            // Add more cases for additional levels if necessary
+            default:
+                game.setScreen(new Level1(game, level, false)); // Default to Level1
+                break;
+        }
+    }
+
+    private void nextLevel(int level) {
+        // Go to the next level (or back to level selector if no more levels)
+        if (level == 3) {
+            // No Level 4, go back to the level selector screen
+            game.setScreen(new LevelSelectorScreen(game)); // Go to level selector
+        } else {
+            int nextLevel = level + 1;
+            switch (nextLevel) {
+                case 2:
+                    game.setScreen(new Level2(game, nextLevel, false)); // Load Level2
+                    break;
+                case 3:
+                    game.setScreen(new Level3(game, nextLevel, false)); // Load Level3
+                    break;
+                // You can add more levels here if needed
+                default:
+                    game.setScreen(new LevelSelectorScreen(game)); // Default to Level Selector if no next level
+                    break;
+            }
+        }
+    }
 
     @Override
     public void render(float delta) {
         batch.begin();
-        batch.draw(background, 0, 0);
-        batch.draw(playAgainButton,593,123,108,106);
-        batch.draw(nextButton, 718, 123, 113, 106);
+        // Draw the background image
+        batch.draw(background, 0, 0, 1280, 720);
+
+        // Draw the playAgainButton and nextButton textures
+        playAgainButton.draw(batch, 1);  // Draw playAgainButton
+        nextButton.draw(batch, 1);  // Draw nextButton
+
         batch.end();
-//        handleInput();
+
+        // Draw buttons on the stage (buttons are automatically drawn via stage)
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f)); // Updates the stage actions
+        stage.draw(); // Draw the stage with the buttons
     }
+
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
     public void pause() {
-
+        // Handle game pause state (optional)
     }
 
     @Override
     public void resume() {
-
+        // Handle game resume state (optional)
     }
 
     @Override
     public void hide() {
-
+        // Clean up when the screen is hidden (optional)
     }
 
     @Override
     public void dispose() {
-
+        // Dispose resources when the screen is no longer needed
+        batch.dispose();
+        background.dispose();
+        playAgainTexture.dispose();
+        nextButtonTexture.dispose();
+        stage.dispose();
     }
 }

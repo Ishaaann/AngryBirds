@@ -676,7 +676,7 @@ public class Level1 implements Screen, PigHealthListener {
     public void levelCleared(){
         if(pigsArray.size==0){
             cleared = true;
-            game.setScreen(new VictoryScreen(game));
+            game.setScreen(new VictoryScreen(game,1));
         }
         else if(birdQueue.size==0 && pigsArray.size>0){
             //add delay of 10 seconds
