@@ -3,6 +3,7 @@ package com.ninjamoney.angrybirds.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
@@ -24,6 +25,7 @@ public class VictoryScreen implements Screen {
     private Texture nextButtonTexture;
     private ImageButton playAgainButton;
     private ImageButton nextButton;
+    private BitmapFont font;
     private int currentLevel;  // To store the current level number
 
     public VictoryScreen(AngryBirds game, int currentLevel) {
@@ -37,9 +39,12 @@ public class VictoryScreen implements Screen {
     @Override
     public void show() {
         // Load textures for buttons
-        background = new Texture("game/bg/victory.png");
+        background = new Texture("game/bg/finalmenu.png");
         playAgainTexture = new Texture("buttons/replay.png");
         nextButtonTexture = new Texture("buttons/next.png");
+
+        // Load font
+        font = new BitmapFont();
 
         // Create button styles for playAgain and next
         ImageButtonStyle playAgainStyle = new ImageButtonStyle();
@@ -52,9 +57,19 @@ public class VictoryScreen implements Screen {
         playAgainButton = new ImageButton(playAgainStyle);
         nextButton = new ImageButton(nextButtonStyle);
 
+        // Calculate positions for the buttons
+        float screenWidth = stage.getViewport().getWorldWidth();
+        float screenHeight = stage.getViewport().getWorldHeight();
+        float buttonWidth = playAgainButton.getWidth();
+        float buttonHeight = playAgainButton.getHeight();
+
+        float playAgainX = screenWidth / 3 - buttonWidth / 2;
+        float nextButtonX = 2 * screenWidth / 3 - buttonWidth / 2;
+        float buttonY = screenHeight / 2 - buttonHeight / 2;
+
         // Set positions of the buttons
-        playAgainButton.setPosition(593, 123);
-        nextButton.setPosition(718, 123);
+        playAgainButton.setPosition(playAgainX, buttonY);
+        nextButton.setPosition(nextButtonX, buttonY);
 
         // Add buttons to the stage
         stage.addActor(playAgainButton);
@@ -125,9 +140,8 @@ public class VictoryScreen implements Screen {
         // Draw the background image
         batch.draw(background, 0, 0, 1280, 720);
 
-        // Draw the playAgainButton and nextButton textures
-        playAgainButton.draw(batch, 1);  // Draw playAgainButton
-        nextButton.draw(batch, 1);  // Draw nextButton
+        // Draw the "Victory" text
+        font.draw(batch, "Victory", 640 - 50, 360 + 200);
 
         batch.end();
 
@@ -135,7 +149,6 @@ public class VictoryScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f)); // Updates the stage actions
         stage.draw(); // Draw the stage with the buttons
     }
-
 
     @Override
     public void resize(int width, int height) {
@@ -165,5 +178,6 @@ public class VictoryScreen implements Screen {
         playAgainTexture.dispose();
         nextButtonTexture.dispose();
         stage.dispose();
+        font.dispose();
     }
 }

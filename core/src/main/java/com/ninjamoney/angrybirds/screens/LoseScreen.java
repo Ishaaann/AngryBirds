@@ -3,14 +3,15 @@ package com.ninjamoney.angrybirds.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.ninjamoney.angrybirds.AngryBirds;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.ninjamoney.angrybirds.AngryBirds;
 import com.ninjamoney.angrybirds.levels.Level1;
 import com.ninjamoney.angrybirds.levels.Level2;
 import com.ninjamoney.angrybirds.levels.Level3;
@@ -24,22 +25,26 @@ public class LoseScreen implements Screen {
     private Texture nextButtonTexture;
     private ImageButton playAgainButton;
     private ImageButton nextButton;
+    private BitmapFont font;
     private int currentLevel;  // To store the current level number
 
     public LoseScreen(AngryBirds game, int currentLevel) {
         this.game = game;
         this.batch = new SpriteBatch();
         this.stage = new Stage();
-//        this.currentLevel = currentLevel;  // Set the current level
+        this.currentLevel = currentLevel;  // Set the current level
         Gdx.input.setInputProcessor(stage);  // Set input processor for the stage
     }
 
     @Override
     public void show() {
         // Load textures for buttons
-        background = new Texture("game/bg/lose.png");
+        background = new Texture("game/bg/finalmenu.png");
         playAgainTexture = new Texture("buttons/replay.png");
         nextButtonTexture = new Texture("buttons/next.png");
+
+        // Load font
+        font = new BitmapFont();
 
         // Create button styles for playAgain and next
         ImageButtonStyle playAgainStyle = new ImageButtonStyle();
@@ -52,9 +57,19 @@ public class LoseScreen implements Screen {
         playAgainButton = new ImageButton(playAgainStyle);
         nextButton = new ImageButton(nextButtonStyle);
 
+        // Calculate positions for the buttons
+        float screenWidth = stage.getViewport().getWorldWidth();
+        float screenHeight = stage.getViewport().getWorldHeight();
+        float buttonWidth = playAgainButton.getWidth();
+        float buttonHeight = playAgainButton.getHeight();
+
+        float playAgainX = screenWidth / 3;
+        float nextButtonX = 2 * screenWidth / 3;
+        float buttonY = screenHeight / 2 - buttonHeight / 2;
+
         // Set positions of the buttons
-        playAgainButton.setPosition(586, 160);
-        nextButton.setPosition(733, 160);
+        playAgainButton.setPosition(playAgainX, buttonY);
+        nextButton.setPosition(nextButtonX, buttonY);
 
         // Add buttons to the stage
         stage.addActor(playAgainButton);
@@ -103,6 +118,10 @@ public class LoseScreen implements Screen {
         batch.begin();
         // Draw the background image
         batch.draw(background, 0, 0, 1280, 720);
+
+        // Draw the "You LOST" text
+        font.draw(batch, "You LOST", 640 - 50, 360 + 200);
+
         batch.end();
 
         // Draw buttons on the stage (buttons are automatically drawn via stage)
@@ -138,5 +157,6 @@ public class LoseScreen implements Screen {
         playAgainTexture.dispose();
         nextButtonTexture.dispose();
         stage.dispose();
+        font.dispose();
     }
 }

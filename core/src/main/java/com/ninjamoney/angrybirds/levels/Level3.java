@@ -49,6 +49,10 @@ public class Level3 implements Screen, PigHealthListener {
     private Chuck chuck;
     private Bomb bomb;
     private Texture rockCircleTexture;
+
+    private float countdown = 10f;       // 10 seconds countdown
+    private boolean countdownStarted = false;  // Flag to track if the countdown is active
+    private boolean gameOver = false;    // Flag to prevent further input after game ends
     public static boolean cleared = false;
 
     private Texture pauseButton;
@@ -669,27 +673,31 @@ public class Level3 implements Screen, PigHealthListener {
 
     public static float score = 0;
 
-    public void levelCleared(){
-        if(pigsArray.size==0){
+    public void levelCleared() {
+        if (pigsArray.size == 0) {
             cleared = true;
-            game.setScreen(new VictoryScreen(game,3));
+            game.setScreen(new VictoryScreen(game, 1));  // Directly set victory screen
+            resetCountdown();
         }
-        else if(birdQueue.size==0 && pigsArray.size>0){
-            //add delay of 10 seconds
-            if(cp.getCurrentBird() == null){
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        if(pigsArray.size == 0){
-                            game.setScreen(new LoseScreen(game,3));
-                        }
-                        else {
-                            game.setScreen(new LoseScreen(game,3));
-                        }
-                    }
-                }, 10);
+        else if (birdQueue.size == 0 && pigsArray.size > 0 && cp.getCurrentBird() == null && !countdownStarted) {
+            countdownStarted = true; // Start countdown
+        }
+
+        if (countdownStarted) {
+            countdown -= Gdx.graphics.getDeltaTime(); // Decrease countdown by frame time
+            if (countdown <= 0) {
+                if (pigsArray.size == 0) {
+                    game.setScreen(new VictoryScreen(game, 1));  // Directly set victory screen
+                } else {
+                    game.setScreen(new LoseScreen(game, 1));     // Directly set lose screen
+                }
+                resetCountdown();
             }
         }
+    }
+    private void resetCountdown() {
+        countdownStarted = false;
+        countdown = 10f; // Reset to 10 seconds for future use
     }
 
     public void processBodyDestructionQueue() {
