@@ -1,7 +1,6 @@
 package com.ninjamoney.angrybirds;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
 import com.ninjamoney.angrybirds.elements.character.bird.Birds;
 import com.ninjamoney.angrybirds.elements.character.pig.Pigs;
 

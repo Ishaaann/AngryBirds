@@ -12,6 +12,7 @@ public class AngryBirds extends Game {
     public SpriteBatch batch;
     public BitmapFont font;
     public Music themeMusic;
+    public static Gamestate gs = new Gamestate();
 
 
     @Override

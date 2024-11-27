@@ -30,7 +30,7 @@ public class LoseScreen implements Screen {
         this.game = game;
         this.batch = new SpriteBatch();
         this.stage = new Stage();
-        this.currentLevel = currentLevel;  // Set the current level
+//        this.currentLevel = currentLevel;  // Set the current level
         Gdx.input.setInputProcessor(stage);  // Set input processor for the stage
     }
 

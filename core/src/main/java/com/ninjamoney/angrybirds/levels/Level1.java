@@ -678,46 +678,66 @@ public class Level1 implements Screen, PigHealthListener {
         stage.getViewport().getCamera().update();
     }
 
-
-    public void levelCleared() {
-        // Cancel any existing task if the level is cleared again to avoid multiple tasks being scheduled
-        if (levelTransitionTask != null) {
-            levelTransitionTask.cancel();
-        }
-
-        // Check if all pigs are cleared (level won)
-        if (pigsArray.size == 0) {
+    public void levelCleared(){
+        if(pigsArray.size==0){
             cleared = true;
-
-            // Schedule the transition to VictoryScreen after 0.5 seconds
-            levelTransitionTask = Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    dispose(); // Dispose of the current screen
-                    game.setScreen(new VictoryScreen(game, 1));
-                }
-            }, 0.5f); // Delay for 0.5 seconds before transitioning to the victory screen
+            game.setScreen(new VictoryScreen(game,2));
+//            dispose();
         }
-        // Check if the player has no birds left but there are still pigs (level lost)
-        else if (birdQueue.size == 0 && pigsArray.size > 0) {
-            if (cp.getCurrentBird() == null) {
-                // Schedule the transition to LoseScreen after 0.5 seconds
-                levelTransitionTask = Timer.schedule(new Timer.Task() {
+        else if(birdQueue.size==0 && pigsArray.size>0){
+            //add delay of 10 seconds
+            if(cp.getCurrentBird() == null){
+                Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        dispose(); // Dispose of the current screen
-                        game.setScreen(new LoseScreen(game, 1));
+                        if(pigsArray.size == 0){
+                            game.setScreen(new VictoryScreen(game,2));
+//                            dispose();
+                        }
+                        else {
+                            game.setScreen(new LoseScreen(game,2));
+//                            dispose();
+                        }
                     }
-                }, 0.5f); // Delay for 0.5 seconds before transitioning to the lose screen
+                }, 10);
             }
         }
     }
 
 
-
-
-
-
+//    public void levelCleared() {
+//        // Cancel any existing task if the level is cleared again to avoid multiple tasks being scheduled
+//        if (levelTransitionTask != null) {
+//            levelTransitionTask.cancel();
+//        }
+//
+//        // Check if all pigs are cleared (level won)
+//        if (pigsArray.size == 0) {
+//            cleared = true;
+//
+//            // Schedule the transition to VictoryScreen after 0.5 seconds
+//            levelTransitionTask = Timer.schedule(new Timer.Task() {
+//                @Override
+//                public void run() {
+//                    dispose(); // Dispose of the current screen
+//                    game.setScreen(new VictoryScreen(game, 1));
+//                }
+//            }, 0.5f); // Delay for 0.5 seconds before transitioning to the victory screen
+//        }
+//        // Check if the player has no birds left but there are still pigs (level lost)
+//        else if (birdQueue.size == 0 && pigsArray.size > 0) {
+//            if (cp.getCurrentBird() == null) {
+//                // Schedule the transition to LoseScreen after 0.5 seconds
+//                levelTransitionTask = Timer.schedule(new Timer.Task() {
+//                    @Override
+//                    public void run() {
+//                        dispose(); // Dispose of the current screen
+//                        game.setScreen(new LoseScreen(game, 1));
+//                    }
+//                }, 0.5f); // Delay for 0.5 seconds before transitioning to the lose screen
+//            }
+//        }
+//    }
 
     //to be implemented properly
     private void destroyBirds(Birds bird){
