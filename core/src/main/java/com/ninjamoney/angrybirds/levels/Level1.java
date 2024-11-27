@@ -525,7 +525,8 @@ public class Level1 implements Screen, PigHealthListener {
 
         if (x < 0 || x > worldWidth || y < 0 || y > worldHeight) {
             pigsArray.removeValue(pig, true);
-            queueBodyForDestruction(pig.getPigBody());
+            pig.setHealth(0);
+//            queueBodyForDestruction(pig.getPigBody());
         }
     }
 
