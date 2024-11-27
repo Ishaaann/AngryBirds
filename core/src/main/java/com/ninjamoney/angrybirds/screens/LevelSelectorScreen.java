@@ -182,7 +182,9 @@ public class LevelSelectorScreen implements Screen {
         level2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new Level2(game, 2, true));
+                if(Level1.cleared) {
+                    game.setScreen(new Level2(game, 2, false));
+                }
             }
         });
 
@@ -194,6 +196,7 @@ public class LevelSelectorScreen implements Screen {
         level3Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if(Level2.cleared)
                 game.setScreen(new Level3(game, 3, true));
             }
         });
