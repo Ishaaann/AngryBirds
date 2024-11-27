@@ -84,7 +84,7 @@ public class Collisions implements ContactListener {
         }
     }
 
-    private void handleBirdPigCollision(Birds bird, Pigs pig) {
+    public void handleBirdPigCollision(Birds bird, Pigs pig) {
         float velocity = bird.getBirdBody().getLinearVelocity().len();
         float damage = velocity * bird.getDamage() / 80;
         pig.setHealth(pig.getHealth() - damage);

@@ -39,7 +39,7 @@ public class LoseScreen implements Screen {
     @Override
     public void show() {
         // Load textures for buttons
-        background = new Texture("game/bg/finalmenu.png");
+        background = new Texture("game/bg/lose.png");
         playAgainTexture = new Texture("buttons/replay.png");
         nextButtonTexture = new Texture("buttons/next.png");
 
@@ -63,13 +63,23 @@ public class LoseScreen implements Screen {
         float buttonWidth = playAgainButton.getWidth();
         float buttonHeight = playAgainButton.getHeight();
 
-        float playAgainX = screenWidth / 3;
-        float nextButtonX = 2 * screenWidth / 3;
-        float buttonY = screenHeight / 2 - buttonHeight / 2;
+//        float playAgainX = screenWidth / 3;
+//        float nextButtonX = 2 * screenWidth / 3;
+//        float buttonY = screenHeight / 2 - buttonHeight / 2;
+//
+//        // Set positions of the buttons
+//        playAgainButton.setPosition(playAgainX, buttonY);
+//        nextButton.setPosition(nextButtonX, buttonY);
+        float playAgainX = (screenWidth / 3 - buttonWidth / 2)+270;
+        float nextButtonX = (2 * screenWidth / 3 - buttonWidth / 2)-7;
+        float buttonY = (screenHeight / 2 - buttonHeight / 2)-90;
 
         // Set positions of the buttons
         playAgainButton.setPosition(playAgainX, buttonY);
+        playAgainButton.setSize(100,100);
         nextButton.setPosition(nextButtonX, buttonY);
+        nextButton.setSize(100,100);
+
 
         // Add buttons to the stage
         stage.addActor(playAgainButton);

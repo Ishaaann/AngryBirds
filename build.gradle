@@ -8,10 +8,6 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
   }
-  dependencies {
-
-
-  }
 }
 
 allprojects {
@@ -67,6 +63,15 @@ subprojects {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://jitpack.io' }
+  }
+
+  dependencies {
+    // JUnit 5 dependency
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+  }
+
+  test {
+    useJUnitPlatform()
   }
 }
 
