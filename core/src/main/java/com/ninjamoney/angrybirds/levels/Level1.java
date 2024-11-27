@@ -56,11 +56,11 @@ public class Level1 implements Screen, PigHealthListener {
     private boolean isPaused = false;
     private Texture pauseOverlay;
     private Texture pauseHeadings;
-    private Texture resumeButton;
+
     private Texture MusicOnHoverTexture;
     private Texture MusicOffHoverTexture;
-    private Texture resumeButtonHoverTexture;
-    private Texture resumeButtonHover;
+
+
 
 
     private Texture musicOnButtonTexture;
@@ -69,7 +69,8 @@ public class Level1 implements Screen, PigHealthListener {
     private ImageButton musicButton;
     private ImageButton backButton;
     private ImageButton dynamicResumeButton;
-
+    private Texture resumeButton;
+    private Texture resumeButtonHoverTexture;
     private boolean isMusicOn = true; // Assuming music is on by default
 
     private Queue<Birds> birdQueue;

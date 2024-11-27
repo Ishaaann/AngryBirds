@@ -57,10 +57,11 @@ public class Level2 implements Screen, PigHealthListener {
     private boolean isPaused = false;
     private Texture pauseOverlay;
     private Texture pauseHeadings;
-    private Texture resumeButton;
+    private ImageButton dynamicResumeButton;
     private Texture MusicOnHoverTexture;
     private Texture MusicOffHoverTexture;
-
+    private Texture resumeButton;
+    private Texture resumeButtonHoverTexture;
     private Texture musicOnButtonTexture;
     private Texture musicOffButtonTexture;
     private Texture backButtonTexture;
@@ -298,31 +299,51 @@ public class Level2 implements Screen, PigHealthListener {
 
     @Override
     public void show() {
+        // Set the input processor to handle UI events
         Gdx.input.setInputProcessor(stage);
+
+        // Load textures
         ground = new Texture("game/bg/ground.png");
         slingshot = cp.getCatapultTexture();
         boxTexture = new Texture("elements/struct/plank.png");
-        rockTexture = new Texture("elements/struct/rock_block.png");
         pauseButton = new Texture("buttons/pause.png");
         pauseOverlay = new Texture("game/pauseboard.png");
         pauseHeadings = new Texture("game/pause_heading.png");
         resumeButton = new Texture("buttons/Play1.png");
+        resumeButtonHoverTexture = new Texture("buttons/Play2.png");
         musicOnButtonTexture = new Texture("buttons/sound/sound.png");
         musicOffButtonTexture = new Texture("buttons/sound/soundoff.png");
         backButtonTexture = new Texture("buttons/back.png");
 
-        // Create hover textures for the music button
-        MusicOnHoverTexture = new Texture("buttons/sound/soundhover.png");
-        MusicOffHoverTexture = new Texture("buttons/sound/soundoffhover.png");
+        // Setup resume button with hover state
+        ImageButton.ImageButtonStyle resumeButtonStyle = new ImageButton.ImageButtonStyle();
+        resumeButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(resumeButton));
+        resumeButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(resumeButtonHoverTexture));
 
-        // Initialize music button style
+        // Initialize the dynamic resume button
+        dynamicResumeButton = new ImageButton(resumeButtonStyle);
+        dynamicResumeButton.setSize(250, 250); // Set the size of the button
+        dynamicResumeButton.setPosition(0, 0); // Initial position, will be updated in render()
+
+        // Add listener for the resume button to resume the game
+        dynamicResumeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isPaused = false; // Resume the game
+            }
+        });
+
+        // Add the resume button to the stage
+        stage.addActor(dynamicResumeButton);
+
+        // Create and initialize the music button
         ImageButton.ImageButtonStyle musicButtonStyle = new ImageButton.ImageButtonStyle();
         if (game.themeMusic.isPlaying()) {
             musicButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(musicOnButtonTexture));
-            musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(MusicOnHoverTexture)); // Hover state
+            musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/soundhover.png"))); // Hover state
         } else {
             musicButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(musicOffButtonTexture));
-            musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(MusicOffHoverTexture)); // Hover state
+            musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/soundoffhover.png"))); // Hover state
         }
 
         // Create the music button
@@ -332,17 +353,17 @@ public class Level2 implements Screen, PigHealthListener {
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Toggle the music state
+                // Toggle music state on click
                 isMusicOn = !isMusicOn;
 
                 if (isMusicOn) {
                     game.themeMusic.play();
                     musicButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(musicOnButtonTexture));
-                    musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(MusicOnHoverTexture)); // Update hover state
+                    musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/soundhover.png"))); // Update hover state
                 } else {
                     game.themeMusic.pause();
                     musicButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(musicOffButtonTexture));
-                    musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(MusicOffHoverTexture)); // Update hover state
+                    musicButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(new Texture("buttons/sound/soundoffhover.png"))); // Update hover state
                 }
             }
         });
@@ -354,11 +375,13 @@ public class Level2 implements Screen, PigHealthListener {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                // Go back to the level selector screen when clicked
                 game.setScreen(new LevelSelectorScreen(game));
                 dispose();
             }
         });
 
+        // Add the music and back buttons to the stage
         stage.addActor(musicButton);
         stage.addActor(backButton);
     }
@@ -453,15 +476,17 @@ public class Level2 implements Screen, PigHealthListener {
             float overlayX = (stage.getViewport().getWorldWidth() - overlayWidth) / 2;
             float overlayY = (stage.getViewport().getWorldHeight() - overlayHeight) / 2;
 
+            // Draw the pause overlay
             batch.draw(pauseOverlay, overlayX, overlayY, overlayWidth, overlayHeight);
 
             // Draw the pause heading at the top
             batch.draw(pauseHeadings, overlayX + overlayWidth / 4, overlayY + overlayHeight + 20, overlayWidth / 2, overlayHeight / 4);
 
-            // Draw the resume button at the bottom center of the pause board
-            batch.draw(resumeButton, overlayX + (overlayWidth - resumeButton.getWidth()) / 2, overlayY + 20, resumeButton.getWidth(), resumeButton.getHeight());
+            // Draw the dynamic resume button at the bottom center of the pause board
+            dynamicResumeButton.setPosition(overlayX + (overlayWidth - dynamicResumeButton.getWidth()) / 2, overlayY + 20);
+            dynamicResumeButton.draw(batch, 1);
 
-            // Draw the music and back buttons
+            // Draw the music and back buttons (positioned relative to the pause overlay)
             musicButton.setPosition(overlayX + 20, overlayY + 20);
             backButton.setPosition(overlayX + overlayWidth - backButton.getWidth() - 20, overlayY + 20);
             musicButton.draw(batch, 1);
