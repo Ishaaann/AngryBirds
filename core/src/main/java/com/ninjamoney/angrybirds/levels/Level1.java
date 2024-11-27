@@ -57,6 +57,8 @@ public class Level1 implements Screen, PigHealthListener {
     private Texture pauseOverlay;
     private Texture pauseHeadings;
 
+    private Timer.Task levelTransitionTask = null;
+
     private Texture MusicOnHoverTexture;
     private Texture MusicOffHoverTexture;
 
@@ -626,6 +628,10 @@ public class Level1 implements Screen, PigHealthListener {
     @Override
     public void dispose() {
         // Dispose of all textures
+
+        if (levelTransitionTask != null) {
+            levelTransitionTask.cancel();
+        }
         if (background != null) background.dispose();
         if (ground != null) ground.dispose();
         if (slingshot != null) slingshot.dispose();
@@ -673,28 +679,41 @@ public class Level1 implements Screen, PigHealthListener {
     }
 
 
-    public void levelCleared(){
-        if(pigsArray.size==0){
-            cleared = true;
-            game.setScreen(new VictoryScreen(game,1));
+    public void levelCleared() {
+        // Cancel any existing task if the level is cleared again to avoid multiple tasks being scheduled
+        if (levelTransitionTask != null) {
+            levelTransitionTask.cancel();
         }
-        else if(birdQueue.size==0 && pigsArray.size>0){
-            //add delay of 10 seconds
-            if(cp.getCurrentBird() == null){
-                Timer.schedule(new Timer.Task() {
+
+        // Check if all pigs are cleared (level won)
+        if (pigsArray.size == 0) {
+            cleared = true;
+
+            // Schedule the transition to VictoryScreen after 0.5 seconds
+            levelTransitionTask = Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    dispose(); // Dispose of the current screen
+                    game.setScreen(new VictoryScreen(game, 1));
+                }
+            }, 0.5f); // Delay for 0.5 seconds before transitioning to the victory screen
+        }
+        // Check if the player has no birds left but there are still pigs (level lost)
+        else if (birdQueue.size == 0 && pigsArray.size > 0) {
+            if (cp.getCurrentBird() == null) {
+                // Schedule the transition to LoseScreen after 0.5 seconds
+                levelTransitionTask = Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        if(pigsArray.size == 0){
-                            game.setScreen(new LoseScreen(game,1));
-                        }
-                        else {
-                            game.setScreen(new LoseScreen(game,1));
-                        }
+                        dispose(); // Dispose of the current screen
+                        game.setScreen(new LoseScreen(game, 1));
                     }
-                }, 10);
+                }, 0.5f); // Delay for 0.5 seconds before transitioning to the lose screen
             }
         }
     }
+
+
 
 
 
