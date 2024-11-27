@@ -666,10 +666,10 @@ public class Level2 implements Screen, PigHealthListener {
                     @Override
                     public void run() {
                         if(pigsArray.size == 0){
-                            game.setScreen(new LoseScreen(game));
+                            game.setScreen(new LoseScreen(game,2));
                         }
                         else {
-                            game.setScreen(new LoseScreen(game));
+                            game.setScreen(new LoseScreen(game,2));
                         }
                     }
                 }, 10);
