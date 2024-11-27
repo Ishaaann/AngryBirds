@@ -4,6 +4,7 @@ package com.ninjamoney.angrybirds.phy;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.ninjamoney.angrybirds.elements.character.bird.Birds;
 import com.ninjamoney.angrybirds.elements.character.pig.Pigs;
 import com.ninjamoney.angrybirds.elements.struct.SolidObjects;
@@ -11,12 +12,12 @@ import com.ninjamoney.angrybirds.elements.struct.Wood;
 import com.ninjamoney.angrybirds.levels.Level1;
 
 import static com.ninjamoney.angrybirds.levels.Level1.onWoodHealthZero;
-import static com.ninjamoney.angrybirds.levels.Level1.queueBodyForDestruction;
 
 public class Collisions implements ContactListener {
     public static float score = 0;
     private PigHealthListener pigHealthListener;
     Stage stage;
+    public static Array<Body> bodiesToDestroy = new Array<Body>();
 
 
     public Collisions(PigHealthListener pigHealthListener) {
@@ -60,6 +61,13 @@ public class Collisions implements ContactListener {
     private void checkSolidObjectHealth(SolidObjects solidObject) {
         if (solidObject.getHp() <= 0) {
            queueBodyForDestruction(solidObject.getBody());
+        }
+    }
+
+    public static void queueBodyForDestruction(Body body) {
+        if (body != null && !bodiesToDestroy.contains(body, true)) {
+            bodiesToDestroy.add(body);
+            System.out.println("Queued body for destruction: " + body);
         }
     }
 

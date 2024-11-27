@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.ninjamoney.angrybirds.levels.Level1;
 
+import static com.ninjamoney.angrybirds.phy.Collisions.queueBodyForDestruction;
+
 public class Ice extends SolidObjects {
     private Texture iceTexture;
     private String iceType;
@@ -52,7 +54,7 @@ public class Ice extends SolidObjects {
     public void reduceHp(float damage) {
         this.hp -= damage;
         if (this.hp <= 0) {
-            Level1.queueBodyForDestruction(this.body);
+            queueBodyForDestruction(this.body);
         }
     }
 

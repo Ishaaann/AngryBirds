@@ -180,13 +180,14 @@ public class LevelSelectorScreen implements Screen {
         );
         level2Button.setSize(238, 242);
         level2Button.addListener(e -> {
-            if (level2Button.isPressed()) {
-                if(Level1.cleared){
-                    game.setScreen(new Level2(game, 2, false));
-                }
-//                game.setScreen(new Level2(game, 2, true));
-                return true;
-            }
+//            if (level2Button.isPressed()) {
+//                if(Level1.cleared){
+//                    game.setScreen(new Level2(game, 2, false));
+//                }
+////                game.setScreen(new Level2(game, 2, true));
+//                return true;
+//            }
+            game.setScreen(new Level2(game, 2, true));
             return false;
         });
 
@@ -196,12 +197,13 @@ public class LevelSelectorScreen implements Screen {
         );
         level3Button.setSize(238, 242);
         level3Button.addListener(e -> {
-            if (level3Button.isPressed()) {
-                if(Level2.cleared){
-                    game.setScreen(new Level3(game, 3, false));
-                }
-                return true;
-            }
+//            if (level3Button.isPressed()) {
+//                if(Level2.cleared){
+//                    game.setScreen(new Level3(game, 3, false));
+//                }
+//                return true;
+//            }
+            game.setScreen(new Level3(game, 3, true));
             return false;
         });
 

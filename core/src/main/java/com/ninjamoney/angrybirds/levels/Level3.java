@@ -36,6 +36,9 @@ import com.ninjamoney.angrybirds.screens.VictoryScreen;
 
 import java.util.Iterator;
 
+import static com.ninjamoney.angrybirds.phy.Collisions.bodiesToDestroy;
+import static com.ninjamoney.angrybirds.phy.Collisions.queueBodyForDestruction;
+
 public class Level3 implements Screen, PigHealthListener {
     private AngryBirds game;
     private SpriteBatch batch;
@@ -659,15 +662,6 @@ public class Level3 implements Screen, PigHealthListener {
                     }
                 }, 10);
             }
-        }
-    }
-
-    private static Array<Body> bodiesToDestroy = new Array<Body>();
-
-    public static void queueBodyForDestruction(Body body) {
-        if (body != null && !bodiesToDestroy.contains(body, true)) {
-            bodiesToDestroy.add(body);
-            System.out.println("Queued body for destruction: " + body);
         }
     }
 
