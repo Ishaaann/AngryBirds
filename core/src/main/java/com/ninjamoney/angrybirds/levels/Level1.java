@@ -603,12 +603,15 @@ public class Level1 implements Screen, PigHealthListener {
 //        System.out.println("Medium pi health: " + mediumPig.getHealth());
 //        System.out.println("Large pi health: " + largePig.getHealth());
 //        System.out.println(red.getRedBody().getLinearVelocity());
+        System.out.println("Pigs destroyed: " + collisionListener.piggaDestroyed.size());
+        System.out.println("pig array size: " + pigsArray.size());
 
 
         // Render the trajectory
         if (cp.isShowTrajectory()) {
             cp.trajectoryPredictor.render(batch);
         }
+
 
         batch.end();
 
@@ -617,9 +620,10 @@ public class Level1 implements Screen, PigHealthListener {
             // Update the physics world
             world.step(1 / 60f, 6, 2);
             world.step(1/60f,6,2);
-            checkBounds(smallpig);
-            checkBounds(mediumPig);
-            checkBounds(largePig);
+
+//            checkBounds(smallpig);
+//            checkBounds(mediumPig);
+//            checkBounds(largePig);
             processBodyDestructionQueue();
             handleInput();
             levelCleared();
@@ -635,9 +639,12 @@ public class Level1 implements Screen, PigHealthListener {
             float y = pig.getPigBody().getPosition().y;
             float worldWidth = stage.getViewport().getWorldWidth();
             float worldHeight = stage.getViewport().getWorldHeight();
+            System.out.println("x: " + x + " y: " + y);
 
             if (x < 0 || x > worldWidth || y < 0 || y > worldHeight) {
+                System.out.println("checked");
                 pig.setHealth(0);
+                collisionListener.piggaDestroyed.add(pig);
                 queueBodyForDestruction(pig.getPigBody());
             }
         }

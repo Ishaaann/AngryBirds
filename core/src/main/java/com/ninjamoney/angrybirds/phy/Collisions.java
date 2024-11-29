@@ -78,6 +78,7 @@ public class Collisions implements ContactListener {
                 if(((Body) obj).getUserData() instanceof Pigs){
                     Pigs pig = (Pigs) ((Body) obj).getUserData();
                     if(pig.getPigBody()!=null){
+                        System.out.println("Pig added");
                         piggaDestroyed.add(pig);
                         System.out.println("Pigga added");
                     }
@@ -132,8 +133,8 @@ public class Collisions implements ContactListener {
     }
 
     private void checkPigHealth(Pigs pig) {
-        Rectangle bounds = new Rectangle();
-        bounds.set(0, 0, stage.getWidth(), stage.getHeight());
+        Rectangle bounds = new Rectangle(0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
+//        bounds.set();
         if (pig.getHealth() <= 0 || !bounds.contains(pig.getPigBody().getPosition().x, pig.getPigBody().getPosition().y)) {
             pigHealthListener.onPigHealthZero(pig);
         }
