@@ -128,17 +128,17 @@ public class Level2 implements Screen, PigHealthListener {
 
         smallpig = new SmallPig(createCirclePiggas(50, 50, 20f, false));
 //        smallpig.setPigBody(createCirclePiggas(50, 50, 20f, false));
-//        smallpig.getPigBody().setUserData(smallpig);
+        smallpig.getPigBody().setUserData(smallpig);
         pigsArray.add(smallpig);
 
         mediumPig = new MediumPig(createCirclePiggas(50, 50, 20f, false));
 //        mediumPig.setPigBody(createCirclePiggas(50, 50, 20f, false));
-//        mediumPig.getPigBody().setUserData(mediumPig);
+        mediumPig.getPigBody().setUserData(mediumPig);
         pigsArray.add(mediumPig);
 
         largePig = new LargePig(createCirclePiggas(50, 50, 20f, false));
 //        largePig.setPigBody(createCirclePiggas(50, 50, 20f, false));
-//        largePig.getPigBody().setUserData(largePig);
+        largePig.getPigBody().setUserData(largePig);
         pigsArray.add(largePig);
 
         birdQueue = new ArrayList<>();

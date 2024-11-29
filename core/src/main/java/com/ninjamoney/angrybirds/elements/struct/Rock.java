@@ -18,7 +18,7 @@ public class Rock extends SolidObjects implements Serializable {
     private transient World world;
 
     public Rock(World world, String type, float x, float y, float width, float height) {
-        super(50);
+        super(10);
         this.world = world;
         this.rockType = type;
         this.body = createBody(world, x, y, width, height);

@@ -72,15 +72,21 @@ public class GameStateListener implements Serializable {
         }
 
         GameState data = new GameState(piggas, solidObjects, birdies,
-                                            birdPositions, pigPositions, solidObjectPositions,
-                                            pigHealth, solidObjectHealth, pigVelocity, solidObjectVelocity,
-                                            birdVelocity, solidObjectsDestroyed , piggasDestroyed, bodiesToDestroy, levelNum);
+            birdPositions, pigPositions, solidObjectPositions,
+            pigHealth, solidObjectHealth, pigVelocity, solidObjectVelocity,
+            birdVelocity, solidObjectsDestroyed , piggasDestroyed, bodiesToDestroy, levelNum);
         saveLevelWise(levelNum, data);
     }
 
+
     public void saveLevelWise(int levelNum, GameState gameState) {
-        File levelFile = new File("C:\\Users\\Ishaan\\bhaari padhai\\2023248_2023449\\AngryBirds\\saves\\level_" + levelNum + "_data.dat");
-        File levelMapFile = new File("C:\\Users\\Ishaan\\bhaari padhai\\2023248_2023449\\AngryBirds\\saves\\levelWiseData.dat");
+        File saveDir = new File("saves");
+        File levelFile = new File(saveDir, "level_" + levelNum + "_data.dat");
+        File levelMapFile = new File(saveDir, "levelWiseData.dat");
+
+        if (!saveDir.exists()) {
+            saveDir.mkdirs();
+        }
 
         try {
             FileOutputStream gameDataOutputStream = new FileOutputStream(levelFile);
@@ -89,6 +95,7 @@ public class GameStateListener implements Serializable {
             gameDataObjectOutputStream.close();
             System.out.println("Game data for level " + levelNum + " saved successfully.");
             levelWiseGameState.put(levelNum, gameState);
+
             FileOutputStream levelMapOutputStream = new FileOutputStream(levelMapFile);
             ObjectOutputStream levelMapObjectOutputStream = new ObjectOutputStream(levelMapOutputStream);
             levelMapObjectOutputStream.writeObject(levelWiseGameState);
@@ -99,8 +106,10 @@ public class GameStateListener implements Serializable {
         }
     }
 
+
     public static GameState loadLevelWiseGameData(int levelNum) {
-        File levelMapFile = new File("C:\\Users\\Ishaan\\bhaari padhai\\2023248_2023449\\AngryBirds\\saves\\levelWiseData.dat");
+        File saveDir = new File("saves");
+        File levelMapFile = new File(saveDir, "levelWiseData.dat");
 
         try {
             if (levelMapFile.exists() && levelMapFile.length() > 0) {
@@ -113,12 +122,13 @@ public class GameStateListener implements Serializable {
                     System.out.println("File is empty: " + levelMapFile.getPath());
                 } catch (IOException | ClassNotFoundException e) {
                     System.err.println("Error reading level metadata: " + e.getMessage());
+                    e.printStackTrace();
                 }
             } else {
                 System.out.println("No level-wise metadata found or file is empty.");
             }
 
-            File levelSaved = new File("C:\\Users\\Ishaan\\bhaari padhai\\2023248_2023449\\AngryBirds\\saves\\level_" + levelNum + "_data.dat");
+            File levelSaved = new File(saveDir, "level_" + levelNum + "_data.dat");
 
             if (levelSaved.exists() && levelSaved.length() > 0) {
                 try (FileInputStream gameDataInputStream = new FileInputStream(levelSaved);
@@ -130,6 +140,7 @@ public class GameStateListener implements Serializable {
                     System.out.println("Game data for level " + levelNum + " is empty or corrupted.");
                 } catch (IOException | ClassNotFoundException e) {
                     System.err.println("Error loading game data for level " + levelNum + ": " + e.getMessage());
+                    e.printStackTrace();
                 }
             } else {
                 System.out.println("No game data found for level " + levelNum + ".");
