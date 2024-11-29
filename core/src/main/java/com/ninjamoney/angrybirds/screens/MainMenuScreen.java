@@ -13,6 +13,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ninjamoney.angrybirds.AngryBirds;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.Color;
+
 public class MainMenuScreen implements Screen {
     private final Stage stage;
     private final AngryBirds game;
@@ -48,6 +55,21 @@ public class MainMenuScreen implements Screen {
         soundOffButtonHoverTexture = new Texture("buttons/sound/soundoffhover.png");
 
         createButtons();
+        // Create a Skin for the Label
+        Skin skin = new Skin();
+        BitmapFont font = new BitmapFont(); // Use default font
+        LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
+        skin.add("default", labelStyle);
+
+// Create the Label
+        Label creditsLabel = new Label("By Ishaan Raj and Rounak Dey", skin);
+        creditsLabel.setFontScale(2); // Make the text bigger
+
+        creditsLabel.setPosition((stage.getViewport().getWorldWidth() - creditsLabel.getWidth()) / 2, 10);
+
+// Add the Label to the stage
+// Add the Label to the stage
+        stage.addActor(creditsLabel);
     }
 
     private void createButtons() {
