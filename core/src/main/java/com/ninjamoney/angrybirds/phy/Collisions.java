@@ -132,6 +132,7 @@ public class Collisions implements ContactListener {
         score += damage;
     }
 
+
     private void checkPigHealth(Pigs pig) {
         Rectangle bounds = new Rectangle(0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
 //        bounds.set();
