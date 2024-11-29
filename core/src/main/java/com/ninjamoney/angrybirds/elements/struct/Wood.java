@@ -8,18 +8,22 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Wood extends SolidObjects {
-    private Texture woodTexture;
+import java.io.Serializable;
+
+public class Wood extends SolidObjects implements Serializable {
+    private transient Texture woodTexture;
     private String woodType;
-    private TextureRegion region;
-    private Body body;
-    private World world;
+    private transient TextureRegion region;
+    private transient Body body;
+    private transient World world;
+    public boolean isVertical;
 
     public Wood(World world, String type, float x, float y, float width, float height) {
         super(10);
         this.world = world;
         this.woodType = type;
         this.body = createBody(world, x, y, width, height);
+        isVertical = true;
 
         if (woodType.equals("plank")) {
             woodTexture = new Texture("elements/struct/plank.png");
@@ -74,4 +78,7 @@ public class Wood extends SolidObjects {
         return body;
     }
 
+    public void setBody(Body box) {
+        this.body = box;
+    }
 }

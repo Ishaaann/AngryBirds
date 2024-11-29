@@ -3,11 +3,12 @@ package com.ninjamoney.angrybirds.elements.character.bird;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
 
-public class Bomb extends Birds {
+import java.io.Serializable;
+
+public class Bomb extends Birds implements Serializable {
     private static final float BOMB_SPEED = 12.0f; // Speed of the Bomb bird
     private static final float damage = 50.0f; // Damage dealt by the Bomb bird
-    private static final Texture bombTexture = new Texture("elements/char/bomb.png"); // Texture for Bomb
-    private Body bombBody;
+    private static final transient Texture bombTexture = new Texture("elements/char/bomb.png"); // Texture for Bomb
 
     public Bomb() {
         super("Bomb", 100, BOMB_SPEED, damage, bombTexture); // Pass properties to superclass

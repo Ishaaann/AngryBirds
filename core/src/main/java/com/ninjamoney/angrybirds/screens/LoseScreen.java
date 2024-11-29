@@ -107,7 +107,7 @@ public class LoseScreen implements Screen {
         // Dynamically load the level based on the current level
         switch (level) {
             case 1:
-                game.setScreen(new Level1(game, level, false)); // Load Level1
+                game.setScreen(new Level1(game, level, false,null)); // Load Level1
                 break;
             case 2:
                 game.setScreen(new Level2(game, level, false)); // Load Level2
@@ -118,7 +118,7 @@ public class LoseScreen implements Screen {
             // Add more cases for additional levels as needed
             default:
                 // Default to Level1 if level is not recognized
-                game.setScreen(new Level1(game, level, false));
+                game.setScreen(new Level1(game, level, false,null));
                 break;
         }
     }

@@ -1,17 +1,20 @@
 package com.ninjamoney.angrybirds.elements.character.bird;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-public abstract class Birds {
+import java.io.Serializable;
+import java.util.Vector;
+
+public abstract class Birds implements Serializable {
     private String name;
     private int health;
-    private Texture birdTexture;
+    private transient Texture birdTexture;
     private float speed;
     private float damage;
-    public Body birdBody;
+    public transient Body birdBody;
     public String state;
-
 
     public Birds(String name, int health, float speed, float damage, Texture birdTexture) {
         this.name = name;
@@ -22,6 +25,15 @@ public abstract class Birds {
         this.state = "IDLE";
     }
 
+    public Vector2 getPos() {
+        Vector2 posi = birdBody.getPosition();
+        return posi;
+    }
+
+    public Vector2 getVelocity() {
+        Vector2 vel = birdBody.getLinearVelocity();
+        return vel;
+    }
 
     public abstract void activateSpecialAbility();
 

@@ -1,13 +1,17 @@
 package com.ninjamoney.angrybirds.elements.character.pig;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-public abstract class Pigs {
+import java.io.Serializable;
+import java.util.Vector;
+
+public abstract class Pigs implements Serializable {
     private String name;
     private float health;
-    private Texture pigTexture;
-    public Body pigBody;
+    private transient Texture pigTexture;
+    public transient Body pigBody;
     public static int HEALTH;
 
     public Pigs(String name, int health, Texture pigTexture) {
@@ -17,6 +21,15 @@ public abstract class Pigs {
         this.pigTexture = pigTexture;
     }
 
+    public Vector2 getPos() {
+        Vector2 posi = pigBody.getPosition();
+        return posi;
+    }
+
+    public Vector2 getVelocity() {
+        Vector2 vel = pigBody.getLinearVelocity();
+        return vel;
+    }
     // Method to update the pig's position based on Box2D
     public abstract void updatePosition();
 

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.ninjamoney.angrybirds.AngryBirds;
+import com.ninjamoney.angrybirds.GameState;
 import com.ninjamoney.angrybirds.levels.Level1;
 import com.ninjamoney.angrybirds.levels.Level2;
 import com.ninjamoney.angrybirds.levels.Level3;
@@ -99,7 +100,7 @@ public class VictoryScreen implements Screen {
         // Dynamically load the level based on the current level
         switch (level) {
             case 1:
-                game.setScreen(new Level1(game, level, false)); // Load Level1
+                game.setScreen(new Level1(game, level, false,null)); // Load Level1
                 break;
             case 2:
                 game.setScreen(new Level2(game, level, false)); // Load Level2
@@ -109,7 +110,7 @@ public class VictoryScreen implements Screen {
                 break;
             // Add more cases for additional levels if necessary
             default:
-                game.setScreen(new Level1(game, level, false)); // Default to Level1
+                game.setScreen(new Level1(game, level, false, null)); // Default to Level1
                 break;
         }
     }

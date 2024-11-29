@@ -8,12 +8,14 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Rock extends SolidObjects {
-    private Texture rockTexture;
+import java.io.Serializable;
+
+public class Rock extends SolidObjects implements Serializable {
+    private transient Texture rockTexture;
     private String rockType;
-    private TextureRegion region;
-    private Body body;
-    private World world;
+    private transient TextureRegion region;
+    private transient Body body;
+    private transient World world;
 
     public Rock(World world, String type, float x, float y, float width, float height) {
         super(50);

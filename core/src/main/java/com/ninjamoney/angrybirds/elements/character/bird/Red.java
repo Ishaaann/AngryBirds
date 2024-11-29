@@ -1,19 +1,20 @@
 package com.ninjamoney.angrybirds.elements.character.bird;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-//import static com.ninjamoney.angrybirds.screens.Level1.createCircle;
+import java.io.Serializable;
 
-public class Red extends Birds {
+public class Red extends Birds implements Serializable {
     private static final float RED_SPEED = 15.0f;
     private static final float damage = 25.0f;
-    private static final Texture redTexture = new Texture("elements/char/red.png");
-//    private Body redBody;
+    private static final transient Texture redTexture = new Texture("elements/char/red.png");
 
     public Red() {
         super("Red", 100, RED_SPEED, damage, redTexture);
 //        this.setBirdBody(createCircle(2f,2f,0.5f,false));
+//        pos = this.getRedBody().getPosition();
     }
 
     @Override

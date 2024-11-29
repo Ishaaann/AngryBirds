@@ -5,14 +5,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.ninjamoney.angrybirds.levels.Level1;
 
+import java.io.Serializable;
+
 import static com.ninjamoney.angrybirds.phy.Collisions.queueBodyForDestruction;
 
-public class Ice extends SolidObjects {
-    private Texture iceTexture;
+public class Ice extends SolidObjects implements Serializable {
+    private transient Texture iceTexture;
     private String iceType;
-    private TextureRegion region;
-    private Body body;
-    private World world;
+    private transient TextureRegion region;
+    private transient Body body;
+    private transient World world;
     private float hp;
 
     public Ice(World world, String type, float x, float y, float width, float height) {

@@ -34,6 +34,7 @@ import com.ninjamoney.angrybirds.screens.LevelSelectorScreen;
 import com.ninjamoney.angrybirds.screens.LoseScreen;
 import com.ninjamoney.angrybirds.screens.VictoryScreen;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import static com.ninjamoney.angrybirds.phy.Collisions.bodiesToDestroy;
@@ -49,6 +50,7 @@ public class Level3 implements Screen, PigHealthListener {
     private Chuck chuck;
     private Bomb bomb;
     private Texture rockCircleTexture;
+    private Collisions collisionListener;
 
     private float countdown = 10f;       // 10 seconds countdown
     private boolean countdownStarted = false;  // Flag to track if the countdown is active
@@ -70,13 +72,13 @@ public class Level3 implements Screen, PigHealthListener {
     private ImageButton backButton;
     private boolean isMusicOn = true; // Assuming music is on by default
 
-    private Queue<Birds> birdQueue;
+    private ArrayList<Birds> birdQueue;
     public static Stage stage;
     private Body gnd;
     public Texture redTexture;
     private Texture ground;
     private Texture slingshot;
-    private Array<Body> boxes;
+    private ArrayList<Body> boxes;
     private Texture boxTexture;
     private Texture rockTexture;
     private Catapult cp;
@@ -88,11 +90,11 @@ public class Level3 implements Screen, PigHealthListener {
     private Pigs smallpig;
     private Pigs mediumPig;
     private Pigs largePig;
-    private Array<Pigs> pigsArray;
+    private ArrayList<Pigs> pigsArray;
     Body c1;
     Body c2;
 
-    private static World world;
+    private static transient World world;
     private Box2DDebugRenderer debugRenderer;
 
     public Level3(AngryBirds game, int levelNumber, boolean isLocked) {
@@ -102,12 +104,13 @@ public class Level3 implements Screen, PigHealthListener {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         redTexture = new Texture("elements/char/red.png");
-        pigsArray = new Array<Pigs>();
+        pigsArray = new ArrayList<>();
         rockCircleTexture = new Texture("elements/struct/rock_circle.png");
 
 
         world = new World(new Vector2(0, -9.8f), true);
-        world.setContactListener(new Collisions(this));
+        collisionListener = new Collisions(this);
+        world.setContactListener(collisionListener);
         debugRenderer = new Box2DDebugRenderer();
 
         float slingshotX = stage.getViewport().getWorldWidth() / 8f;
@@ -131,22 +134,22 @@ public class Level3 implements Screen, PigHealthListener {
         c1 = createCircle(4 * stage.getWidth() / 5, stage.getHeight() / 5, 25, false);
         c2 = createCircle(4 * stage.getWidth() / 5 - 200, stage.getHeight() / 5, 25, false);
 
-        smallpig = new SmallPig();
-        smallpig.setPigBody(createCirclePiggas(50, 50, 20f, false));
-        smallpig.getPigBody().setUserData(smallpig);
+        smallpig = new SmallPig(createCirclePiggas(50, 50, 20f, false));
+//        smallpig.setPigBody(createCirclePiggas(50, 50, 20f, false));
+//        smallpig.getPigBody().setUserData(smallpig);
         pigsArray.add(smallpig);
 
-        mediumPig = new MediumPig();
-        mediumPig.setPigBody(createCirclePiggas(50, 50, 20f, false));
-        mediumPig.getPigBody().setUserData(mediumPig);
+        mediumPig = new MediumPig(createCirclePiggas(50, 50, 20f, false));
+//        mediumPig.setPigBody(createCirclePiggas(50, 50, 20f, false));
+//        mediumPig.getPigBody().setUserData(mediumPig);
         pigsArray.add(mediumPig);
 
-        largePig = new LargePig();
-        largePig.setPigBody(createCirclePiggas(50, 50, 20f, false));
-        largePig.getPigBody().setUserData(largePig);
+        largePig = new LargePig(createCirclePiggas(50, 50, 20f, false));
+//        largePig.setPigBody(createCirclePiggas(50, 50, 20f, false));
+//        largePig.getPigBody().setUserData(largePig);
         pigsArray.add(largePig);
 
-        birdQueue = new Queue<Birds>();
+        birdQueue = new ArrayList<>();
         birdQueue.addLast(red);
         birdQueue.addLast(chuck);
         birdQueue.addLast(bomb);
@@ -154,7 +157,7 @@ public class Level3 implements Screen, PigHealthListener {
         gnd = createGround();
         setNextBirdOnSlingshot();
 
-        boxes = new Array<Body>();
+        boxes = new ArrayList<>();
         createStructure();
 
     }
@@ -193,7 +196,7 @@ public class Level3 implements Screen, PigHealthListener {
     }
 
     private void setNextBirdOnSlingshot() {
-        if (birdQueue.size > 0) {
+        if (birdQueue.size() > 0) {
             birdJumpToCatapult(cp.getCurrentBird());
             Birds nextBird = birdQueue.removeFirst();
             float slingshotX = stage.getViewport().getWorldWidth() / 8f;
@@ -674,50 +677,58 @@ public class Level3 implements Screen, PigHealthListener {
     public static float score = 0;
 
     public void levelCleared() {
-        if (pigsArray.size == 0) {
+        if (pigsArray.size() == collisionListener.piggaDestroyed.size()) {
             cleared = true;
-            game.setScreen(new VictoryScreen(game, 1));  // Directly set victory screen
+            game.setScreen(new VictoryScreen(game, 1));
             resetCountdown();
         }
-        else if (birdQueue.size == 0 && pigsArray.size > 0 && cp.getCurrentBird() == null && !countdownStarted) {
-            countdownStarted = true; // Start countdown
+        else if (birdQueue.size() == 0 && pigsArray.size() > 0 && cp.getCurrentBird() == null && !countdownStarted) {
+            countdownStarted = true;
         }
 
         if (countdownStarted) {
-            countdown -= Gdx.graphics.getDeltaTime(); // Decrease countdown by frame time
+            countdown -= Gdx.graphics.getDeltaTime();
             if (countdown <= 0) {
-                if (pigsArray.size == 0) {
-                    game.setScreen(new VictoryScreen(game, 1));  // Directly set victory screen
+                if (pigsArray.size() == collisionListener.piggaDestroyed.size()) {
+                    game.setScreen(new VictoryScreen(game, 1));
                 } else {
-                    game.setScreen(new LoseScreen(game, 1));     // Directly set lose screen
+                    game.setScreen(new LoseScreen(game, 1));
                 }
                 resetCountdown();
             }
         }
     }
+
     private void resetCountdown() {
         countdownStarted = false;
         countdown = 10f; // Reset to 10 seconds for future use
     }
 
     public void processBodyDestructionQueue() {
-        System.out.println("Processing destruction queue...");
-        Iterator<Body> iterator = bodiesToDestroy.iterator();
+        Iterator<Object> iterator = bodiesToDestroy.iterator();
         while (iterator.hasNext()) {
-            Body body = iterator.next();
-            if (body != null) {
-                if (body.getUserData() instanceof Pigs) {
-                    pigsArray.removeValue((Pigs) body.getUserData(), true);
-                } else if (body.getUserData() instanceof SolidObjects) {
-                    boxes.removeValue(body, true);
+            Object obj = iterator.next();
+            if (obj instanceof Body) {
+                if(((Body) obj).getUserData() instanceof Pigs){
+                    Pigs pig = (Pigs) ((Body) obj).getUserData();
+                    if(pig.getPigBody()!=null){
+                        world.destroyBody(pig.getPigBody());
+                        System.out.println("Pigga destroyed");
+                    }
+                } else if(((Body) obj).getUserData() instanceof SolidObjects){
+                    SolidObjects solidObject = (SolidObjects) ((Body) obj).getUserData();
+                    if(solidObject.getBody()!=null){
+                        boxes.remove(solidObject.getBody());
+                        world.destroyBody(solidObject.getBody());
+                        System.out.println("Solid object destroyed");
+                    }
                 }
-                System.out.println("Destroying body: " + body);
-                world.destroyBody(body);
-                iterator.remove();
             }
+            System.out.println("Destroying body: " + obj);
+            iterator.remove();
+
         }
     }
-
     //to be implemented properly
     private void destroyBirds(Birds bird){
         if(bird != null && bird.getBirdBody() != null) {

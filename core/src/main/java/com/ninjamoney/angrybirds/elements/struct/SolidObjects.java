@@ -1,8 +1,12 @@
 package com.ninjamoney.angrybirds.elements.struct;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-public class SolidObjects {
+import java.io.Serializable;
+import java.util.Vector;
+
+public class SolidObjects implements Serializable {
     private float hp;
 
     public SolidObjects(float hp) {
@@ -15,6 +19,19 @@ public class SolidObjects {
 
     public float getHp() {
         return hp;
+    }
+
+    public Vector2 getPos() {
+        if( this.getBody()!=null) {
+            Vector2 posi = getBody().getPosition();
+            return posi;
+        }
+        return null;
+    }
+
+    public Vector2 getVelocity() {
+        Vector2 vel = getBody().getLinearVelocity();
+        return vel;
     }
 
     public Body getBody() {

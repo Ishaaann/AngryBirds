@@ -11,18 +11,25 @@ import com.ninjamoney.angrybirds.elements.struct.SolidObjects;
 import com.ninjamoney.angrybirds.elements.struct.Wood;
 import com.ninjamoney.angrybirds.levels.Level1;
 
+import java.util.ArrayList;
+
 import static com.ninjamoney.angrybirds.levels.Level1.onWoodHealthZero;
+//import static com.ninjamoney.angrybirds.levels.Level1.pigsDestroyed;
 
 public class Collisions implements ContactListener {
     public static float score = 0;
     private PigHealthListener pigHealthListener;
     Stage stage;
-    public static Array<Body> bodiesToDestroy = new Array<Body>();
+    public static ArrayList<Object> bodiesToDestroy = new ArrayList<>();
+    public static ArrayList<Object> solidObjectsDestroyed;
+    public static ArrayList<Pigs> piggaDestroyed;
 
 
     public Collisions(PigHealthListener pigHealthListener) {
         this.pigHealthListener = pigHealthListener;
         stage = new Stage();
+        solidObjectsDestroyed = new ArrayList<>();
+        piggaDestroyed = new ArrayList<>();
     }
 
     @Override
@@ -64,10 +71,25 @@ public class Collisions implements ContactListener {
         }
     }
 
-    public static void queueBodyForDestruction(Body body) {
-        if (body != null && !bodiesToDestroy.contains(body, true)) {
-            bodiesToDestroy.add(body);
-            System.out.println("Queued body for destruction: " + body);
+    public static void queueBodyForDestruction(Object obj) {
+        if (obj != null && !bodiesToDestroy.contains(obj)) {
+            bodiesToDestroy.add(obj);
+            if (obj instanceof Body) {
+                if(((Body) obj).getUserData() instanceof Pigs){
+                    Pigs pig = (Pigs) ((Body) obj).getUserData();
+                    if(pig.getPigBody()!=null){
+                        piggaDestroyed.add(pig);
+                        System.out.println("Pigga added");
+                    }
+                } else if(((Body) obj).getUserData() instanceof SolidObjects){
+                    SolidObjects solidObject = (SolidObjects) ((Body) obj).getUserData();
+                    if(solidObject.getBody()!=null){
+                        System.out.println("Solid object added");
+                        solidObjectsDestroyed.add(solidObject);
+                    }
+                }
+            }
+            System.out.println("Queued body for destruction: " + obj);
         }
     }
 

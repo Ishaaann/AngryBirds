@@ -10,7 +10,7 @@ import com.ninjamoney.angrybirds.phy.TrajectoryPredictor;
 public class Catapult {
     private float x; // X-coordinate of the catapult
     private float y; // Y-coordinate of the catapult
-    private Texture catapultTexture = new Texture("elements/struct/catapult.png");
+    private transient Texture catapultTexture = new Texture("elements/struct/catapult.png");
     private Birds currentBird; // Reference to the bird being manipulated
     private boolean isPulling = false; // Flag for pull state
     private float maxStretch = 10; // Maximum distance the bird can be stretched

@@ -3,11 +3,12 @@ package com.ninjamoney.angrybirds.elements.character.bird;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
 
-public class Chuck extends Birds {
+import java.io.Serializable;
+
+public class Chuck extends Birds implements Serializable {
     private static final float CHUCK_SPEED = 20.0f;
     private static final float damage = 30.0f;
-    private static final Texture chuckTexture = new Texture("elements/char/chuck.png");
-    private Body chuckBody;
+    private static final transient Texture chuckTexture = new Texture("elements/char/chuck.png");
 
     public Chuck() {
         super("Chuck", 100, CHUCK_SPEED, damage, chuckTexture);
