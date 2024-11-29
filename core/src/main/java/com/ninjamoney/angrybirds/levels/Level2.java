@@ -663,7 +663,7 @@ public class Level2 implements Screen, PigHealthListener {
     public void levelCleared() {
         if (pigsArray.size() == collisionListener.piggaDestroyed.size()) {
             cleared = true;
-            game.setScreen(new VictoryScreen(game, 1));
+            game.setScreen(new VictoryScreen(game, 2));
             resetCountdown();
         }
         else if (birdQueue.size() == 0 && pigsArray.size() > 0 && cp.getCurrentBird() == null && !countdownStarted) {
@@ -674,9 +674,9 @@ public class Level2 implements Screen, PigHealthListener {
             countdown -= Gdx.graphics.getDeltaTime();
             if (countdown <= 0) {
                 if (pigsArray.size() == collisionListener.piggaDestroyed.size()) {
-                    game.setScreen(new VictoryScreen(game, 1));
+                    game.setScreen(new VictoryScreen(game, 2));
                 } else {
-                    game.setScreen(new LoseScreen(game, 1));
+                    game.setScreen(new LoseScreen(game, 2));
                 }
                 resetCountdown();
             }
