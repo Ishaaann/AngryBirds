@@ -617,6 +617,7 @@ public class Level1 implements Screen, PigHealthListener {
             // Update the physics world
             world.step(1 / 60f, 6, 2);
             world.step(1/60f,6,2);
+            world.step(1/60f,6,2);
             checkBounds(smallpig);
             checkBounds(mediumPig);
             checkBounds(largePig);
