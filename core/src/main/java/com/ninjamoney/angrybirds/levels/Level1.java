@@ -811,9 +811,9 @@ public class Level1 implements Screen, PigHealthListener {
     }
 
     public void levelCleared() {
-        System.out.println("Checking if level is cleared...");
-        System.out.println("Total pigs: " + pigsArray.size());
-        System.out.println("Destroyed pigs: " + collisionListener.piggaDestroyed.size());
+//        System.out.println("Checking if level is cleared...");
+//        System.out.println("Total pigs: " + pigsArray.size());
+//        System.out.println("Destroyed pigs: " + collisionListener.piggaDestroyed.size());
 
         if (pigsArray.size() == collisionListener.piggaDestroyed.size()) {
             cleared = true;
